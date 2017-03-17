@@ -23,6 +23,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+//// TODO: 3/18/2017 Create bottom navigation view and a second click listener for users path.
+
 public class MainActivity extends BaseActivity implements MainView{
 
     @Inject protected RecipesPresenter mRecipesPresenter;
