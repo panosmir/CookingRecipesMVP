@@ -25,6 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getContentView());
         unbinder = ButterKnife.bind(this);
         onViewReady(savedInstanceState, getIntent());
     }
@@ -46,11 +47,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
+
     }
 
     protected void hideDialog(){
-        if (mProgressDialog != null && mProgressDialog.isShowing())
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
     }
 
     protected abstract int getContentView();
@@ -62,5 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbinder.unbind();
     }
 }

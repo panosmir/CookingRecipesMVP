@@ -25,6 +25,8 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
 
     @Inject protected RecipeMapper mRecipeMapper;
 
+    @Inject public RecipesPresenter(){}
+
     @Inject
     public void getRecipes(){
         getView().onShowDialog("Loading recipes....");
@@ -39,6 +41,7 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
     @Override
     public void onNext(RecipesResponse recipesResponse) {
         List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponse);
+        getView().onClearItems();
         getView().onRecipeLoaded(recipes);
     }
 
@@ -51,6 +54,6 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
     @Override
     public void onComplete() {
         getView().onHideDialog();
-        getView().onShowDialog("Recipes loaded successfully!!!");
+        getView().onShowToast("Recipes loaded successfully!!!");
     }
 }

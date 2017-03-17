@@ -17,4 +17,6 @@ public interface MainView extends BaseView {
     void onShowToast(String message);
 
     void onRecipeLoaded(List<Recipe> recipes);
+
+    void onClearItems();
 }

@@ -1,10 +1,12 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Panos on 3/18/2017.
  */
 
-public class Recipe {
+public class Recipe implements Serializable{
     private int userId;
     private int id;
     private String title;

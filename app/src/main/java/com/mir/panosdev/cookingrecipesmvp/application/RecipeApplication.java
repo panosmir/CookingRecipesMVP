@@ -23,7 +23,7 @@ public class RecipeApplication extends Application{
     private void initializeApplicationComponent() {
         mApplicationComponent = DaggerApplicationComponent
                 .builder().applicationModule(
-                        new ApplicationModule(this, "http://10.0.2.2:3000/")
+                        new ApplicationModule(this, "http://10.0.2.2:3000")
                 ).build();
     }
 
