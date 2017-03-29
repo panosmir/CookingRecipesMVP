@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.base;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;

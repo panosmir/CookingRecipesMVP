@@ -3,6 +3,7 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 
 import dagger.Component;
 

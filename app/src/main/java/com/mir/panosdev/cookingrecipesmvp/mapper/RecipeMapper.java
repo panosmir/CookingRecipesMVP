@@ -35,4 +35,15 @@ public class RecipeMapper {
         }
         return recipeList;
     }
+
+    public Recipe mapSingleRecipe(Recipe response){
+        Recipe mRecipe = new Recipe();
+        if(response != null){
+            mRecipe.setId(response.getId());
+            mRecipe.setUserId(response.getUserId());
+            mRecipe.setTitle(response.getTitle());
+            mRecipe.setDescription(response.getDescription());
+        }
+        return mRecipe;
+    }
 }

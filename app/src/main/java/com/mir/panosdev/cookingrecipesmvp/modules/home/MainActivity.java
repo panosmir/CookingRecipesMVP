@@ -2,8 +2,11 @@ package com.mir.panosdev.cookingrecipesmvp.modules.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,8 +14,10 @@ import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RecipesModule;
+import com.mir.panosdev.cookingrecipesmvp.modules.Login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
@@ -23,8 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-//// TODO: 3/18/2017 Create bottom navigation view and a second click listener for users path.
-
+//// TODO: 3/24/2017 Implement user login system
 public class MainActivity extends BaseActivity implements MainView{
 
     @Inject protected RecipesPresenter mRecipesPresenter;
@@ -34,14 +38,44 @@ public class MainActivity extends BaseActivity implements MainView{
     @BindView(R.id.recipe_list)
     RecyclerView recipesRecyclerView;
 
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView mBottomNavigationView;
+
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initializeList();
         loadRecipes();
+        initializeNavBar();
+
     }
 
-    private void loadRecipes() {
+    private void initializeNavBar() {
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_recipes:
+                        loadRecipes();
+                        return true;
+                    case R.id.action_search:
+                        seachRecipe();
+                        return true;
+                    case R.id.action_login:
+                        userLogin();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void userLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void loadRecipes() {
         mRecipesPresenter.getRecipes();
     }
 
@@ -61,8 +95,6 @@ public class MainActivity extends BaseActivity implements MainView{
         .recipesModule(new RecipesModule(this))
         .build().inject(this);
     }
-
-
 
     @Override
     protected int getContentView() {
@@ -94,6 +126,11 @@ public class MainActivity extends BaseActivity implements MainView{
         mRecipeAdapter.clearRecipes();
     }
 
+    private void seachRecipe(){
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        startActivity(intent);
+    }
+
     private RecipeAdapter.OnRecipeClickListener mRecipeClickListener = new RecipeAdapter.OnRecipeClickListener() {
         @Override
         public void onClick(View v, Recipe recipe, int position) {
@@ -102,4 +139,7 @@ public class MainActivity extends BaseActivity implements MainView{
             startActivity(intent);
         }
     };
+
+
+
 }
