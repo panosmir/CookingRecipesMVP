@@ -1,12 +1,15 @@
 package com.mir.panosdev.cookingrecipesmvp.api;
 
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.RecipesResponse;
-
-import java.util.List;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -19,5 +22,15 @@ public interface RecipesApiService {
 
     @GET("/recipes/all/findbyTitle/{title}")
     Observable<RecipesResponse> getARecipe(@Path("title") String title);
+
+    @POST("/recipes/all/userId/create")
+    Observable<Recipe> addRecipe(@Body Recipe recipe);
+
+    @POST("/users/create")
+    Observable<Response<User>> userRegistration(@Body User user);
+
+    @Headers("Content-Type: application/json")
+    @POST("/users/all/findUser")
+    Observable<Response<User>> userLogin(@Body User user);
 
 }

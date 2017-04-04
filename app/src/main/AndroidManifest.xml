@@ -12,16 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".application.RecipeApplication">
-        <activity android:name=".modules.home.MainActivity">
+        <activity android:name=".modules.home.MainActivity"/>
+        <activity android:name=".modules.detail.DetailsActivity"/>
+        <activity android:name=".modules.search.SearchActivity"/>
+        <activity android:name=".modules.newRecipe.NewRecipeActivity"/>
+        <activity android:name=".modules.Login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".modules.detail.DetailsActivity"/>
-        <activity android:name=".modules.search.SearchActivity"/>
-        <activity android:name=".modules.Login.LoginActivity"/>
     </application>
 
 </manifest>

@@ -2,11 +2,12 @@ package com.mir.panosdev.cookingrecipesmvp.modules.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import butterknife.BindView;
 
@@ -28,10 +29,22 @@ public class DetailsActivity extends BaseActivity {
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
+        showBackArrow();
+
         Recipe recipe = (Recipe) intent.getSerializableExtra(RECIPE);
         mRecipeTitle.setText(recipe.getTitle());
         mRecipeDescription.setText(recipe.getDescription());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -1,11 +1,15 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,8 +21,10 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RecipesModu
 import com.mir.panosdev.cookingrecipesmvp.modules.Login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
 
@@ -27,8 +33,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-//// TODO: 3/24/2017 Implement user login system
+//// TODO: 4/4/2017 Code cleanup, comments needed. 
 public class MainActivity extends BaseActivity implements MainView{
 
     @Inject protected RecipesPresenter mRecipesPresenter;
@@ -41,13 +48,21 @@ public class MainActivity extends BaseActivity implements MainView{
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
 
+
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initializeList();
         loadRecipes();
         initializeNavBar();
+    }
 
+    @OnClick(R.id.floatingActionButton)
+    public void addNewRecipeButtonClick(View view){
+        if (view.getId() == R.id.floatingActionButton){
+            Intent intent = new Intent(MainActivity.this, NewRecipeActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initializeNavBar() {
@@ -140,6 +155,24 @@ public class MainActivity extends BaseActivity implements MainView{
         }
     };
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoutMenuButton:
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return false;
+    }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
 }

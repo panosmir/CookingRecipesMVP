@@ -1,4 +1,6 @@
-package com.mir.panosdev.cookingrecipesmvp.mvp.model;
+package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
+
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.io.Serializable;
 
@@ -11,6 +13,16 @@ public class Recipe implements Serializable{
     private int id;
     private String title;
     private String description;
+
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getUserId() {
         return userId;

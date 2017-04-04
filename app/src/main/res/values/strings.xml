@@ -2,5 +2,11 @@
     <string name="app_name">CookingRecipesMVP</string>
     <string name="food_icon">Recipes</string>
     <string name="search_icon">Search</string>
-    <string name="login_icon">Login</string>
+    <string name="profile_icon">My Profile</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="username_edit_text">Username</string>
+    <string name="password_edit_text">Password</string>
+    <string name="add_recipe_button">Add Recipe</string>
+    <string name="logout_menu_item">Logout</string>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mir.panosdev.cookingrecipesmvp.application.RecipeApplication;
@@ -48,6 +49,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
 
+    }
+
+    protected void showBackArrow(){
+        ActionBar supActionBar = getSupportActionBar();
+        if(supActionBar != null){
+            supActionBar.setDisplayHomeAsUpEnabled(true);
+            supActionBar.setDisplayShowHomeEnabled(true);
+        }
     }
 
     protected void hideDialog(){

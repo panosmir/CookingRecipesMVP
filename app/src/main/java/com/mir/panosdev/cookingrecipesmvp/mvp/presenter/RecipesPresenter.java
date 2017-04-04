@@ -3,8 +3,8 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.RecipesResponse;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
 
 import java.util.List;

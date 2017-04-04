@@ -1,4 +1,4 @@
-package com.mir.panosdev.cookingrecipesmvp.mvp.model;
+package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
 public class RecipesResponse {
     private RecipesResponseRecipes[] recipes;

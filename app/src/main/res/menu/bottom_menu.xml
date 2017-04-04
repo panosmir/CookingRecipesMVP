@@ -17,6 +17,6 @@
         android:id="@+id/action_login"
         android:enabled="true"
         android:icon="@drawable/ic_guest_icon"
-        android:title="@string/login_icon"
+        android:title="@string/profile_icon"
         app:showAsAction="ifRoom" />
 </menu>

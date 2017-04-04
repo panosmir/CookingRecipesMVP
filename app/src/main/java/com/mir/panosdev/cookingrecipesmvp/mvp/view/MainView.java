@@ -1,7 +1,8 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.view;
 
 import com.mir.panosdev.cookingrecipesmvp.base.BaseView;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.util.List;
 

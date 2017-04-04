@@ -18,7 +18,7 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.SearchModul
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter.SearchAdapter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.SearchPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchView;
 

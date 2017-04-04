@@ -1,8 +1,8 @@
 package com.mir.panosdev.cookingrecipesmvp.mapper;
 
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.RecipesResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.RecipesResponseRecipes;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponseRecipes;
 
 import java.util.ArrayList;
 import java.util.List;
