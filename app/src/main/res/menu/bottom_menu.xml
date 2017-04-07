@@ -14,7 +14,7 @@
         android:title="@string/search_icon"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_login"
+        android:id="@+id/action_profile"
         android:enabled="true"
         android:icon="@drawable/ic_guest_icon"
         android:title="@string/profile_icon"

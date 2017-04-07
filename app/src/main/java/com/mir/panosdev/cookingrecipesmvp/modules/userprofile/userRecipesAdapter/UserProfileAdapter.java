@@ -1,4 +1,4 @@
-package com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter;
+package com.mir.panosdev.cookingrecipesmvp.modules.userprofile.userRecipesAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -19,26 +19,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Panos on 3/23/2017.
+ * Created by Panos on 4/5/2017.
  */
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder>{
+public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.Holder> {
 
     private LayoutInflater mLayoutInflater;
     private List<Recipe> mRecipeList = new ArrayList<>();
 
-    public SearchAdapter(LayoutInflater inflater){
+    public UserProfileAdapter(LayoutInflater inflater){
         mLayoutInflater = inflater;
     }
 
     @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserProfileAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.list_item_layout, parent, false);
         return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(SearchAdapter.Holder holder, int position) {
+    public void onBindViewHolder(UserProfileAdapter.Holder holder, int position) {
         holder.bind(mRecipeList.get(position));
     }
 
@@ -65,8 +65,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder>{
         @BindView(R.id.recipeDescription)
         protected TextView recipeDescription;
 
-        private Context mContext;
         private Recipe mRecipe;
+        private Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
@@ -83,17 +83,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder>{
 
         @Override
         public void onClick(View v) {
-            if (mRecipeClickListener != null){
-                mRecipeClickListener.onClick(recipeTitle, mRecipe, getAdapterPosition());
+            if(mOnRecipeClickListener!=null){
+                mOnRecipeClickListener.onClick(v, mRecipe, getAdapterPosition());
             }
         }
     }
 
-
-    public void setRecipeClickListener(OnRecipeClickListener listener){
-        mRecipeClickListener = listener;
+    public void setOnRecipeClickListener(OnRecipeClickListener listener){
+        mOnRecipeClickListener = listener;
     }
 
-    private OnRecipeClickListener mRecipeClickListener;
-
+    private OnRecipeClickListener mOnRecipeClickListener;
 }

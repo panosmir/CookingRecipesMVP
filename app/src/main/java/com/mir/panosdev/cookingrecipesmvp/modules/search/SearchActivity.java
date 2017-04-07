@@ -17,7 +17,10 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerS
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.SearchModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter.SearchAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.SearchPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchView;
@@ -73,7 +76,7 @@ public class SearchActivity extends BaseActivity implements SearchView {
         searchList.setAdapter(mSearchAdapter);
     }
 
-    private SearchAdapter.OnRecipeClickListener mOnRecipeClickListener = new SearchAdapter.OnRecipeClickListener() {
+    private OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
         @Override
         public void onClick(View v, Recipe recipe, int position) {
             Intent intent = new Intent(SearchActivity.this, DetailsActivity.class);
@@ -92,11 +95,19 @@ public class SearchActivity extends BaseActivity implements SearchView {
                         return true;
                     case R.id.action_search:
                         return true;
+                    case R.id.action_profile:
+                        userProfile();
+                        return true;
                 }
                 return true;
             }
 
         });
+    }
+
+    private void userProfile() {
+        Intent intent = new Intent(SearchActivity.this, UserProfileActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.searchButton)

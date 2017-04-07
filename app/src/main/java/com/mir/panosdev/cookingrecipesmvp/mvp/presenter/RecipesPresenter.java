@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.os.Handler;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
@@ -53,7 +55,13 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
 
     @Override
     public void onComplete() {
-        getView().onHideDialog();
-        getView().onShowToast("Recipes loaded successfully!!!");
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getView().onHideDialog();
+                getView().onShowToast("Recipes loaded successfully!!!");
+            }
+        }, 1500);
     }
 }

@@ -16,7 +16,9 @@
         <activity android:name=".modules.detail.DetailsActivity"/>
         <activity android:name=".modules.search.SearchActivity"/>
         <activity android:name=".modules.newRecipe.NewRecipeActivity"/>
-        <activity android:name=".modules.Login.LoginActivity">
+        <activity android:name=".modules.userprofile.UserProfileActivity"/>
+        <activity android:name=".modules.register.RegisterActivity"/>
+        <activity android:name=".modules.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

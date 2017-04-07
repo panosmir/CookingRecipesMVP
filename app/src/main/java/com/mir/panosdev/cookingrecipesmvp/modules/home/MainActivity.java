@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,13 +16,14 @@ import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RecipesModule;
-import com.mir.panosdev.cookingrecipesmvp.modules.Login.LoginActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
 
@@ -35,7 +34,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-//// TODO: 4/4/2017 Code cleanup, comments needed. 
+//// TODO: 4/4/2017 Code cleanup, comments needed.
 public class MainActivity extends BaseActivity implements MainView{
 
     @Inject protected RecipesPresenter mRecipesPresenter;
@@ -76,7 +75,7 @@ public class MainActivity extends BaseActivity implements MainView{
                     case R.id.action_search:
                         seachRecipe();
                         return true;
-                    case R.id.action_login:
+                    case R.id.action_profile:
                         userLogin();
                 }
                 return true;
@@ -85,7 +84,7 @@ public class MainActivity extends BaseActivity implements MainView{
     }
 
     private void userLogin() {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         startActivity(intent);
     }
 
@@ -146,7 +145,7 @@ public class MainActivity extends BaseActivity implements MainView{
         startActivity(intent);
     }
 
-    private RecipeAdapter.OnRecipeClickListener mRecipeClickListener = new RecipeAdapter.OnRecipeClickListener() {
+    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
         @Override
         public void onClick(View v, Recipe recipe, int position) {
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);

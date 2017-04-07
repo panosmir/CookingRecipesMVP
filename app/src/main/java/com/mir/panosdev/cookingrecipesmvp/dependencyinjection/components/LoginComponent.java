@@ -2,7 +2,7 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components;
 
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.LoginModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.Login.LoginActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 
 import dagger.Component;
 

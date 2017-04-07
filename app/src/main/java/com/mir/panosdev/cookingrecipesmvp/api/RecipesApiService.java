@@ -17,20 +17,23 @@ import retrofit2.http.Path;
  */
 public interface RecipesApiService {
 
-    @GET("/recipes/all")
+    @GET("recipes/all")
     Observable<RecipesResponse> getRecipes();
 
-    @GET("/recipes/all/findbyTitle/{title}")
+    @GET("recipes/all/findbyTitle/{title}")
     Observable<RecipesResponse> getARecipe(@Path("title") String title);
 
-    @POST("/recipes/all/userId/create")
+    @GET("recipes//all/userId/{id}")
+    Observable<RecipesResponse> getUserRecipes(@Path("id") int id);
+
+    @POST("recipes/all/userId/create")
     Observable<Recipe> addRecipe(@Body Recipe recipe);
 
-    @POST("/users/create")
+    @POST("users/create")
     Observable<Response<User>> userRegistration(@Body User user);
 
     @Headers("Content-Type: application/json")
-    @POST("/users/all/findUser")
+    @POST("users/all/findUser")
     Observable<Response<User>> userLogin(@Body User user);
 
 }
