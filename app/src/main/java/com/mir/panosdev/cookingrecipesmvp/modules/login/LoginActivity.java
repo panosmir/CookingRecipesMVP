@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
             case R.id.registerButton:
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                finish();
             case R.id.loginButton:
                 mLoginPresenter.userLogin();
         }
