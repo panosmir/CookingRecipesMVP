@@ -1,10 +1,12 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.home;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -15,7 +17,7 @@ import android.widget.Toast;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RecipesModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
@@ -26,6 +28,7 @@ import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivit
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
+import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
 
 import java.util.List;
 
@@ -35,9 +38,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 //// TODO: 4/4/2017 Code cleanup, comments needed.
-public class MainActivity extends BaseActivity implements MainView{
+public class MainActivity extends BaseActivity implements MainView {
 
-    @Inject protected RecipesPresenter mRecipesPresenter;
+    @Inject
+    protected RecipesPresenter mRecipesPresenter;
 
     private RecipeAdapter mRecipeAdapter;
 
@@ -47,6 +51,13 @@ public class MainActivity extends BaseActivity implements MainView{
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
 
+    @BindView(R.id.mainSwipeContainer)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Inject
+    SharedPreferences sharedPreferences;
+
+    private boolean onNetFetchRecipes = false;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -54,11 +65,17 @@ public class MainActivity extends BaseActivity implements MainView{
         initializeList();
         loadRecipes();
         initializeNavBar();
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadRecipes();
+            }
+        });
     }
 
     @OnClick(R.id.floatingActionButton)
-    public void addNewRecipeButtonClick(View view){
-        if (view.getId() == R.id.floatingActionButton){
+    public void addNewRecipeButtonClick(View view) {
+        if (view.getId() == R.id.floatingActionButton) {
             Intent intent = new Intent(MainActivity.this, NewRecipeActivity.class);
             startActivity(intent);
         }
@@ -68,7 +85,7 @@ public class MainActivity extends BaseActivity implements MainView{
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_recipes:
                         loadRecipes();
                         return true;
@@ -76,21 +93,29 @@ public class MainActivity extends BaseActivity implements MainView{
                         seachRecipe();
                         return true;
                     case R.id.action_profile:
-                        userLogin();
+                        userProfile();
                 }
                 return true;
             }
         });
     }
 
-    private void userLogin() {
+    private void userProfile() {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         startActivity(intent);
     }
 
 
     public void loadRecipes() {
-        mRecipesPresenter.getRecipes();
+        if (NetworkUtils.isNetworkAvailable(this)){
+            onNetFetchRecipes = true;
+            mRecipesPresenter.getRecipes();
+        }else{
+            onNetFetchRecipes = false;
+            mRecipesPresenter.getRecipesFromDatabase();
+
+        }
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void initializeList() {
@@ -105,9 +130,9 @@ public class MainActivity extends BaseActivity implements MainView{
     @Override
     protected void resolveDaggerDependency() {
         DaggerRecipesComponent.builder()
-        .applicationComponent(getApplicationComponent())
-        .recipesModule(new RecipesModule(this))
-        .build().inject(this);
+                .applicationComponent(getApplicationComponent())
+                .recipesModule(new RecipesModule(this))
+                .build().inject(this);
     }
 
     @Override
@@ -140,7 +165,17 @@ public class MainActivity extends BaseActivity implements MainView{
         mRecipeAdapter.clearRecipes();
     }
 
-    private void seachRecipe(){
+    @Override
+    public boolean isNetAvailable() {
+        return onNetFetchRecipes;
+    }
+
+    @Override
+    public void onNetworkUnavailableToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void seachRecipe() {
         Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
@@ -150,15 +185,20 @@ public class MainActivity extends BaseActivity implements MainView{
         public void onClick(View v, Recipe recipe, int position) {
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
             intent.putExtra(DetailsActivity.RECIPE, recipe);
-            startActivity(intent);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.logoutMenuButton:
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+                sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
@@ -171,7 +211,7 @@ public class MainActivity extends BaseActivity implements MainView{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
         return true;
     }
 }

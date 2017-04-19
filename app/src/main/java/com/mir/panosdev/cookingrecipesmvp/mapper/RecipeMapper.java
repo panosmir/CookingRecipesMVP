@@ -3,6 +3,8 @@ package com.mir.panosdev.cookingrecipesmvp.mapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponseRecipes;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,32 +20,37 @@ public class RecipeMapper {
     @Inject
     public RecipeMapper(){}
 
-    public List<Recipe> mapRecipes(RecipesResponse response){
+    public List<Recipe> mapRecipes(Storage storage, RecipesResponseRecipes[] response){
         List<Recipe> recipeList = new ArrayList<>();
 
         if (response != null){
-            RecipesResponseRecipes[] responseRecipes = response.getRecipes();
-            if(responseRecipes != null){
-                for (RecipesResponseRecipes recipe: responseRecipes) {
+                for (RecipesResponseRecipes recipe: response) {
                     Recipe mRecipe = new Recipe();
+                    mRecipe.setUser(recipe.getUser());
                     mRecipe.setId(recipe.getId());
                     mRecipe.setTitle(recipe.getTitle());
                     mRecipe.setDescription(recipe.getDescription());
+                    storage.addRecipe(mRecipe);
                     recipeList.add(mRecipe);
                 }
-            }
+//            }
         }
         return recipeList;
     }
 
-    public Recipe mapSingleRecipe(Recipe response){
-        Recipe mRecipe = new Recipe();
+    public List<Recipe> mapResults(RecipesResponseRecipes[] response){
+        List<Recipe> recipeList = new ArrayList<>();
         if(response != null){
-            mRecipe.setId(response.getId());
-            mRecipe.setUserId(response.getUserId());
-            mRecipe.setTitle(response.getTitle());
-            mRecipe.setDescription(response.getDescription());
+            for (RecipesResponseRecipes recipe :
+                    response) {
+                Recipe mRecipe = new Recipe();
+                mRecipe.setUser(recipe.getUser());
+                mRecipe.setId(recipe.getId());
+                mRecipe.setTitle(recipe.getTitle());
+                mRecipe.setDescription(recipe.getDescription());
+                recipeList.add(mRecipe);
+            }
         }
-        return mRecipe;
+        return recipeList;
     }
 }

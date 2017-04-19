@@ -54,7 +54,7 @@ public class RegisterPresenter extends BasePresenter<RegisterView> implements Ob
     }
 
     private void registerSuccessful() {
-        getView().onHideDialog();
+        getView().onShowDialog("We're trying to register you, please wait...");
         getView().onRegisterSuccess("Register completed!!");
     }
 

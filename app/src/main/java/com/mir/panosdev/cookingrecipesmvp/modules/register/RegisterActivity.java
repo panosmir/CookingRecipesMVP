@@ -9,9 +9,8 @@ import android.widget.Toast;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRegisterComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.RegisterModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RegisterModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RegisterPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterView;
@@ -81,6 +80,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     @Override
     public void onErrorToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        mUsername.setError("Username already in use.");
     }
 
     @Override
@@ -103,5 +103,10 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onShowDialog(String message) {
+        showDialog(message);
     }
 }

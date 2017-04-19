@@ -14,12 +14,13 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import retrofit2.Response;
 
 /**
  * Created by Panos on 3/21/2017.
  */
 
-public class SearchPresenter extends BasePresenter<SearchView> implements Observer<RecipesResponse> {
+public class SearchPresenter extends BasePresenter<SearchView> implements Observer<Response<RecipesResponse>> {
 
     @Inject protected RecipesApiService mRecipesApiService;
 
@@ -30,7 +31,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements Observ
     @Inject
     public void getARecipe(){
         getView().onShowDialog("Searching for this recipe.....");
-        Observable<RecipesResponse> recipesResponseObservable = mRecipesApiService.getARecipe(getView().searchTitle());
+        Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getARecipe(getView().searchTitle());
         subscribe(recipesResponseObservable, this);
     }
 
@@ -40,8 +41,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements Observ
     }
 
     @Override
-    public void onNext(RecipesResponse recipesResponse) {
-        List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponse);
+    public void onNext(Response<RecipesResponse> recipesResponse) {
+        List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponse.body().getRecipes());
         getView().onClearItems();
         getView().onRecipeLoaded(recipes);
     }

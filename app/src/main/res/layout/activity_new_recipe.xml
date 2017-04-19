@@ -7,8 +7,8 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:layout_width="191dp"
-        android:layout_height="45dp"
+        android:layout_width="299dp"
+        android:layout_height="50dp"
         android:hint="Recipe title"
         android:id="@+id/addRecipeTitleEditText"
         android:layout_marginLeft="8dp"
@@ -17,11 +17,12 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="54dp"
         app:layout_constraintBottom_toTopOf="@+id/addRecipeDescriptionEditText"
-        app:layout_constraintHorizontal_bias="0.502" />
+        app:layout_constraintHorizontal_bias="0.502"
+        tools:layout_editor_absoluteX="-11dp" />
 
     <EditText
-        android:layout_width="191dp"
-        android:layout_height="53dp"
+        android:layout_width="312dp"
+        android:layout_height="238dp"
         android:hint="Recipe description"
         android:id="@+id/addRecipeDescriptionEditText"
         android:layout_marginRight="8dp"
@@ -29,20 +30,22 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        android:layout_marginBottom="299dp" />
+        android:layout_marginBottom="156dp"
+        app:layout_constraintHorizontal_bias="0.508"
+        tools:layout_editor_absoluteY="117dp"
+        tools:layout_editor_absoluteX="34dp" />
 
     <Button
         android:id="@+id/addRecipeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_recipe_button"
-        android:layout_marginTop="116dp"
-        app:layout_constraintTop_toBottomOf="@+id/addRecipeDescriptionEditText"
-        android:layout_marginRight="27dp"
+        android:layout_marginRight="41dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginBottom="57dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/addRecipeDescriptionEditText"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>

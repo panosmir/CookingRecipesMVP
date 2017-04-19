@@ -1,6 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components;
 
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.UserProfileModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.UserProfileModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
 

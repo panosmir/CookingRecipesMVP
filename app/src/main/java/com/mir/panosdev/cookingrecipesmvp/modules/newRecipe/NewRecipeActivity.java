@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerNewRecipeComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.NewRecipeModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.NewRecipeModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;

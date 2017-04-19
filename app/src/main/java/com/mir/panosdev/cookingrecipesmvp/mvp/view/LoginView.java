@@ -20,4 +20,6 @@ public interface LoginView extends BaseView {
     void onErrorToast(String message);
 
     void returnUserDetails(User user);
+
+    void onShowDialog(String s);
 }

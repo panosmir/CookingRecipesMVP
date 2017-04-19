@@ -5,16 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
 import android.view.View;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerUserProfileComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.UserProfileModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.UserProfileModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.userRecipesAdapter.UserProfileAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;

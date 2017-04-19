@@ -1,10 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
+
 public class RecipesResponseRecipes {
     private String description;
     private int id;
     private String title;
     private int userId;
+    private User user;
 
     public String getDescription() {
         return this.description;
@@ -36,5 +39,13 @@ public class RecipesResponseRecipes {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

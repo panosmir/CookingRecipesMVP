@@ -17,4 +17,6 @@ public interface RegisterView extends BaseView {
     void returnUserDetails(User user);
 
     void onRegisterSuccess(String s);
+
+    void onShowDialog(String message);
 }

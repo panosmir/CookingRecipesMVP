@@ -2,6 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module;
 
 import android.content.Context;
 
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.prefs.SharedPrefsModule;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -17,19 +19,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by Panos on 3/17/2017.
  */
-@Module
+@Module(includes = SharedPrefsModule.class)
 public class ApplicationModule {
     private String mBaseUrl;
     private Context mContext;
 
-    public ApplicationModule(Context context, String baseUrl){
+    public ApplicationModule(Context context, String baseUrl) {
         mContext = context;
         mBaseUrl = baseUrl;
     }
 
     @Singleton
     @Provides
-    OkHttpClient provideOkHttpClient(){
+    OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
@@ -38,26 +40,27 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    GsonConverterFactory provideGsonConverterFactory(){
+    GsonConverterFactory provideGsonConverterFactory() {
         return GsonConverterFactory.create();
     }
 
     @Singleton
     @Provides
-    RxJava2CallAdapterFactory provideRxJava2CallAdapterFactory(){
+    RxJava2CallAdapterFactory provideRxJava2CallAdapterFactory() {
         return RxJava2CallAdapterFactory.createWithScheduler(Schedulers.newThread());
     }
 
     @Singleton
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
+
 
     @Singleton
     @Provides
     Retrofit provideRetrofit(OkHttpClient client, GsonConverterFactory converterFactory,
-                             RxJava2CallAdapterFactory adapterFactory){
+                             RxJava2CallAdapterFactory adapterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
                 .addConverterFactory(converterFactory)

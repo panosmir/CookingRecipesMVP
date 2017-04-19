@@ -25,6 +25,7 @@
         android:layout_width="208dp"
         android:layout_height="48dp"
         android:hint="@string/password_edit_text"
+        android:inputType="textPassword"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/passwordEditText"

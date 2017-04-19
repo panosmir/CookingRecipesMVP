@@ -30,18 +30,13 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
-
-    }
+    public void onSubscribe(Disposable d) {}
 
     @Override
-    public void onNext(Recipe recipe) {
-    }
+    public void onNext(Recipe recipe) {}
 
     @Override
-    public void onError(Throwable e) {
-
-    }
+    public void onError(Throwable e) {}
 
     @Override
     public void onComplete() {

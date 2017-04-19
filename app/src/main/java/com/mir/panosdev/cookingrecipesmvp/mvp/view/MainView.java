@@ -20,4 +20,8 @@ public interface MainView extends BaseView {
     void onRecipeLoaded(List<Recipe> recipes);
 
     void onClearItems();
+
+    boolean isNetAvailable();
+
+    void onNetworkUnavailableToast(String message);
 }

@@ -1,24 +1,25 @@
-package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module;
+package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules;
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
 
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 
 /**
- * Created by Panos on 3/18/2017.
+ * Created by Panos on 3/27/2017.
  */
-
 @Module
-public class RecipesModule {
+public class LoginModule {
 
-    private MainView mView;
+    private LoginView mView;
+//    private Context mContext;
 
-    public RecipesModule(MainView mainView){
-        mView = mainView;
+    public LoginModule(LoginView searchView){
+        mView = searchView;
+//        mContext = context;
     }
 
     @PerActivity
@@ -29,7 +30,7 @@ public class RecipesModule {
 
     @PerActivity
     @Provides
-    MainView provideMainView(){
+    LoginView provideLoginView(){
         return mView;
     }
 }

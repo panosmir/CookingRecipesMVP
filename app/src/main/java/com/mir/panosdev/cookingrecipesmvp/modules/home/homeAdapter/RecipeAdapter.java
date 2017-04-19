@@ -86,6 +86,7 @@ public class RecipeAdapter  extends RecyclerView.Adapter<RecipeAdapter.Holder>{
                 mRecipeClickListener.onClick(recipeTitle, mRecipe, getAdapterPosition());
             }
         }
+
     }
 
     public void setRecipeClickListener(OnRecipeClickListener listener){

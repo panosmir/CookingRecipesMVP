@@ -1,6 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components;
 
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.SearchModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.SearchModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 

@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.os.Handler;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
@@ -17,7 +19,6 @@ import retrofit2.Response;
 /**
  * Created by Panos on 3/27/2017.
  */
-//// TODO: 4/6/2017 seperate register with login activity due to conflicsts with api
 public class LoginPresenter extends BasePresenter<LoginView> implements Observer<Response<User>> {
 
     @Inject
@@ -27,12 +28,11 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
     public LoginPresenter() {
     }
 
-//    User user = new User();
 
     @Inject
     public void userLogin() {
         if(getView().getUserDetails()!=null) {
-            Observable<Response<User>> userObservable = mRecipesApiService.userLogin((getView().getUserDetails()));
+            Observable<Response<User>> userObservable = mRecipesApiService.userLogin(getView().getUserDetails());
             subscribe(userObservable, this);
         }
     }
@@ -43,7 +43,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
 
     @Override
     public void onNext(Response<User> userResponse) {
-        //// TODO: 4/6/2017 create a boolean and check if the body returns code==200
         switch (userResponse.code()) {
             case HttpURLConnection.HTTP_OK:
                 getView().returnUserDetails(userResponse.body());
@@ -62,15 +61,14 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
     }
 
     private void loginSuccessful() {
-        getView().onHideDialog();
+        getView().onShowDialog("Logging you in... Please wait");
         getView().onLoginCompleted("You logged in successfully!!!");
+        getView().onHideDialog();
     }
 
     @Override
-    public void onError(Throwable e) {
-    }
+    public void onError(Throwable e) {}
 
     @Override
-    public void onComplete() {
-    }
+    public void onComplete() {}
 }

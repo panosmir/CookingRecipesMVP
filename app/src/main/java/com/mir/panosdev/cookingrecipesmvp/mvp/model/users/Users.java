@@ -1,13 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.users;
 
 public class Users {
-    private UsersUsers[] users;
+    private User[] users;
 
-    public UsersUsers[] getUsers() {
+    public User[] getUsers() {
         return this.users;
     }
 
-    public void setUsers(UsersUsers[] users) {
+    public void setUsers(User[] users) {
         this.users = users;
     }
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 public class Recipe implements Serializable{
-    private int userId;
+//    private int userId;
     private int id;
     private String title;
     private String description;
@@ -20,17 +20,26 @@ public class Recipe implements Serializable{
         return user;
     }
 
+    public Recipe() {
+    }
+
+    public Recipe(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     public int getId() {
         return id;
