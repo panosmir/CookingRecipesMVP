@@ -31,7 +31,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
 
     @Inject
     public void userLogin() {
-        if(getView().getUserDetails()!=null) {
+        if (getView().getUserDetails() != null) {
             Observable<Response<User>> userObservable = mRecipesApiService.userLogin(getView().getUserDetails());
             subscribe(userObservable, this);
         }
@@ -52,7 +52,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
                 loginFailed();
                 break;
         }
-
     }
 
     private void loginFailed() {
@@ -67,8 +66,10 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
     }
 
     @Override
-    public void onError(Throwable e) {}
+    public void onError(Throwable e) {
+    }
 
     @Override
-    public void onComplete() {}
+    public void onComplete() {
+    }
 }

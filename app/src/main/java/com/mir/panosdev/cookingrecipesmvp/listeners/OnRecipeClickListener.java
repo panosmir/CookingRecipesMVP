@@ -1,4 +1,4 @@
-package com.mir.panosdev.cookingrecipesmvp.modules.listeners;
+package com.mir.panosdev.cookingrecipesmvp.listeners;
 
 import android.view.View;
 

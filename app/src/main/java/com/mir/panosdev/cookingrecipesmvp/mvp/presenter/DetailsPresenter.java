@@ -36,18 +36,13 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
-
-    }
+    public void onSubscribe(Disposable d) {}
 
     @Override
-    public void onNext(Response<Recipe> recipe) {
-    }
+    public void onNext(Response<Recipe> recipe) {}
 
     @Override
-    public void onError(Throwable e) {
-
-    }
+    public void onError(Throwable e) {}
 
     @Override
     public void onComplete() {

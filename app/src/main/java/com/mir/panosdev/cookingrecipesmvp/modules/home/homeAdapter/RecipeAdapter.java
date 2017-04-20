@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
-import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import java.util.ArrayList;

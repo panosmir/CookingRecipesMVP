@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +17,9 @@ import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
-import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnBottomNavigationClickListener;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnSwipeUpListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
@@ -64,13 +65,8 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onViewReady(savedInstanceState, intent);
         initializeList();
         loadRecipes();
-        initializeNavBar();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadRecipes();
-            }
-        });
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationListener);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnSwipeUpListener);
     }
 
     @OnClick(R.id.floatingActionButton)
@@ -81,30 +77,28 @@ public class MainActivity extends BaseActivity implements MainView {
         }
     }
 
-    private void initializeNavBar() {
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_recipes:
-                        loadRecipes();
-                        return true;
-                    case R.id.action_search:
-                        seachRecipe();
-                        return true;
-                    case R.id.action_profile:
-                        userProfile();
-                }
+    private OnSwipeUpListener mOnSwipeUpListener = this::loadRecipes;
+
+    private OnBottomNavigationClickListener mOnBottomNavigationListener = menu -> {
+        switch (menu.getItemId()){
+            case R.id.action_recipes:
+                loadRecipes();
                 return true;
-            }
-        });
-    }
+            case R.id.action_search:
+                seachRecipe();
+                return true;
+            case R.id.action_profile:
+                userProfile();
+                return true;
+        }
+        return true;
+    };
+
 
     private void userProfile() {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         startActivity(intent);
     }
-
 
     public void loadRecipes() {
         if (NetworkUtils.isNetworkAvailable(this)){
@@ -180,17 +174,14 @@ public class MainActivity extends BaseActivity implements MainView {
         startActivity(intent);
     }
 
-    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
-                startActivity(intent, options.toBundle());
-            } else {
-                startActivity(intent);
-            }
+    private OnRecipeClickListener mRecipeClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
         }
     };
 

@@ -15,9 +15,10 @@ import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerSearchComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.SearchModule;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnBottomNavigationClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter.SearchAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
@@ -56,7 +57,7 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
-        initializeNavBar();
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationClickListener);
     }
 
     @Override
@@ -75,34 +76,26 @@ public class SearchActivity extends BaseActivity implements SearchView {
         searchList.setAdapter(mSearchAdapter);
     }
 
-    private OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(SearchActivity.this, DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            startActivity(intent);
-        }
+    private OnRecipeClickListener mOnRecipeClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(SearchActivity.this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        startActivity(intent);
     };
 
-    private void initializeNavBar() {
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_recipes:
-                        loadRecipes();
-                        return true;
-                    case R.id.action_search:
-                        return true;
-                    case R.id.action_profile:
-                        userProfile();
-                        return true;
-                }
+    private OnBottomNavigationClickListener mOnBottomNavigationClickListener = menu -> {
+        switch (menu.getItemId()){
+            case R.id.action_recipes:
+                loadRecipes();
                 return true;
-            }
+            case R.id.action_search:
+                return true;
+            case R.id.action_profile:
+                userProfile();
+                return true;
+        }
+        return true;
+    };
 
-        });
-    }
 
     private void userProfile() {
         Intent intent = new Intent(SearchActivity.this, UserProfileActivity.class);

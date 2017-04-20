@@ -1,8 +1,5 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Looper;
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
@@ -12,7 +9,6 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponseRecipes;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
-import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,17 +23,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.reactivestreams.Subscriber;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.matches;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
