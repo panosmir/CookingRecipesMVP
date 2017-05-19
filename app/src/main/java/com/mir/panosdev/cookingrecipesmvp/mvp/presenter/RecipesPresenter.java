@@ -1,6 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
@@ -34,13 +35,14 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
     @Inject
     protected Storage mStorage;
 
+
     @Inject
     public RecipesPresenter() {
     }
 
     @Inject
     public void getRecipes() {
-        getView().onShowDialog("Loading recipes....");
+//        getView().onShowDialog("Loading recipes....");
         Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getRecipes();
         subscribe(recipesResponseObservable, this);
         mStorage.dropDatabase();

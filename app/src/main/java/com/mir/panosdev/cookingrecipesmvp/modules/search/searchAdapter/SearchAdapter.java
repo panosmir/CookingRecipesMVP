@@ -1,6 +1,5 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,12 +63,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder>{
         @BindView(R.id.recipeDescription)
         protected TextView recipeDescription;
 
-        private Context mContext;
         private Recipe mRecipe;
 
         public Holder(View itemView) {
             super(itemView);
-            mContext = itemView.getContext();
             itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }

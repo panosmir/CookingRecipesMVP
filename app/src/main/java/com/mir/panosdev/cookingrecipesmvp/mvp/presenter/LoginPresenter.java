@@ -7,7 +7,9 @@ import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 
 import javax.inject.Inject;
 
@@ -16,9 +18,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
-/**
- * Created by Panos on 3/27/2017.
- */
+
 public class LoginPresenter extends BasePresenter<LoginView> implements Observer<Response<User>> {
 
     @Inject
@@ -60,13 +60,14 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
     }
 
     private void loginSuccessful() {
-        getView().onShowDialog("Logging you in... Please wait");
-        getView().onLoginCompleted("You logged in successfully!!!");
         getView().onHideDialog();
+        getView().onLoginCompleted("You logged in successfully!!!");
     }
 
     @Override
     public void onError(Throwable e) {
+        getView().onHideDialog();
+        getView().onErrorToast("Server is down...");
     }
 
     @Override

@@ -76,24 +76,30 @@ public class SearchActivity extends BaseActivity implements SearchView {
         searchList.setAdapter(mSearchAdapter);
     }
 
-    private OnRecipeClickListener mOnRecipeClickListener = (v, recipe, position) -> {
-        Intent intent = new Intent(SearchActivity.this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RECIPE, recipe);
-        startActivity(intent);
+    private OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
+        @Override
+        public void onClick(View v, Recipe recipe, int position) {
+            Intent intent = new Intent(SearchActivity.this, DetailsActivity.class);
+            intent.putExtra(DetailsActivity.RECIPE, recipe);
+            startActivity(intent);
+        }
     };
 
-    private OnBottomNavigationClickListener mOnBottomNavigationClickListener = menu -> {
-        switch (menu.getItemId()){
-            case R.id.action_recipes:
-                loadRecipes();
-                return true;
-            case R.id.action_search:
-                return true;
-            case R.id.action_profile:
-                userProfile();
-                return true;
+    private OnBottomNavigationClickListener mOnBottomNavigationClickListener = new OnBottomNavigationClickListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menu) {
+            switch (menu.getItemId()){
+                case R.id.action_recipes:
+                    loadRecipes();
+                    return true;
+                case R.id.action_search:
+                    return true;
+                case R.id.action_profile:
+                    userProfile();
+                    return true;
+            }
+            return true;
         }
-        return true;
     };
 
 

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
@@ -34,6 +35,9 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     @BindView(R.id.addRecipeDescriptionEditText)
     EditText addRecipeDescription;
 
+    @BindView(R.id.categorySpinner)
+    Spinner spinner;
+
     @Inject
     protected NewRecipePresenter mNewRecipePresenter;
 
@@ -42,6 +46,8 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+//        spinner.setAdapter(new ArrayAdapter<Categories>(this, android.R.layout.simple_spinner_item, ));
+        mNewRecipePresenter.fetchCategories();
     }
 
     @Override

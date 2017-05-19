@@ -3,6 +3,7 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by Panos on 3/18/2017.
@@ -15,10 +16,7 @@ public class Recipe implements Serializable{
     private String description;
 
     private User user;
-
-    public User getUser() {
-        return user;
-    }
+    private Set<User> favorites;
 
     public Recipe() {
     }
@@ -29,17 +27,13 @@ public class Recipe implements Serializable{
         this.description = description;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
-
-//    public int getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
 
     public int getId() {
         return id;
@@ -63,5 +57,13 @@ public class Recipe implements Serializable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<User> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(Set<User> favorites) {
+        this.favorites = favorites;
     }
 }

@@ -17,6 +17,10 @@ import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.LoginPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
+import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
+
+import java.io.IOException;
+import java.net.InetAddress;
 
 import javax.inject.Inject;
 
@@ -56,6 +60,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 startActivity(intent);
                 break;
             case R.id.loginButton:
+                onShowDialog("Logging you in... Please wait!");
                 mLoginPresenter.userLogin();
                 break;
         }

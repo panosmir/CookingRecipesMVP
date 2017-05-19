@@ -11,7 +11,11 @@ public interface DetailsView extends BaseView {
 
     Recipe getRecipeDetails();
 
+    void onDeleteShowToast(String message);
+
     boolean getDeleteSignal();
 
-    void onDeleteShowToast(String message);
+    boolean getUpdateSignal();
+
+    void onUpdateShowToast(String message);
 }

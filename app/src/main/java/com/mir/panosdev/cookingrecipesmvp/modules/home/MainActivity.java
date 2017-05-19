@@ -39,8 +39,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 //// TODO: 4/4/2017 Code cleanup, comments needed.
-public class MainActivity extends BaseActivity implements MainView {
 
+public class MainActivity extends BaseActivity implements MainView {
     @Inject
     protected RecipesPresenter mRecipesPresenter;
 
@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity implements MainView {
     @Inject
     SharedPreferences sharedPreferences;
 
-    private boolean onNetFetchRecipes = false;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -77,21 +76,29 @@ public class MainActivity extends BaseActivity implements MainView {
         }
     }
 
-    private OnSwipeUpListener mOnSwipeUpListener = this::loadRecipes;
-
-    private OnBottomNavigationClickListener mOnBottomNavigationListener = menu -> {
-        switch (menu.getItemId()){
-            case R.id.action_recipes:
-                loadRecipes();
-                return true;
-            case R.id.action_search:
-                seachRecipe();
-                return true;
-            case R.id.action_profile:
-                userProfile();
-                return true;
+    private OnSwipeUpListener mOnSwipeUpListener = new OnSwipeUpListener() {
+        @Override
+        public void onRefresh() {
+            loadRecipes();
         }
-        return true;
+    };
+
+    private OnBottomNavigationClickListener mOnBottomNavigationListener = new OnBottomNavigationClickListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menu) {
+            switch (menu.getItemId()){
+                case R.id.action_recipes:
+                    loadRecipes();
+                    return true;
+                case R.id.action_search:
+                    seachRecipe();
+                    return true;
+                case R.id.action_profile:
+                    userProfile();
+                    return true;
+            }
+            return true;
+        }
     };
 
 
@@ -102,10 +109,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     public void loadRecipes() {
         if (NetworkUtils.isNetworkAvailable(this)){
-            onNetFetchRecipes = true;
             mRecipesPresenter.getRecipes();
         }else{
-            onNetFetchRecipes = false;
             mRecipesPresenter.getRecipesFromDatabase();
 
         }
@@ -160,11 +165,6 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public boolean isNetAvailable() {
-        return onNetFetchRecipes;
-    }
-
-    @Override
     public void onNetworkUnavailableToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
@@ -174,14 +174,17 @@ public class MainActivity extends BaseActivity implements MainView {
         startActivity(intent);
     }
 
-    private OnRecipeClickListener mRecipeClickListener = (v, recipe, position) -> {
-        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RECIPE, recipe);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
-            startActivity(intent, options.toBundle());
-        } else {
-            startActivity(intent);
+    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
+        @Override
+        public void onClick(View v, Recipe recipe, int position) {
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+            intent.putExtra(DetailsActivity.RECIPE, recipe);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     };
 

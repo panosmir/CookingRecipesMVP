@@ -39,9 +39,11 @@ public class UserProfilePresenter extends BasePresenter<UserProfileView> impleme
 
     @Override
     public void onNext(Response<RecipesResponse> recipesResponse) {
-        List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponse.body().getRecipes());
-        getView().onClearItems();
-        getView().onRecipesLoaded(recipes);
+        if(recipesResponse.isSuccessful()) {
+            List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponse.body().getRecipes());
+            getView().onClearItems();
+            getView().onRecipesLoaded(recipes);
+        }
     }
 
     @Override

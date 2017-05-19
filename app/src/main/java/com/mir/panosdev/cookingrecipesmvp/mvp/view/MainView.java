@@ -2,7 +2,6 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.view;
 
 import com.mir.panosdev.cookingrecipesmvp.base.BaseView;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.util.List;
 
@@ -20,8 +19,6 @@ public interface MainView extends BaseView {
     void onRecipeLoaded(List<Recipe> recipes);
 
     void onClearItems();
-
-    boolean isNetAvailable();
 
     void onNetworkUnavailableToast(String message);
 }

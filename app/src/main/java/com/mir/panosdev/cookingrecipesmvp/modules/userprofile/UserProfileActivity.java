@@ -114,9 +114,12 @@ public class UserProfileActivity extends BaseActivity implements UserProfileView
         }
     }
 
-    private OnRecipeClickListener mClickListener = (v, recipe, position) -> {
-        Intent intent = new Intent(UserProfileActivity.this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RECIPE, recipe);
-        startActivity(intent);
+    private OnRecipeClickListener mClickListener = new OnRecipeClickListener() {
+        @Override
+        public void onClick(View v, Recipe recipe, int position) {
+            Intent intent = new Intent(UserProfileActivity.this, DetailsActivity.class);
+            intent.putExtra(DetailsActivity.RECIPE, recipe);
+            startActivity(intent);
+        }
     };
 }
