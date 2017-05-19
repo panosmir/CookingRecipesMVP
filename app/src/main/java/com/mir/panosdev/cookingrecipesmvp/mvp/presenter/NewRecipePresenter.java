@@ -35,8 +35,6 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
     @Inject
     protected CategoryMapper mCategoryMapper;
 
-    private List<Category> categories = new ArrayList<>();
-
     @Inject
     public NewRecipePresenter() {
     }
@@ -61,11 +59,10 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
                     @Override
                     public void onNext(Response<Categories> category) {
                         List<Category> categories = mCategoryMapper.mapCategories(category.body().getCategories());
-                        for (Category c :
-                                categories) {
-                            Log.d("CATEGORY_LOG", "CATEGORY------>" + c.getCategory());
+                        if(categories != null) {
+                            getView().onClearItems();
+                            getView().onItemsLoaded(categories);
                         }
-//                        Log.d("CATEGORY_LOG", "CATEGORY----->" + category.body().getCategories());
                     }
 
                     @Override
