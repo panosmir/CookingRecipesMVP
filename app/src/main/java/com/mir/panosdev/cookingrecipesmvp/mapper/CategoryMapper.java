@@ -19,7 +19,9 @@ public class CategoryMapper {
 
     public List<Category> mapCategories(CategoriesResponse[] response){
         List<Category> categories = new ArrayList<>();
-
+        Category c = new Category();
+        c.setmCategory("Please select a category");
+        categories.add(c);
         if(response != null){
             for (CategoriesResponse categoriesResponse:
                  response) {

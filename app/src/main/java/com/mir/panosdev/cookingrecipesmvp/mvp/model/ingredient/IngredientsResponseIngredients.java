@@ -2,42 +2,30 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 
-/**
- * Created by Panos on 18-May-17.
- */
-
-public class Ingredient {
-
-    private int id;
+public class IngredientsResponseIngredients implements java.io.Serializable {
+    private static final long serialVersionUID = 2479905863658673040L;
     private String ingredient;
+    private int id;
     private Category category;
 
-    public Ingredient(int id, String ingredient) {
-        this.id = id;
-        this.ingredient = ingredient;
-    }
-
-    public Ingredient() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getIngredient() {
-        return ingredient;
+        return this.ingredient;
     }
 
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Category getCategory() {
-        return category;
+        return this.category;
     }
 
     public void setCategory(Category category) {

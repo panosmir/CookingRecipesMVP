@@ -5,8 +5,12 @@ import android.util.Log;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.CategoryMapper;
+import com.mir.panosdev.cookingrecipesmvp.mapper.IngredientMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponseIngredients;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeView;
 
@@ -36,8 +40,12 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
     protected CategoryMapper mCategoryMapper;
 
     @Inject
+    protected IngredientMapper mIngredientMapper;
+
+    @Inject
     public NewRecipePresenter() {
     }
+
 
     @Inject
     public void addNewRecipe() {
@@ -46,7 +54,7 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
     }
 
     @Inject
-    public void fetchCategories(){
+    public void fetchCategories() {
         Observable<Response<Categories>> categoryObservable = mRecipesApiService.getAllCategories();
         categoryObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,7 +67,7 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
                     @Override
                     public void onNext(Response<Categories> category) {
                         List<Category> categories = mCategoryMapper.mapCategories(category.body().getCategories());
-                        if(categories != null) {
+                        if (categories != null) {
                             getView().onClearItems();
                             getView().onItemsLoaded(categories);
                         }
@@ -67,7 +75,7 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CATEGORY_LOG", "ERROR------->" + e.getMessage());
+                        Log.d("ERROR_LOG", "ERROR------->" + e.getMessage());
                     }
 
                     @Override
@@ -75,6 +83,38 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
 
                     }
                 });
+    }
+
+    @Inject
+    public void fetchIngredients() {
+        if (getView().getCategoryId() != 0) {
+            Observable<Response<IngredientsResponse>> responseObservable = mRecipesApiService.getIngredientsById(getView().getCategoryId());
+            subscribe(responseObservable, new Observer<Response<IngredientsResponse>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Response<IngredientsResponse> ingredientResponse) {
+                    List<Ingredient> ingredientList = mIngredientMapper.mapIngredients(ingredientResponse.body().getIngredients());
+                    getView().onClearIngredients();
+                    getView().onIngredientsLoaded(ingredientList);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("ERROR_LOG", e.getMessage());
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        }
+        else
+            return;
     }
 
     @Override
@@ -87,6 +127,7 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
 
     @Override
     public void onError(Throwable e) {
+        Log.d("ERROR_LOG", e.getMessage());
     }
 
     @Override

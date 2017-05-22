@@ -1,8 +1,11 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,6 +20,7 @@ public class Recipe implements Serializable{
 
     private User user;
     private Set<User> favorites;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {
     }
@@ -65,5 +69,13 @@ public class Recipe implements Serializable{
 
     public void setFavorites(Set<User> favorites) {
         this.favorites = favorites;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

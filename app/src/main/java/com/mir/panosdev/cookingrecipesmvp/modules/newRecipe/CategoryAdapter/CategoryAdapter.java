@@ -1,34 +1,27 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
-/**
- * Created by Panos on 19-May-17.
- */
-
-public class CategoryAdapter extends BaseAdapter{
+public class CategoryAdapter extends BaseAdapter {
 
     private List<Category> mCategoryList;
-    @Inject Context mContext;
+    @Inject
+    Context mContext;
     private LayoutInflater mLayoutInflater;
 
     public CategoryAdapter(List<Category> mCategoryList, Context mContext) {
@@ -53,13 +46,23 @@ public class CategoryAdapter extends BaseAdapter{
     }
 
     @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        View view = super.getDropDownView(position, convertView, parent);
+        ConstraintLayout layout = (android.support.constraint.ConstraintLayout) view;
+        TextView tv = (TextView) layout.findViewById(R.id.spinnerTextView);
+        tv.setTextColor(Color.parseColor("#333639"));
+        return view;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        if(convertView == null){
+
+        if (convertView == null) {
             view = mLayoutInflater.inflate(R.layout.spinner_list_layout, null);
-            TextView tv = (TextView)view.findViewById(R.id.spinnerTextView);
-            tv.setText(mCategoryList.get(position).getCategory());
         }
+        TextView tv = (TextView) view.findViewById(R.id.spinnerTextView);
+        tv.setText(mCategoryList.get(position).getCategory());
         return view;
     }
 

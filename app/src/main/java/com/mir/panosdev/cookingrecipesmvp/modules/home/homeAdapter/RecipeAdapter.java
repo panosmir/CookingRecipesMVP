@@ -17,10 +17,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Panos on 3/18/2017.
- */
-
 public class RecipeAdapter  extends RecyclerView.Adapter<RecipeAdapter.Holder>{
 
     private LayoutInflater mLayoutInflater;
@@ -86,7 +82,6 @@ public class RecipeAdapter  extends RecyclerView.Adapter<RecipeAdapter.Holder>{
                 mRecipeClickListener.onClick(recipeTitle, mRecipe, getAdapterPosition());
             }
         }
-
     }
 
     public void setRecipeClickListener(OnRecipeClickListener listener){

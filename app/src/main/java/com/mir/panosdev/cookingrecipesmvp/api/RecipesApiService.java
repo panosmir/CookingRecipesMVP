@@ -2,6 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.api;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
@@ -48,6 +50,9 @@ public interface RecipesApiService {
 
     @GET("/categories/all")
     Observable<Response<Categories>> getAllCategories();
+
+    @GET("ingredients/findByCategoryId/{id}")
+    Observable<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
 
     //// TODO: 18-May-17 Wait for the server to implement it
 //    @GET("recipes/userFavorites/{id}")
