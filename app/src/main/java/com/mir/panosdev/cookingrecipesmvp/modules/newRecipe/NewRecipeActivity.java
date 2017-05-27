@@ -7,10 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerNewRecipeComponent;
@@ -105,6 +107,22 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
                 getApplicationComponent()
         ).newRecipeModule(new NewRecipeModule(this))
                 .build().inject(this);
+    }
+
+    @OnClick(R.id.searchIngredientsButton)
+    public void searchIngredientButtonClick(){
+        new MaterialDialog.Builder(this)
+                .title(category.getCategory())
+                .items(mIngredients)
+                .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
+
+                        return true;
+                    }
+                })
+                .positiveText("Choose")
+                .show();
     }
 
     @OnClick(R.id.addRecipeButton)
