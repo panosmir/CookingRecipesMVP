@@ -2,7 +2,10 @@ package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
@@ -20,6 +24,7 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMod
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.IngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
@@ -61,6 +66,7 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     Category category = new Category();
     private int categoryId;
     private IngredientAdapter mIngredientAdapter;
+    private AddedIngredientsAdapter mAddedIngredientsAdapter;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -87,7 +93,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -96,9 +101,13 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
+
         mIngredientAdapter = new IngredientAdapter(getLayoutInflater());
-        mRecyclerView.setAdapter(mIngredientAdapter);
         mIngredientAdapter.setIngredientClickListener(mOnIngredientClickListener);
+
+        mAddedIngredientsAdapter = new AddedIngredientsAdapter(getLayoutInflater());
+
+        mRecyclerView.setAdapter(mAddedIngredientsAdapter);
     }
 
     @Override
@@ -114,14 +123,23 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
         new MaterialDialog.Builder(this)
                 .title(category.getCategory())
                 .items(mIngredients)
+                .adapter(mIngredientAdapter, new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
                 .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
-
                         return true;
                     }
                 })
+                .widgetColor(Color.BLUE)
                 .positiveText("Choose")
+                .positiveColor(Color.BLUE)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                        mAddedIngredientsAdapter.clearAddedIngredients();
+                        mAddedIngredientsAdapter.addedIngredients(addedIngredients);
+                    }
+                })
                 .show();
     }
 
@@ -179,8 +197,11 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     private OnIngredientClickListener mOnIngredientClickListener = new OnIngredientClickListener() {
         @Override
         public void onClick(View v, Ingredient ingredient, int position) {
-            addedIngredients.add(ingredient);
-
+            if (addedIngredients.contains(ingredient))
+                addedIngredients.remove(ingredient);
+            else {
+                addedIngredients.add(ingredient);
+            }
         }
     };
 

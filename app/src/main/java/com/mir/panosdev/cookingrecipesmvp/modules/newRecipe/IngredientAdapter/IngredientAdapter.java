@@ -19,10 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
-/**
- * Created by Panos on 21-May-17.
- */
-
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder>{
 
     private LayoutInflater mLayoutInflater;
@@ -58,10 +54,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         notifyDataSetChanged();
     }
 
+    public void add(Ingredient ingredient) {
+        mIngredients.add(ingredient);
+        notifyDataSetChanged();
+    }
+
+    public void remove(Ingredient ingredient){
+        mIngredients.remove(ingredient);
+        notifyDataSetChanged();
+    }
+
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.ingredientTextView)
         protected TextView ingredientTitle;
+
+        @BindView(R.id.ingredientCheckBox)
+        CheckBox mCheckBox;
 
         private Ingredient mIngredient;
         private Context mContext;
@@ -82,8 +91,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         public void onClick(View v) {
             if(mIngredientClickListener!=null){
                 mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
+                if(mCheckBox.isChecked())
+                    mCheckBox.setChecked(false);
+                else
+                    mCheckBox.setChecked(true);
             }
         }
+
     }
 
     private OnIngredientClickListener mIngredientClickListener;

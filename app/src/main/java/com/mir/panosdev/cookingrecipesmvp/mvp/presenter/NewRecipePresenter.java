@@ -92,7 +92,6 @@ public class NewRecipePresenter extends BasePresenter<NewRecipeView> implements 
             subscribe(responseObservable, new Observer<Response<IngredientsResponse>>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-
                 }
 
                 @Override
