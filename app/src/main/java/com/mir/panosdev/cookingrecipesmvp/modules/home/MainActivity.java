@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +27,13 @@ import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
 import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

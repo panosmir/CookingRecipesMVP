@@ -1,13 +1,19 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
-public class RecipesResponseRecipes {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RecipesResponseRecipes implements Serializable{
     private String description;
     private int id;
     private String title;
     private int userId;
     private User user;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public String getDescription() {
         return this.description;
@@ -47,5 +53,13 @@ public class RecipesResponseRecipes {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

@@ -30,6 +30,7 @@ public class RecipeMapper {
                     mRecipe.setId(recipe.getId());
                     mRecipe.setTitle(recipe.getTitle());
                     mRecipe.setDescription(recipe.getDescription());
+                    mRecipe.setIngredients(recipe.getIngredients());
                     storage.addRecipe(mRecipe);
                     recipeList.add(mRecipe);
                 }
@@ -48,6 +49,7 @@ public class RecipeMapper {
                 mRecipe.setId(recipe.getId());
                 mRecipe.setTitle(recipe.getTitle());
                 mRecipe.setDescription(recipe.getDescription());
+                mRecipe.setIngredients(recipe.getIngredients());
                 recipeList.add(mRecipe);
             }
         }
