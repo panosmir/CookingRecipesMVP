@@ -2,11 +2,13 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 
+import java.io.Serializable;
+
 /**
  * Created by Panos on 18-May-17.
  */
 
-public class Ingredient {
+public class Ingredient implements Serializable{
 
     private int id;
     private String ingredient;

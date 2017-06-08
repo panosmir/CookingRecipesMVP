@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,9 @@ import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerDetailComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.DetailsModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.IngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
@@ -51,12 +56,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @BindView(R.id.cancelButton)
     Button mCancelButton;
 
+    @BindView(R.id.ingredientsRecyclerView)
+    RecyclerView mRecyclerView;
+
     @Inject
     SharedPreferences prefs;
 
     @Inject
     protected DetailsPresenter mPresenter;
 
+    private AddedIngredientsAdapter mIngredientAdapter;
     private Recipe recipe;
     boolean isReadyForDelete = false, isReadyForUpdate = false;
     int userId;
@@ -65,9 +74,11 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         showBackArrow();
+        initializeList();
         prefs = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         mRecipeTitleEdit.setVisibility(View.INVISIBLE);
         mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mRecipeTitle.setTransitionName("recipeAnimation");
@@ -76,6 +87,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         recipe = (Recipe) intent.getSerializableExtra(RECIPE);
         mRecipeTitle.setText(recipe.getTitle());
         mRecipeDescription.setText(recipe.getDescription());
+        mIngredientAdapter.addedIngredients(recipe.getIngredients());
+    }
+
+    private void initializeList() {
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mIngredientAdapter = new AddedIngredientsAdapter(getLayoutInflater());
+        mRecyclerView.setAdapter(mIngredientAdapter);
     }
 
     @Override
@@ -132,6 +151,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
         mSaveRecipeButton.setVisibility(View.INVISIBLE);
         mCancelButton.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void editUserDetails() {
@@ -141,6 +161,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         mRecipeDescriptionEdit.setVisibility(View.VISIBLE);
         mSaveRecipeButton.setVisibility(View.VISIBLE);
         mCancelButton.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
 
         mRecipeTitleEdit.setText(recipe.getTitle());
         mRecipeDescriptionEdit.setText(recipe.getDescription());

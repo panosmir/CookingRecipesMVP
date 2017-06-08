@@ -4,9 +4,11 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.category;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Category {
+public class Category implements Serializable{
 
     @SerializedName("id")
     private int mId;
