@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -37,28 +40,28 @@ import butterknife.OnClick;
 public class DetailsActivity extends BaseActivity implements DetailsView {
 
     public static final String RECIPE = "recipe";
-
-    @BindView(R.id.recipeTitleDetail)
-    TextView mRecipeTitle;
-
-    @BindView(R.id.recipeDescriptionDetail)
-    TextView mRecipeDescription;
-
-    @BindView(R.id.recipeTitleDetailEditText)
-    EditText mRecipeTitleEdit;
-
-    @BindView(R.id.recipeDescriptionDetailEditText)
-    EditText mRecipeDescriptionEdit;
-
-    @BindView(R.id.saveRecipeButton)
-    Button mSaveRecipeButton;
-
-    @BindView(R.id.cancelButton)
-    Button mCancelButton;
-
-    @BindView(R.id.ingredientsRecyclerView)
-    RecyclerView mRecyclerView;
-
+//
+//    @BindView(R.id.recipeTitleDetail)
+//    TextView mRecipeTitle;
+//
+//    @BindView(R.id.recipeDescriptionDetail)
+//    TextView mRecipeDescription;
+//
+//    @BindView(R.id.recipeTitleDetailEditText)
+//    EditText mRecipeTitleEdit;
+//
+//    @BindView(R.id.recipeDescriptionDetailEditText)
+//    EditText mRecipeDescriptionEdit;
+//
+//    @BindView(R.id.saveRecipeButton)
+//    Button mSaveRecipeButton;
+//
+//    @BindView(R.id.cancelButton)
+//    Button mCancelButton;
+//
+//    @BindView(R.id.ingredientsRecyclerView)
+//    RecyclerView mRecyclerView;
+//
     @Inject
     SharedPreferences prefs;
 
@@ -70,46 +73,55 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     boolean isReadyForDelete = false, isReadyForUpdate = false;
     int userId;
 
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FragmentManager manager = getSupportFragmentManager();
+        DetailsFragment detailsFragment = new DetailsFragment();
+        manager.beginTransaction().replace(R.id.details_fragment_container, detailsFragment).commit();
+    }
+
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         showBackArrow();
-        initializeList();
-        prefs = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        mRecipeTitleEdit.setVisibility(View.INVISIBLE);
-        mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mRecipeTitle.setTransitionName("recipeAnimation");
-        }
-
-        recipe = (Recipe) intent.getSerializableExtra(RECIPE);
-        mRecipeTitle.setText(recipe.getTitle());
-        mRecipeDescription.setText(recipe.getDescription());
-        mIngredientAdapter.addedIngredients(recipe.getIngredients());
+//        initializeList();
+//        prefs = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+//        mRecipeTitleEdit.setVisibility(View.INVISIBLE);
+//        mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
+//        mRecyclerView.setVisibility(View.VISIBLE);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            mRecipeTitle.setTransitionName("recipeAnimation");
+//        }
+//
+//        recipe = (Recipe) intent.getSerializableExtra(RECIPE);
+//        mRecipeTitle.setText(recipe.getTitle());
+//        mRecipeDescription.setText(recipe.getDescription());
+//        mIngredientAdapter.addedIngredients(recipe.getIngredients());
     }
 
-    private void initializeList() {
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mIngredientAdapter = new AddedIngredientsAdapter(getLayoutInflater());
-        mRecyclerView.setAdapter(mIngredientAdapter);
-    }
+//    private void initializeList() {
+//        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+//        mIngredientAdapter = new AddedIngredientsAdapter(getLayoutInflater());
+//        mRecyclerView.setAdapter(mIngredientAdapter);
+//    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem deleteButton = menu.findItem(R.id.deleteRecipeButton);
         MenuItem updateButton = menu.findItem(R.id.updateRecipeButton);
-        userId = prefs.getInt("USER_ID", 0);
-        if (recipe.getUser().getId() == userId){
-            deleteButton.setVisible(true);
-            updateButton.setVisible(true);
-        }
-        else{
-            deleteButton.setVisible(false);
-            updateButton.setVisible(false);
-        }
+//        userId = prefs.getInt("USER_ID", 0);
+//        if (recipe.getUser().getId() == userId){
+//            deleteButton.setVisible(true);
+//            updateButton.setVisible(true);
+//        }
+//        else{
+//            deleteButton.setVisible(false);
+//            updateButton.setVisible(false);
+//        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -128,44 +140,44 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 return true;
             case R.id.updateRecipeButton:
                 isReadyForUpdate = true;
-                editUserDetails();
+//                editUserDetails();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.saveRecipeButton)
-    public void saveRecipeButtonClick(){
-        recipe.setTitle(mRecipeTitleEdit.getText().toString());
-        recipe.setDescription(mRecipeDescriptionEdit.getText().toString());
-        mPresenter.updateRecipe();
-        Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    @OnClick(R.id.saveRecipeButton)
+//    public void saveRecipeButtonClick(){
+//        recipe.setTitle(mRecipeTitleEdit.getText().toString());
+//        recipe.setDescription(mRecipeDescriptionEdit.getText().toString());
+//        mPresenter.updateRecipe();
+//        Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
+//
+//    @OnClick(R.id.cancelButton)
+//    public void cancelButtonClick(){
+//        mRecipeTitle.setVisibility(View.VISIBLE);
+//        mRecipeTitleEdit.setVisibility(View.INVISIBLE);
+//        mRecipeDescription.setVisibility(View.VISIBLE);
+//        mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
+//        mSaveRecipeButton.setVisibility(View.INVISIBLE);
+//        mCancelButton.setVisibility(View.INVISIBLE);
+//        mRecyclerView.setVisibility(View.VISIBLE);
+//    }
 
-    @OnClick(R.id.cancelButton)
-    public void cancelButtonClick(){
-        mRecipeTitle.setVisibility(View.VISIBLE);
-        mRecipeTitleEdit.setVisibility(View.INVISIBLE);
-        mRecipeDescription.setVisibility(View.VISIBLE);
-        mRecipeDescriptionEdit.setVisibility(View.INVISIBLE);
-        mSaveRecipeButton.setVisibility(View.INVISIBLE);
-        mCancelButton.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private void editUserDetails() {
-        mRecipeTitle.setVisibility(View.INVISIBLE);
-        mRecipeTitleEdit.setVisibility(View.VISIBLE);
-        mRecipeDescription.setVisibility(View.INVISIBLE);
-        mRecipeDescriptionEdit.setVisibility(View.VISIBLE);
-        mSaveRecipeButton.setVisibility(View.VISIBLE);
-        mCancelButton.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-
-        mRecipeTitleEdit.setText(recipe.getTitle());
-        mRecipeDescriptionEdit.setText(recipe.getDescription());
-    }
+//    private void editUserDetails() {
+//        mRecipeTitle.setVisibility(View.INVISIBLE);
+//        mRecipeTitleEdit.setVisibility(View.VISIBLE);
+//        mRecipeDescription.setVisibility(View.INVISIBLE);
+//        mRecipeDescriptionEdit.setVisibility(View.VISIBLE);
+//        mSaveRecipeButton.setVisibility(View.VISIBLE);
+//        mCancelButton.setVisibility(View.VISIBLE);
+//        mRecyclerView.setVisibility(View.INVISIBLE);
+//
+//        mRecipeTitleEdit.setText(recipe.getTitle());
+//        mRecipeDescriptionEdit.setText(recipe.getDescription());
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
