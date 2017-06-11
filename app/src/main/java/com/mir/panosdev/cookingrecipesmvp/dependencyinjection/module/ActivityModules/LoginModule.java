@@ -2,7 +2,7 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMo
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,10 +14,10 @@ import retrofit2.Retrofit;
 @Module
 public class LoginModule {
 
-    private LoginView mView;
+    private LoginActivityMVP mView;
 //    private Context mContext;
 
-    public LoginModule(LoginView searchView){
+    public LoginModule(LoginActivityMVP searchView){
         mView = searchView;
 //        mContext = context;
     }
@@ -30,7 +30,7 @@ public class LoginModule {
 
     @PerActivity
     @Provides
-    LoginView provideLoginView(){
+    LoginActivityMVP provideLoginView(){
         return mView;
     }
 }

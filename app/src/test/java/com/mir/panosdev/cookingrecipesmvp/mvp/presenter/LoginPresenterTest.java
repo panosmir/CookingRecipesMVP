@@ -4,7 +4,7 @@ import android.os.Looper;
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class LoginPresenterTest {
     @Mock
     private RecipesApiService mApiService;
     @Mock
-    private LoginView mView;
+    private LoginActivityMVP mView;
     @Mock
     private Observable<Response<User>> mObservable;
     @Captor
