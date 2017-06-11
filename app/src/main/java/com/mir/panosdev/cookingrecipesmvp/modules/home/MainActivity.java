@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity implements MainActivityMVP.MainVi
     protected void onStart() {
         super.onStart();
         mRecipesPresenter.attachView(this);
+        loadRecipes();
     }
 
     @Override
@@ -74,7 +75,6 @@ public class MainActivity extends BaseActivity implements MainActivityMVP.MainVi
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initializeList();
-        loadRecipes();
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationListener);
         mSwipeRefreshLayout.setOnRefreshListener(mOnSwipeUpListener);
     }
