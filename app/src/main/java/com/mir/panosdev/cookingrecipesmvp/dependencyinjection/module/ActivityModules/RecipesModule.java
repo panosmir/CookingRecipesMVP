@@ -13,22 +13,9 @@ import retrofit2.Retrofit;
 
 @Module
 public class RecipesModule {
-
-//    private MainActivityMVP mView;
-//
-//    public RecipesModule(MainActivityMVP mainView){
-//        mView = mainView;
-//    }
-
     @PerActivity
     @Provides
     RecipesApiService provideApiService(Retrofit retrofit){
         return retrofit.create(RecipesApiService.class);
     }
-
-//    @PerActivity
-//    @Provides
-//    MainActivityMVP provideMainView(){
-//        return mView;
-//    }
 }
