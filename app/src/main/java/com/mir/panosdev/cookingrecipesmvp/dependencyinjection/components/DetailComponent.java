@@ -4,6 +4,8 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMod
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ApplicationModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsFragment;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.UpdateFragment;
 
 import dagger.Component;
 
@@ -14,4 +16,6 @@ import dagger.Component;
 @Component(modules = DetailsModule.class, dependencies = ApplicationComponent.class)
 public interface DetailComponent {
     void inject (DetailsActivity activity);
+    void inject (DetailsFragment fragment);
+    void inject (UpdateFragment updateFragment);
 }

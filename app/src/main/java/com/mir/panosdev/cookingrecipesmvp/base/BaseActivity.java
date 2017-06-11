@@ -14,9 +14,7 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.Applica
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by Panos on 3/17/2017.
- */
+
 
 public abstract class BaseActivity extends AppCompatActivity {
 
