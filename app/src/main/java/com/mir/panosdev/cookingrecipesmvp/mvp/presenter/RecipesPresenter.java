@@ -18,14 +18,21 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
+
+import static io.reactivex.internal.operators.observable.ObservableBlockingSubscribe.subscribe;
 
 /**
  * Created by Panos on 3/18/2017.
  */
 
-public class RecipesPresenter extends BasePresenter<MainView> implements Observer<Response<RecipesResponse>> {
+public class RecipesPresenter implements MainView.Presenter {
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -34,7 +41,9 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
     protected RecipeMapper mRecipeMapper;
     @Inject
     protected Storage mStorage;
-
+    private MainView.MainView1 mainView;
+    private Observable<Response<RecipesResponse>> recipesResponseObservable;
+    private CompositeDisposable compositeDisposable;
 
     @Inject
     public RecipesPresenter() {
@@ -43,39 +52,79 @@ public class RecipesPresenter extends BasePresenter<MainView> implements Observe
     @Inject
     public void getRecipes() {
 //        getView().onShowDialog("Loading recipes....");
-        Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getRecipes();
-        subscribe(recipesResponseObservable, this);
+        recipesResponseObservable = mRecipesApiService.getRecipes();
+        Disposable disposable = recipesResponseObservable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
+                    @Override
+                    public void onNext(@NonNull Response<RecipesResponse> recipesResponseResponse) {
+                        List<Recipe> recipes = mRecipeMapper.mapRecipes(mStorage, recipesResponseResponse.body().getRecipes());
+                        mainView.onClearItems();
+                        mainView.onRecipeLoaded(recipes);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        mainView.onHideDialog();
+                        mainView.onShowToast("Error loading recipes " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mainView.onHideDialog();
+                        mainView.onShowToast("Sync completed!");
+                    }
+                });
         mStorage.dropDatabase();
+        if (compositeDisposable!=null)
+            compositeDisposable.add(disposable);
     }
 
-    @Override
-    public void onSubscribe(Disposable d) {
-    }
-
-    @Override
-    public void onNext(Response<RecipesResponse> recipesResponse) {
-        List<Recipe> recipes = mRecipeMapper.mapRecipes(mStorage, recipesResponse.body().getRecipes());
-        getView().onClearItems();
-        getView().onRecipeLoaded(recipes);
-    }
+//    @Override
+//    public void onSubscribe(Disposable d) {
+//    }
+//
+//    @Override
+//    public void onNext(Response<RecipesResponse> recipesResponse) {
+//        List<Recipe> recipes = mRecipeMapper.mapRecipes(mStorage, recipesResponse.body().getRecipes());
+//        mainView.onClearItems();
+//        mainView.onRecipeLoaded(recipes);
+//    }
 
     public void getRecipesFromDatabase() {
         List<Recipe> recipes = mStorage.getSavedRecipes();
-        getView().onClearItems();
-        getView().onRecipeLoaded(recipes);
-        getView().onNetworkUnavailableToast("Updating items from database...");
+        mainView.onClearItems();
+        mainView.onRecipeLoaded(recipes);
+        mainView.onNetworkUnavailableToast("Updating items from database...");
+    }
+
+//    @Override
+//    public void onError(Throwable e) {
+//        mainView.onHideDialog();
+//        mainView.onShowToast("Error loading recipes " + e.getMessage());
+//    }
+//
+//    @Override
+//    public void onComplete() {
+//        mainView.onHideDialog();
+//        mainView.onShowToast("Sync completed!");
+//    }
+
+    public void attachView(MainView.MainView1 mainView) {
+        this.mainView = mainView;
     }
 
     @Override
-    public void onError(Throwable e) {
-        getView().onHideDialog();
-        getView().onShowToast("Error loading recipes " + e.getMessage());
+    public <T> void subsribe(Observable<T> observable, Observer<T> observer) {
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(observer);
     }
 
     @Override
-    public void onComplete() {
-        getView().onHideDialog();
-        getView().onShowToast("Sync completed!");
-
+    public void unsubscribe() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
     }
 }

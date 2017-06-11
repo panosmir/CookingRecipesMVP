@@ -15,11 +15,11 @@ import retrofit2.Retrofit;
 @Module
 public class RecipesModule {
 
-    private MainView mView;
-
-    public RecipesModule(MainView mainView){
-        mView = mainView;
-    }
+//    private MainView mView;
+//
+//    public RecipesModule(MainView mainView){
+//        mView = mainView;
+//    }
 
     @PerActivity
     @Provides
@@ -27,9 +27,9 @@ public class RecipesModule {
         return retrofit.create(RecipesApiService.class);
     }
 
-    @PerActivity
-    @Provides
-    MainView provideMainView(){
-        return mView;
-    }
+//    @PerActivity
+//    @Provides
+//    MainView provideMainView(){
+//        return mView;
+//    }
 }

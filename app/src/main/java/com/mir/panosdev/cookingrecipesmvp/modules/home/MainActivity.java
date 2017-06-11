@@ -43,7 +43,7 @@ import butterknife.OnClick;
 
 //// TODO: 4/4/2017 Code cleanup, comments needed.
 
-public class MainActivity extends BaseActivity implements MainView {
+public class MainActivity extends BaseActivity implements MainView.MainView1 {
     @Inject
     protected RecipesPresenter mRecipesPresenter;
 
@@ -61,6 +61,17 @@ public class MainActivity extends BaseActivity implements MainView {
     @Inject
     SharedPreferences sharedPreferences;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mRecipesPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecipesPresenter.unsubscribe();
+    }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -133,7 +144,7 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void resolveDaggerDependency() {
         DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .recipesModule(new RecipesModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 
