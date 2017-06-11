@@ -2,7 +2,6 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMo
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,9 +14,9 @@ import retrofit2.Retrofit;
 @Module
 public class RecipesModule {
 
-//    private MainView mView;
+//    private MainActivityMVP mView;
 //
-//    public RecipesModule(MainView mainView){
+//    public RecipesModule(MainActivityMVP mainView){
 //        mView = mainView;
 //    }
 
@@ -29,7 +28,7 @@ public class RecipesModule {
 
 //    @PerActivity
 //    @Provides
-//    MainView provideMainView(){
+//    MainActivityMVP provideMainView(){
 //        return mView;
 //    }
 }

@@ -2,66 +2,32 @@ package com.mir.panosdev.cookingrecipesmvp.modules.detail;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerDetailComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.DetailsModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.IngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by Panos on 3/18/2017.
  */
-public class DetailsActivity extends BaseActivity implements DetailsView {
+public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.DetailsView {
 
     public static final String RECIPE = "recipe";
-//
-//    @BindView(R.id.recipeTitleDetail)
-//    TextView mRecipeTitle;
-//
-//    @BindView(R.id.recipeDescriptionDetail)
-//    TextView mRecipeDescription;
-//
-//    @BindView(R.id.recipeTitleDetailEditText)
-//    EditText mRecipeTitleEdit;
-//
-//    @BindView(R.id.recipeDescriptionDetailEditText)
-//    EditText mRecipeDescriptionEdit;
-//
-//    @BindView(R.id.saveRecipeButton)
-//    Button mSaveRecipeButton;
-//
-//    @BindView(R.id.cancelButton)
-//    Button mCancelButton;
-//
-//    @BindView(R.id.ingredientsRecyclerView)
-//    RecyclerView mRecyclerView;
-//
+
     @Inject
     SharedPreferences prefs;
 
@@ -70,9 +36,20 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     private AddedIngredientsAdapter mIngredientAdapter;
     private Recipe recipe;
-    boolean isReadyForDelete = false, isReadyForUpdate = false;
+    private boolean isReadyForDelete = false, isReadyForUpdate = false;
     int userId;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,9 +117,9 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerDetailComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .detailsModule(new DetailsModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 

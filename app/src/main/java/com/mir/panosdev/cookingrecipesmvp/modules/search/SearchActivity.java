@@ -2,7 +2,6 @@ package com.mir.panosdev.cookingrecipesmvp.modules.search;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,9 @@ import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerSearchComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.SearchModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnBottomNavigationClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
@@ -23,7 +24,7 @@ import com.mir.panosdev.cookingrecipesmvp.modules.search.searchAdapter.SearchAda
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.SearchPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class SearchActivity extends BaseActivity implements SearchView {
+public class SearchActivity extends BaseActivity implements SearchActivityMVP.SearchView {
 
     @Inject
     protected SearchPresenter mSearchPresenter;
@@ -50,6 +51,18 @@ public class SearchActivity extends BaseActivity implements SearchView {
     private SearchAdapter mSearchAdapter;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mSearchPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSearchPresenter.detatchView();
+    }
+
+    @Override
     protected int getContentView() {
         return R.layout.activity_search;
     }
@@ -62,9 +75,9 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerSearchComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .searchModule(new SearchModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 

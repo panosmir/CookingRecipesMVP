@@ -2,7 +2,7 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMo
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,9 +14,9 @@ import retrofit2.Retrofit;
 @Module
 public class SearchModule {
 
-    private SearchView mView;
+    private SearchActivityMVP mView;
 
-    public SearchModule(SearchView searchView){
+    public SearchModule(SearchActivityMVP searchView){
        mView = searchView;
     }
 
@@ -28,7 +28,7 @@ public class SearchModule {
 
     @PerActivity
     @Provides
-    SearchView provideSearchView(){
+    SearchActivityMVP provideSearchView(){
         return mView;
     }
 }

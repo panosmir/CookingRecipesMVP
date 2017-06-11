@@ -5,7 +5,7 @@ import android.os.Looper;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class DetailsPresenterTest {
     private RecipesApiService mApiService;
 
     @Mock
-    private DetailsView mView;
+    private DetailsActivityMVP mView;
 
     @Mock
     private Observable<Response<Recipe>> mObservable;

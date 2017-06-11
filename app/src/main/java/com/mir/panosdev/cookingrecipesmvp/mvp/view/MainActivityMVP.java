@@ -12,9 +12,9 @@ import io.reactivex.Observer;
  * Created by Panos on 3/18/2017.
  */
 
-public interface MainView extends BaseView {
+public interface MainActivityMVP extends BaseView {
 
-    interface MainView1 extends BaseView{
+    interface MainView extends BaseView{
         void onShowDialog(String message);
 
         void onHideDialog();
@@ -29,8 +29,8 @@ public interface MainView extends BaseView {
     }
 
     interface Presenter {
-        <T> void subsribe(Observable<T> observable, Observer<T> observer);
-        void unsubscribe();
+        void attachView(MainActivityMVP.MainView view);
+        void detachView();
     }
 
 }

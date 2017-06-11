@@ -15,11 +15,13 @@ import android.widget.Toast;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerDetailComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.DetailsModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 
 import javax.inject.Inject;
 
@@ -31,7 +33,7 @@ import butterknife.OnClick;
  * Created by Panos on 10-Jun-17.
  */
 
-public class UpdateFragment extends BaseFragment implements DetailsView {
+public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.DetailsView {
     public static final String RECIPE = "recipe";
 
     @BindView(R.id.recipeTitleDetailEditText)
@@ -48,6 +50,12 @@ public class UpdateFragment extends BaseFragment implements DetailsView {
 
     private Recipe mRecipe;
     private boolean isReadyForDelete = false, isReadyForUpdate = false;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mDetailsPresenter.attachView(this);
+    }
 
     @Nullable
     @Override
@@ -86,9 +94,9 @@ public class UpdateFragment extends BaseFragment implements DetailsView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerDetailComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .detailsModule(new DetailsModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 

@@ -7,15 +7,22 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
  * Created by Panos on 4/17/2017.
  */
 
-public interface DetailsView extends BaseView {
+public interface DetailsActivityMVP extends BaseView {
 
-    Recipe getRecipeDetails();
+    interface DetailsView extends BaseView {
+        Recipe getRecipeDetails();
 
-    void onDeleteShowToast(String message);
+        void onDeleteShowToast(String message);
 
-    boolean getDeleteSignal();
+        boolean getDeleteSignal();
 
-    boolean getUpdateSignal();
+        boolean getUpdateSignal();
 
-    void onUpdateShowToast(String message);
+        void onUpdateShowToast(String message);
+    }
+
+    interface Presenter {
+        void attachView(DetailsView view);
+        void detachView();
+    }
 }

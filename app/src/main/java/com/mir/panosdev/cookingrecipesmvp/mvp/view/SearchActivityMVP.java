@@ -9,16 +9,25 @@ import java.util.List;
  * Created by Panos on 3/21/2017.
  */
 
-public interface SearchView extends BaseView {
-    void onShowDialog(String searchString);
+public interface SearchActivityMVP extends BaseView {
 
-    String searchTitle();
+    interface SearchView extends BaseView{
+        void onShowDialog(String searchString);
 
-    void onShowToast(String message);
+        String searchTitle();
 
-    void onClearItems();
+        void onShowToast(String message);
 
-    void onRecipeLoaded(List<Recipe> recipes);
+        void onClearItems();
 
-    void onHideDialog();
+        void onRecipeLoaded(List<Recipe> recipes);
+
+        void onHideDialog();
+    }
+
+    interface Presenter{
+        void attachView(SearchActivityMVP.SearchView view);
+        void detatchView();
+    }
+
 }

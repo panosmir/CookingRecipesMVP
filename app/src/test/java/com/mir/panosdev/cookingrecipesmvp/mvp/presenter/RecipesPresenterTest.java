@@ -4,37 +4,25 @@ import android.os.Looper;
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponseRecipes;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainActivityMVP;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.reactivestreams.Subscriber;
 
-import java.util.ArrayList;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Observable.class, AndroidSchedulers.class, Looper.class, RecipesResponse.class})
@@ -48,7 +36,7 @@ public class RecipesPresenterTest {
     @Mock
     private Storage mStorage;
     @Mock
-    private MainView mView;
+    private MainActivityMVP mView;
     @Mock
     private Observable<Response<RecipesResponse>> mObservable;
 
