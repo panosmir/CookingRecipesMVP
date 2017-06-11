@@ -8,6 +8,7 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMod
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 
 import dagger.Component;
@@ -25,4 +26,5 @@ public interface RecipesComponent {
     void inject(SearchActivity activity);
     void inject(LoginActivity activity);
     void inject(NewRecipeActivity activity);
+    void inject(RegisterActivity activity);
 }
