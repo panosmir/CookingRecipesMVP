@@ -3,25 +3,20 @@ package com.mir.panosdev.cookingrecipesmvp.modules.detail;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerDetailComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.DetailsModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
@@ -30,40 +25,34 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
+/**
+ * Created by Panos on 10-Jun-17.
+ */
 
-public class DetailsFragment extends BaseFragment implements DetailsView {
+public class UpdateFragment extends BaseFragment implements DetailsView {
     public static final String RECIPE = "recipe";
 
-    @BindView(R.id.recipeTitleDetail)
-    TextView mRecipeTitle;
+    @BindView(R.id.recipeTitleDetailEditText)
+    EditText mRecipeTitleEditText;
 
-    @BindView(R.id.recipeDescriptionDetail)
-    TextView mRecipeDescription;
-
-    @BindView(R.id.ingredientsRecyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.recipeDescriptionDetailEditText)
+    EditText mRecipeDescriptionEditText;
 
     @Inject
     SharedPreferences mPrefs;
 
     @Inject
-    protected DetailsPresenter mPresenter;
+    protected DetailsPresenter mDetailsPresenter;
 
     private Recipe mRecipe;
-    private AddedIngredientsAdapter mIngredientsAdapter;
-    private int userId;
     private boolean isReadyForDelete = false, isReadyForUpdate = false;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_details_update_recipe, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -72,45 +61,59 @@ public class DetailsFragment extends BaseFragment implements DetailsView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPrefs = getActivity().getSharedPreferences("USER_CREDENTIALS", Context.MODE_PRIVATE);
         mRecipe = (Recipe) getActivity().getIntent().getSerializableExtra(RECIPE);
-        mRecipeTitle.setText(mRecipe.getTitle());
-        mRecipeDescription.setText(mRecipe.getDescription());
-        initializeList();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mRecipeTitle.setTransitionName("recipeAnimation");
-        }
-
+        mRecipeTitleEditText.setText(mRecipe.getTitle());
+        mRecipeDescriptionEditText.setText(mRecipe.getDescription());
     }
 
-    private void initializeList() {
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mIngredientsAdapter = new AddedIngredientsAdapter(getActivity().getLayoutInflater());
-        mRecyclerView.setAdapter(mIngredientsAdapter);
-        mIngredientsAdapter.addedIngredients(mRecipe.getIngredients());
+    @OnClick(R.id.saveRecipeButton)
+    public void saveRecipeButtonClick(){
+        isReadyForUpdate = true;
+        mRecipe.setTitle(mRecipeTitleEditText.getText().toString());
+        mRecipe.setDescription(mRecipeDescriptionEditText.getText().toString());
+        mDetailsPresenter.updateRecipe();
+        Intent intent = new Intent(this.getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    @OnClick(R.id.cancelButton)
+    public void cancelButtonClick(){
+        isReadyForDelete = true;
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        DetailsFragment detailsFragment = new DetailsFragment();
+        manager.beginTransaction().replace(R.id.details_fragment_container, detailsFragment).commit();
+    }
+
+    @Override
+    protected void resolveDaggerDependency() {
+        DaggerDetailComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .detailsModule(new DetailsModule(this))
+                .build().inject(this);
     }
 
     @Override
     public Recipe getRecipeDetails() {
-        return null;
+        return mRecipe;
     }
 
     @Override
     public void onDeleteShowToast(String message) {
+        Toast.makeText(this.getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean getDeleteSignal() {
-        return false;
+        return isReadyForDelete;
     }
 
     @Override
     public boolean getUpdateSignal() {
-        return false;
+        return isReadyForUpdate;
     }
 
     @Override
     public void onUpdateShowToast(String message) {
-
+        Toast.makeText(this.getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,9 +16,6 @@ import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-/**
- * Created by Panos on 3/17/2017.
- */
 public interface RecipesApiService {
 
     @GET("recipes/all")

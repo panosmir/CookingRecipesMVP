@@ -52,6 +52,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
 
     @Override
     public void onError(Throwable e) {
+        Log.d("ERROR_LOG", e.getMessage());
     }
 
     @Override
