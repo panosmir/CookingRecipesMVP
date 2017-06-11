@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class LoginPresenter implements LoginActivityMVP.Presenter {
 
     private LoginActivityMVP.LoginView mView;
-    private CompositeDisposable compositeDisposable;
+    protected CompositeDisposable compositeDisposable;
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -34,7 +34,7 @@ public class LoginPresenter implements LoginActivityMVP.Presenter {
 
     @Inject
     public void userLogin() {
-        if (mView != null && mView.getUserDetails() != null) {
+        if (mView != null && mView.getUserDetails()!=null) {
             Observable<Response<User>> userObservable = mRecipesApiService.userLogin(mView.getUserDetails());
             Disposable disposable = userObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())

@@ -47,12 +47,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     protected void onStart() {
         super.onStart();
         mLoginPresenter.attachView(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLoginPresenter.detachView();
+        mLoginPresenter.userLogin();
     }
 
     @Override
@@ -94,6 +89,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
             user.setId(sharedPreferences.getInt("USER_ID", 0));
             user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
             user.setPassword(sharedPreferences.getString("USER_PASSWORD", null));
+            Log.d("LOGIN_LOG", "Username -> " + user.getUsername());
             return user;
         } else {
             if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
