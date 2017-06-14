@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerUserProfileComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.UserProfileModule;
-import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.userRecipesAdapter.UserProfileAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.UserProfilePresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileMVP;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import butterknife.BindView;
  * Created by Panos on 4/5/2017.
  */
 
-public class UserProfileActivity extends BaseActivity implements UserProfileView{
+public class UserProfileActivity extends BaseActivity implements UserProfileMVP.UserProfileView {
 
     @BindView(R.id.usernameTextView)
     TextView mUsername;
@@ -45,12 +45,24 @@ public class UserProfileActivity extends BaseActivity implements UserProfileView
     private UserProfileAdapter mProfileAdapter;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mUserProfilePresenter.attachView(this);
+        loadUserRecipes();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserProfilePresenter.detachView();
+    }
+
+    @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         showBackArrow();
         initializeUsernameTextbox();
         initializeList();
-        loadUserRecipes();
     }
 
     private void loadUserRecipes() {
@@ -72,9 +84,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileView
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerUserProfileComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .userProfileModule(new UserProfileModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 

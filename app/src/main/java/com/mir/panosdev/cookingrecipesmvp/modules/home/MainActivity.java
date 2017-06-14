@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,13 +26,11 @@ import com.mir.panosdev.cookingrecipesmvp.modules.home.homeAdapter.RecipeAdapter
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RecipesPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainActivityMVP;
 import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,7 +40,7 @@ import butterknife.OnClick;
 
 //// TODO: 4/4/2017 Code cleanup, comments needed.
 
-public class MainActivity extends BaseActivity implements MainView {
+public class MainActivity extends BaseActivity implements MainActivityMVP.MainView {
     @Inject
     protected RecipesPresenter mRecipesPresenter;
 
@@ -61,12 +58,23 @@ public class MainActivity extends BaseActivity implements MainView {
     @Inject
     SharedPreferences sharedPreferences;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mRecipesPresenter.attachView(this);
+        loadRecipes();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecipesPresenter.detachView();
+    }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initializeList();
-        loadRecipes();
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationListener);
         mSwipeRefreshLayout.setOnRefreshListener(mOnSwipeUpListener);
     }
@@ -133,7 +141,7 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void resolveDaggerDependency() {
         DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .recipesModule(new RecipesModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 

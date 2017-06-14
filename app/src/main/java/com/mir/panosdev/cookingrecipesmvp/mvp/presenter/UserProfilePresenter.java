@@ -5,7 +5,7 @@ import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileMVP;
 
 import java.util.List;
 
@@ -13,46 +13,69 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 /**
  * Created by Panos on 4/5/2017.
  */
 
-public class UserProfilePresenter extends BasePresenter<UserProfileView> implements Observer<Response<RecipesResponse>> {
+public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
-    @Inject protected RecipesApiService mApiService;
-    @Inject protected RecipeMapper mRecipeMapper;
-    @Inject public UserProfilePresenter(){}
+    private UserProfileMVP.UserProfileView mView;
+    protected CompositeDisposable compositeDisposable;
 
     @Inject
-    public void getUserRecipes(){
-        Observable<Response<RecipesResponse>> recipeObservable = mApiService.getUserRecipes(getView().getUserId());
-        subscribe(recipeObservable, this);
+    protected RecipesApiService mApiService;
+    @Inject
+    protected RecipeMapper mRecipeMapper;
+
+    @Inject
+    public UserProfilePresenter() {
     }
 
-    @Override
-    public void onSubscribe(Disposable d) {
+    @Inject
+    public void getUserRecipes() {
+        if (mView != null) {
+            Observable<Response<RecipesResponse>> recipeObservable = mApiService.getUserRecipes(mView.getUserId());
+            Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
+                        @Override
+                        public void onNext(Response<RecipesResponse> recipesResponseResponse) {
+                            if (recipesResponseResponse.isSuccessful()) {
+                                List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
+                                mView.onClearItems();
+                                mView.onRecipesLoaded(recipes);
+                            }
+                        }
 
-    }
+                        @Override
+                        public void onError(Throwable e) {
+                        }
 
-    @Override
-    public void onNext(Response<RecipesResponse> recipesResponse) {
-        if(recipesResponse.isSuccessful()) {
-            List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponse.body().getRecipes());
-            getView().onClearItems();
-            getView().onRecipesLoaded(recipes);
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
         }
     }
 
     @Override
-    public void onError(Throwable e) {
-
+    public void attachView(UserProfileMVP.UserProfileView view) {
+        mView = view;
     }
 
     @Override
-    public void onComplete() {
-
+    public void detachView() {
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
+        mView = null;
     }
 }

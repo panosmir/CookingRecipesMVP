@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRegisterComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RegisterModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RegisterPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterActivityMVP;
 
 import javax.inject.Inject;
 
@@ -24,7 +24,7 @@ import butterknife.OnClick;
  * Created by Panos on 4/7/2017.
  */
 
-public class RegisterActivity extends BaseActivity implements RegisterView {
+public class RegisterActivity extends BaseActivity implements RegisterActivityMVP.RegisterView {
 
     @BindView(R.id.usernameRegisterET)
     EditText mUsername;
@@ -32,9 +32,22 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     @BindView(R.id.passwordRegisterET)
     EditText mPassword;
 
-    @Inject protected RegisterPresenter mRegisterPresenter;
+    @Inject
+    protected RegisterPresenter mRegisterPresenter;
 
     User user = new User();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mRegisterPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRegisterPresenter.detachView();
+    }
 
     @Override
     protected int getContentView() {
@@ -43,38 +56,32 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
 
     @Override
     public User getUserDetails() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        if (sharedPreferences.contains("EXISTS")) {
-            user.setId(sharedPreferences.getInt("USER_ID", 0));
-            user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
-            user.setPassword(sharedPreferences.getString("USER_PASSWORD", null));
+
+        if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
+            user.setUsername(mUsername.getText().toString());
+            user.setPassword(mPassword.getText().toString());
             return user;
-        } else {
-            if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
-                user.setUsername(mUsername.getText().toString());
-                user.setPassword(mPassword.getText().toString());
-                return user;
-            }
         }
+
         return null;
     }
 
     @OnClick(R.id.userRegistrationButton)
-    public void userRegistrationButtonClick(){
+    public void userRegistrationButtonClick() {
         mRegisterPresenter.userRegistration();
     }
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerRegisterComponent.builder()
-            .applicationComponent(getApplicationComponent())
-            .registerModule(new RegisterModule(this))
-            .build().inject(this);
+        DaggerRecipesComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .recipesModule(new RecipesModule())
+                .build().inject(this);
     }
 
     @Override
     public void onHideDialog() {
-
+        hideDialog();
     }
 
     @Override
@@ -85,7 +92,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
 
     @Override
     public void returnUserDetails(User user) {
-        if(user != null) {
+        if (user != null) {
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("USER_ID", user.getId());

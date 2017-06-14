@@ -10,17 +10,13 @@ import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerLoginComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.LoginModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.LoginPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
-import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
-
-import java.io.IOException;
-import java.net.InetAddress;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
 
 import javax.inject.Inject;
 
@@ -31,7 +27,7 @@ import butterknife.OnClick;
  * Created by Panos on 3/27/2017.
  */
 
-public class LoginActivity extends BaseActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginActivityMVP.LoginView {
 
     @BindView(R.id.usernameEditText)
     TextView mUsername;
@@ -46,6 +42,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Inject
     SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLoginPresenter.attachView(this);
+        mLoginPresenter.userLogin();
+    }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -73,9 +76,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerLoginComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .loginModule(new LoginModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 
@@ -86,6 +89,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             user.setId(sharedPreferences.getInt("USER_ID", 0));
             user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
             user.setPassword(sharedPreferences.getString("USER_PASSWORD", null));
+            Log.d("LOGIN_LOG", "Username -> " + user.getUsername());
             return user;
         } else {
             if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {

@@ -1,25 +1,28 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
-import android.os.Handler;
-
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 
-public class LoginPresenter extends BasePresenter<LoginView> implements Observer<Response<User>> {
+public class LoginPresenter implements LoginActivityMVP.Presenter {
+
+    private LoginActivityMVP.LoginView mView;
+    protected CompositeDisposable compositeDisposable;
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -31,46 +34,58 @@ public class LoginPresenter extends BasePresenter<LoginView> implements Observer
 
     @Inject
     public void userLogin() {
-        if (getView().getUserDetails() != null) {
-            Observable<Response<User>> userObservable = mRecipesApiService.userLogin(getView().getUserDetails());
-            subscribe(userObservable, this);
-        }
-    }
+        if (mView != null && mView.getUserDetails()!=null) {
+            Observable<Response<User>> userObservable = mRecipesApiService.userLogin(mView.getUserDetails());
+            Disposable disposable = userObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableObserver<Response<User>>() {
+                        @Override
+                        public void onNext(Response<User> userResponse) {
+                            switch (userResponse.code()) {
+                                case HttpURLConnection.HTTP_OK:
+                                    mView.returnUserDetails(userResponse.body());
+                                    loginSuccessful();
+                                    break;
+                                case HttpURLConnection.HTTP_NOT_FOUND:
+                                    loginFailed();
+                                    break;
+                            }
+                        }
 
-    @Override
-    public void onSubscribe(Disposable d) {
-    }
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.onHideDialog();
+                            mView.onErrorToast("Server is down...");
+                        }
 
-    @Override
-    public void onNext(Response<User> userResponse) {
-        switch (userResponse.code()) {
-            case HttpURLConnection.HTTP_OK:
-                getView().returnUserDetails(userResponse.body());
-                loginSuccessful();
-                break;
-            case HttpURLConnection.HTTP_NOT_FOUND:
-                loginFailed();
-                break;
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
         }
     }
 
     private void loginFailed() {
-        getView().onHideDialog();
-        getView().onErrorToast("Username or password incorrect...");
+        mView.onHideDialog();
+        mView.onErrorToast("Username or password incorrect...");
     }
 
     private void loginSuccessful() {
-        getView().onHideDialog();
-        getView().onLoginCompleted("You logged in successfully!!!");
+        mView.onHideDialog();
+        mView.onLoginCompleted("You logged in successfully!!!");
     }
 
     @Override
-    public void onError(Throwable e) {
-        getView().onHideDialog();
-        getView().onErrorToast("Server is down...");
+    public void attachView(LoginActivityMVP.LoginView view) {
+        mView = view;
     }
 
     @Override
-    public void onComplete() {
+    public void detachView() {
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
+        mView = null;
     }
 }

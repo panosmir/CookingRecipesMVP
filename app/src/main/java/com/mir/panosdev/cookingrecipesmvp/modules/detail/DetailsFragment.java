@@ -1,30 +1,25 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.detail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerDetailComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.DetailsModule;
-import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 
 import javax.inject.Inject;
 
@@ -32,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class DetailsFragment extends BaseFragment implements DetailsView {
+public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.DetailsView {
     public static final String RECIPE = "recipe";
 
     @BindView(R.id.recipeTitleDetail)
@@ -54,6 +49,12 @@ public class DetailsFragment extends BaseFragment implements DetailsView {
     private AddedIngredientsAdapter mIngredientsAdapter;
     private int userId;
     private boolean isReadyForDelete = false, isReadyForUpdate = false;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.attachView(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +81,14 @@ public class DetailsFragment extends BaseFragment implements DetailsView {
             mRecipeTitle.setTransitionName("recipeAnimation");
         }
 
+    }
+
+    @Override
+    protected void resolveDaggerDependency() {
+        DaggerRecipesComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .recipesModule(new RecipesModule())
+                .build().inject(this);
     }
 
     private void initializeList() {

@@ -2,7 +2,6 @@ package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,8 +17,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerNewRecipeComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.NewRecipeModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
@@ -31,7 +29,7 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.NewRecipePresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeView;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +39,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
+public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewRecipeView {
 
     @BindView(R.id.addRecipeTitleEditText)
     EditText addRecipeTitle;
@@ -67,6 +65,18 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     private int categoryId;
     private IngredientAdapter mIngredientAdapter;
     private AddedIngredientsAdapter mAddedIngredientsAdapter;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mNewRecipePresenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNewRecipePresenter.detachView();
+    }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -112,9 +122,9 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerNewRecipeComponent.builder().applicationComponent(
-                getApplicationComponent()
-        ).newRecipeModule(new NewRecipeModule(this))
+        DaggerRecipesComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 
