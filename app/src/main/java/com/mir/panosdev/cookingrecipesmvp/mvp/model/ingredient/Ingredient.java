@@ -13,10 +13,12 @@ public class Ingredient implements Serializable{
     private int id;
     private String ingredient;
     private Category category;
+    private String quantity;
 
-    public Ingredient(int id, String ingredient) {
+    public Ingredient(int id, String ingredient, String quantity) {
         this.id = id;
         this.ingredient = ingredient;
+        this.quantity = quantity;
     }
 
     public Ingredient() {
@@ -44,5 +46,13 @@ public class Ingredient implements Serializable{
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

@@ -195,7 +195,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @Override
     public void onIngredientsLoaded(List<Ingredient> ingredientList) {
         mIngredientAdapter.addIngredients(ingredientList);
-        mIngredientAdapter.notifyDataSetChanged();
         mIngredients = ingredientList;
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
@@ -66,6 +67,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        @BindView(R.id.grEditText)
+        EditText mGrEdiText;
+
         @BindView(R.id.ingredientTextView)
         protected TextView ingredientTitle;
 
@@ -83,8 +87,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         }
 
         public void bind(Ingredient ingredient) {
-            mIngredient = ingredient;
             ingredientTitle.setText(ingredient.getIngredient());
+//            ingredient.setQuantity(mGrEdiText.getText().toString());
+            mIngredient = ingredient;
         }
 
         @Override
@@ -95,6 +100,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
                     mCheckBox.setChecked(false);
                 else
                     mCheckBox.setChecked(true);
+                mIngredient.setQuantity(mGrEdiText.getText().toString());
             }
         }
 
