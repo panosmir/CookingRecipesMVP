@@ -1,5 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient;
 
+import com.google.gson.annotations.SerializedName;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ public class Ingredient implements Serializable{
     private int id;
     private String ingredient;
     private Category category;
+    @SerializedName(value = "quantity")
     private String quantity;
 
     public Ingredient(int id, String ingredient, String quantity) {

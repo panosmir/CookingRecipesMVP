@@ -60,6 +60,9 @@ public class AddedIngredientsAdapter extends RecyclerView.Adapter<AddedIngredien
         @BindView(R.id.addedIngredientTextView)
         TextView mAddedIngredient;
 
+        @BindView(R.id.quantityTextView)
+        TextView mQuantity;
+
         private Ingredient mIngredient;
         private Context mContext;
 
@@ -72,6 +75,7 @@ public class AddedIngredientsAdapter extends RecyclerView.Adapter<AddedIngredien
         public void bind(Ingredient ingredient) {
             mIngredient = ingredient;
             mAddedIngredient.setText(ingredient.getIngredient());
+            mQuantity.setText(ingredient.getQuantity());
         }
     }
 }

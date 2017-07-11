@@ -88,7 +88,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
         public void bind(Ingredient ingredient) {
             ingredientTitle.setText(ingredient.getIngredient());
-//            ingredient.setQuantity(mGrEdiText.getText().toString());
+            ingredient.setQuantity(mGrEdiText.getText().toString());
             mIngredient = ingredient;
         }
 
