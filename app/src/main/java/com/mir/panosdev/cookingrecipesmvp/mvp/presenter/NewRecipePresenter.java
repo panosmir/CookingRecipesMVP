@@ -78,7 +78,6 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
     @Inject
     public void fetchCategories() {
-
             Observable<Response<Categories>> categoryObservable = mRecipesApiService.getAllCategories();
             Disposable disposable = categoryObservable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -104,7 +103,6 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);
-
     }
 
     @Inject

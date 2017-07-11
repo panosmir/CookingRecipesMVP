@@ -15,9 +15,13 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerR
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
+import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -151,5 +155,30 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
     @Override
     public void onUpdateShowToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public int getCategoryId() {
+        return 0;
+    }
+
+    @Override
+    public void onClearIngredients() {
+
+    }
+
+    @Override
+    public void onIngredientsLoaded(List<Ingredient> ingredientList) {
+
+    }
+
+    @Override
+    public void onClearItems() {
+
+    }
+
+    @Override
+    public void onItemsLoaded(List<Category> categories) {
+
     }
 }

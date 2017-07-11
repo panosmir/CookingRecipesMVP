@@ -1,12 +1,10 @@
-package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter;
+package com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
@@ -18,25 +16,28 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder>{
+/**
+ * Created by Panos on 14-Jun-17.
+ */
+
+public class UpdateIngredientAdapter extends RecyclerView.Adapter<UpdateIngredientAdapter.Holder>{
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
 
-    public IngredientAdapter(LayoutInflater inflater){
+    public UpdateIngredientAdapter(LayoutInflater inflater){
         mLayoutInflater = inflater;
     }
 
     @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.ingredient_list_item_layout, parent, false);
+    public UpdateIngredientAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mLayoutInflater.inflate(R.layout.added_ingredients_list, parent, false);
         return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(IngredientAdapter.Holder holder, int position) {
+    public void onBindViewHolder(UpdateIngredientAdapter.Holder holder, int position) {
         holder.bind(mIngredients.get(position));
     }
 
@@ -55,29 +56,18 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         notifyDataSetChanged();
     }
 
-    public void add(Ingredient ingredient) {
-        mIngredients.add(ingredient);
-        notifyDataSetChanged();
-    }
-
-    public void remove(Ingredient ingredient){
+    public void removeIngredient(Ingredient ingredient){
         mIngredients.remove(ingredient);
         notifyDataSetChanged();
     }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.grEditText)
-        EditText mGrEdiText;
+        @BindView(R.id.addedIngredientTextView)
+        TextView mIngredientTextView;
 
-        @BindView(R.id.ingredientTextView)
-        protected TextView ingredientTitle;
-
-        @BindView(R.id.ingredientCheckBox)
-        CheckBox mCheckBox;
-
-        private Ingredient mIngredient;
         private Context mContext;
+        private Ingredient mIngredient;
 
         public Holder(View itemView) {
             super(itemView);
@@ -87,23 +77,16 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         }
 
         public void bind(Ingredient ingredient) {
-            ingredientTitle.setText(ingredient.getIngredient());
-            ingredient.setQuantity(mGrEdiText.getText().toString());
             mIngredient = ingredient;
+            mIngredientTextView.setText(ingredient.getIngredient());
         }
 
         @Override
         public void onClick(View v) {
             if(mIngredientClickListener!=null){
-                mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
-                if(mCheckBox.isChecked())
-                    mCheckBox.setChecked(false);
-                else
-                    mCheckBox.setChecked(true);
-                mIngredient.setQuantity(mGrEdiText.getText().toString());
+                mIngredientClickListener.onClick(mIngredientTextView, mIngredient, getAdapterPosition());
             }
         }
-
     }
 
     private OnIngredientClickListener mIngredientClickListener;

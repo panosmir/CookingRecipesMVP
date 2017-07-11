@@ -6,17 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <EditText
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/grEditText"
+        android:hint="g"
+        android:textAlignment="center"/>
+
     <TextView
         android:id="@+id/ingredientTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/grEditText"
+        android:layout_marginStart="8dp" />
 
     <CheckBox
         android:id="@+id/ingredientCheckBox"
