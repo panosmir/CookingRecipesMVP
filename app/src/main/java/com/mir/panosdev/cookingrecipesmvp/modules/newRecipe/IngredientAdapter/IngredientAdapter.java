@@ -27,6 +27,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
+    private int buttonClickCounter = 0;
 
     public IngredientAdapter(LayoutInflater inflater) {
         mLayoutInflater = inflater;
@@ -95,12 +96,20 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         @Override
         public void onClick(View v) {
             if (mIngredientClickListener != null) {
-                mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
+                if (!mGrEdiText.getText().toString().isEmpty()) {
 
-                mIngredient.setQuantity(mGrEdiText.getText().toString());
+                    mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
 
-                ingredientTitle.setPaintFlags(ingredientTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    mIngredient.setQuantity(mGrEdiText.getText().toString());
 
+                    ingredientTitle.setPaintFlags(ingredientTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    buttonClickCounter++;
+                    if(buttonClickCounter%2 == 0){
+                        mGrEdiText.setText("");
+                        ingredientTitle.setPaintFlags(0);
+                    }
+                } else
+                    return;
             }
         }
 

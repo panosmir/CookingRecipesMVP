@@ -238,9 +238,14 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     private OnIngredientClickListener mOnIngredientClickListener = new OnIngredientClickListener() {
         @Override
         public void onClick(View v, Ingredient ingredient, int position) {
-            if (!addedIngredients.contains(ingredient))
+            if (!addedIngredients.contains(ingredient)) {
                 addedIngredients.add(ingredient);
-            Toast.makeText(NewRecipeActivity.this,ingredient.getIngredient() + " added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewRecipeActivity.this,ingredient.getIngredient() + " added!", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                addedIngredients.remove(ingredient);
+                Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
+            }
 
         }
     };
