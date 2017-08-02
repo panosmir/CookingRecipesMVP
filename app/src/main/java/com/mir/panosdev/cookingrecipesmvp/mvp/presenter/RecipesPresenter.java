@@ -49,6 +49,7 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
     public void getRecipes() {
         if (mainView != null)
             mainView.onShowDialog("Loading recipes....");
+        mStorage.dropDatabase();
         Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getRecipes();
         Disposable disposable = recipesResponseObservable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -72,7 +73,6 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                         mainView.onShowToast("Sync completed!");
                     }
                 });
-        mStorage.dropDatabase();
         if (compositeDisposable != null)
             compositeDisposable.add(disposable);
 
