@@ -7,6 +7,7 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,9 +49,15 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                     .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
                         @Override
                         public void onNext(Response<RecipesResponse> recipesResponseResponse) {
-                            List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
-                            mView.onClearItems();
-                            mView.onRecipeLoaded(recipes);
+                            if(recipesResponseResponse.isSuccessful()) {
+                                List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
+                                mView.onClearItems();
+                                mView.onRecipeLoaded(recipes);
+                            }
+                            else if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe not found.");
+                            }
                         }
 
                         @Override
