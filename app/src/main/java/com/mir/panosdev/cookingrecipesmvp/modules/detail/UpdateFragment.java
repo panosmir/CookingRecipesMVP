@@ -80,6 +80,7 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
     private List<Ingredient> updatedIngredients = new ArrayList<>();
     private Category mCategory = new Category();
     private CategoryAdapter mCategoryAdapter;
+    private List<Ingredient> tempList = new ArrayList<>();
 
     @Override
     public void onStart() {
@@ -180,11 +181,28 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
         mIngredientRecyclerView.setAdapter(mUpdateIngredientAdapter);
     }
 
+    private List<Ingredient> moddedIngredients(){
+        tempList.clear();
+        tempList.addAll(mIngredients);
+        for (Ingredient i :
+                mIngredients) {
+            for (Ingredient ingredient :
+                    updateRecipe.getIngredients()) {
+                if(ingredient.getIngredient().equals(i.getIngredient())){
+                    tempList.remove(i);
+                }
+            }
+        }
+        mIngredientAdapter.clearIngredients();
+        mIngredientAdapter.addIngredients(tempList);
+        return tempList;
+    }
+
     @OnClick(R.id.ingredientSearchButton)
     public void searchIngredientButtonClick() {
         new MaterialDialog.Builder(this.getActivity())
                 .title(mCategory.getCategory())
-                .items(mIngredients)
+                .items(moddedIngredients())
                 .adapter(mIngredientAdapter, new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false))
                 .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override

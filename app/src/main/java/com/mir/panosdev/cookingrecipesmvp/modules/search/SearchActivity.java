@@ -99,7 +99,7 @@ public class SearchActivity extends BaseActivity implements SearchActivityMVP.Se
     private OnBottomNavigationClickListener mOnBottomNavigationClickListener = new OnBottomNavigationClickListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem menu) {
-            switch (menu.getItemId()){
+            switch (menu.getItemId()) {
                 case R.id.action_recipes:
                     loadRecipes();
                     return true;
