@@ -1,6 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 
 import java.util.ArrayList;
@@ -20,12 +23,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder>{
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder> {
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
 
-    public IngredientAdapter(LayoutInflater inflater){
+    public IngredientAdapter(LayoutInflater inflater) {
         mLayoutInflater = inflater;
     }
 
@@ -45,12 +48,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         return mIngredients.size();
     }
 
-    public void addIngredients(List<Ingredient> ingredients){
+    public void addIngredients(List<Ingredient> ingredients) {
         mIngredients.addAll(ingredients);
         notifyDataSetChanged();
     }
 
-    public void clearIngredients(){
+    public void clearIngredients() {
         mIngredients.clear();
         notifyDataSetChanged();
     }
@@ -60,21 +63,18 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         notifyDataSetChanged();
     }
 
-    public void remove(Ingredient ingredient){
+    public void remove(Ingredient ingredient) {
         mIngredients.remove(ingredient);
         notifyDataSetChanged();
     }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.grEditText)
         EditText mGrEdiText;
 
         @BindView(R.id.ingredientTextView)
         protected TextView ingredientTitle;
-
-        @BindView(R.id.ingredientCheckBox)
-        CheckBox mCheckBox;
 
         private Ingredient mIngredient;
         private Context mContext;
@@ -94,21 +94,21 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
         @Override
         public void onClick(View v) {
-            if(mIngredientClickListener!=null){
+            if (mIngredientClickListener != null) {
                 mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
-                if(mCheckBox.isChecked())
-                    mCheckBox.setChecked(false);
-                else
-                    mCheckBox.setChecked(true);
+
                 mIngredient.setQuantity(mGrEdiText.getText().toString());
+
+                ingredientTitle.setPaintFlags(ingredientTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
             }
         }
 
     }
 
-    private OnIngredientClickListener mIngredientClickListener;
+    private OnIngredientClickListener mIngredientClickListener = null;
 
-    public void setIngredientClickListener(OnIngredientClickListener listener){
+    public void setIngredientClickListener(OnIngredientClickListener listener) {
         mIngredientClickListener = listener;
     }
 }
