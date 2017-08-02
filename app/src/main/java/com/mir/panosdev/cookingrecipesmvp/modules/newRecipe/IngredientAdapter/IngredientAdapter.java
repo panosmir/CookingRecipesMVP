@@ -6,14 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 
 import java.util.ArrayList;
@@ -21,13 +18,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder> {
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
-    private int buttonClickCounter = 0;
 
     public IngredientAdapter(LayoutInflater inflater) {
         mLayoutInflater = inflater;
@@ -79,6 +74,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
         private Ingredient mIngredient;
         private Context mContext;
+        private boolean isClicked = false;
 
         public Holder(View itemView) {
             super(itemView);
@@ -97,16 +93,20 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         public void onClick(View v) {
             if (mIngredientClickListener != null) {
                 if (!mGrEdiText.getText().toString().isEmpty()) {
-
-                    mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition());
-
-                    mIngredient.setQuantity(mGrEdiText.getText().toString());
-
-                    ingredientTitle.setPaintFlags(ingredientTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    buttonClickCounter++;
-                    if(buttonClickCounter%2 == 0){
+                    if(isClicked) {
+                        mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition(), isClicked);
                         mGrEdiText.setText("");
                         ingredientTitle.setPaintFlags(0);
+                        isClicked = false;
+                    }
+                    else {
+                        mIngredientClickListener.onClick(ingredientTitle, mIngredient, getAdapterPosition(), isClicked);
+
+                        mIngredient.setQuantity(mGrEdiText.getText().toString());
+
+                        ingredientTitle.setPaintFlags(ingredientTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                        isClicked = true;
                     }
                 } else
                     return;
@@ -117,7 +117,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
 
     private OnIngredientClickListener mIngredientClickListener = null;
 
+
     public void setIngredientClickListener(OnIngredientClickListener listener) {
         mIngredientClickListener = listener;
     }
+
 }

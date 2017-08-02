@@ -88,7 +88,7 @@ public class UpdateIngredientAdapter extends RecyclerView.Adapter<UpdateIngredie
         @Override
         public void onClick(View v) {
             if(mIngredientClickListener!=null){
-                mIngredientClickListener.onClick(mIngredientTextView, mIngredient, getAdapterPosition());
+                mIngredientClickListener.onClick(mIngredientTextView, mIngredient, getAdapterPosition(), true);
             }
         }
     }

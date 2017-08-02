@@ -87,7 +87,12 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
         super.onStart();
         mDetailsPresenter.attachView(this);
         mDetailsPresenter.fetchCategories();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDetailsPresenter.detachView();
     }
 
     @Nullable
@@ -225,7 +230,7 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
 
     private OnIngredientClickListener mIngredientClickListener = new OnIngredientClickListener() {
         @Override
-        public void onClick(View v, Ingredient ingredient, int position) {
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
             mUpdateIngredientAdapter.removeIngredient(ingredient);
             updateRecipe.getIngredients().remove(ingredient);
         }
@@ -233,7 +238,7 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
 
     private OnIngredientClickListener mUpdateIngredientClickListener = new OnIngredientClickListener() {
         @Override
-        public void onClick(View v, Ingredient ingredient, int position) {
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
             if (updateRecipe.getIngredients().contains(ingredient)) {
                 updateRecipe.getIngredients().remove(ingredient);
                 mUpdateIngredientAdapter.removeIngredient(ingredient);
@@ -248,16 +253,6 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
             return mRecipe;
         else
             return updateRecipe;
-    }
-
-    @Override
-    public void onDeleteShowToast(String message) {
-        Toast.makeText(this.getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean getDeleteSignal() {
-        return isReadyForDelete;
     }
 
     @Override

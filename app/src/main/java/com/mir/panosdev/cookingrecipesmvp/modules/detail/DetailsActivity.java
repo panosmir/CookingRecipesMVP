@@ -28,7 +28,7 @@ import javax.inject.Inject;
 /**
  * Created by Panos on 3/18/2017.
  */
-public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.DetailsView {
+public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.DetailsViewActivity {
 
     public static final String RECIPE = "recipe";
 
@@ -46,7 +46,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.attachView(this);
+        mPresenter.attachActivity(this);
     }
 
     @Override
@@ -148,38 +148,4 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
         return isReadyForDelete;
     }
 
-    @Override
-    public boolean getUpdateSignal() {
-        return isReadyForUpdate;
-    }
-
-    @Override
-    public void onUpdateShowToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public int getCategoryId() {
-        return 0;
-    }
-
-    @Override
-    public void onClearIngredients() {
-
-    }
-
-    @Override
-    public void onIngredientsLoaded(List<Ingredient> ingredientList) {
-
-    }
-
-    @Override
-    public void onClearItems() {
-
-    }
-
-    @Override
-    public void onItemsLoaded(List<Category> categories) {
-
-    }
 }

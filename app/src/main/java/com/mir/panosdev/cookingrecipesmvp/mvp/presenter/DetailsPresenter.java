@@ -39,6 +39,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     protected CategoryMapper mCategoryMapper;
 
     private DetailsActivityMVP.DetailsView mView;
+    private DetailsActivityMVP.DetailsViewActivity mDetailsViewActivity;
     private Observable<Response<Recipe>> recipeObservable;
 
     protected CompositeDisposable compositeDisposable;
@@ -49,8 +50,8 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
     @Inject
     public void deleteRecipe() {
-        if (mView!=null && mView.getDeleteSignal()) {
-            recipeObservable = mRecipesApiService.deleteRecipe(mView.getRecipeDetails());
+        if (mDetailsViewActivity!=null && mDetailsViewActivity.getDeleteSignal()) {
+            recipeObservable = mRecipesApiService.deleteRecipe(mDetailsViewActivity.getRecipeDetails());
             Disposable disposable = recipeObservable.observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .subscribeWith(new DisposableObserver<Response<Recipe>>() {
@@ -67,7 +68,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-
+                            mDetailsViewActivity.onDeleteShowToast("Recipe deleted!");
                         }
                     });
             if (compositeDisposable != null)
@@ -92,6 +93,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
                         @Override
                         public void onComplete() {
+                            mView.onUpdateShowToast("Recipe updated!");
                         }
                     });
             if (compositeDisposable != null)
@@ -164,9 +166,15 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     }
 
     @Override
+    public void attachActivity(DetailsActivityMVP.DetailsViewActivity detailsViewActivity) {
+        mDetailsViewActivity = detailsViewActivity;
+    }
+
+    @Override
     public void detachView() {
         if (compositeDisposable != null)
             compositeDisposable.dispose();
         mView = null;
+        mDetailsViewActivity = null;
     }
 }

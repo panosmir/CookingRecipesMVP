@@ -9,5 +9,5 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
  */
 
 public interface OnIngredientClickListener {
-    void onClick(View v, Ingredient ingredient, int position);
+    void onClick(View v, Ingredient ingredient, int position, boolean isClicked);
 }
