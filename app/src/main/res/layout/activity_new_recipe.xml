@@ -108,17 +108,19 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/newRecipeFloatingButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_addrecipe_icon"
-            app:layout_constraintTop_toTopOf="@+id/textInputDescription"
             android:layout_marginTop="120dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_addrecipe_icon"
+            app:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            android:layout_marginBottom="8dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textInputDescription"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </android.support.constraint.ConstraintLayout>
