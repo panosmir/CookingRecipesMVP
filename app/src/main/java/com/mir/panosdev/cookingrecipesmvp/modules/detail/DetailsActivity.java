@@ -69,6 +69,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
         showBackArrow();
         prefs = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         recipe = (Recipe) intent.getSerializableExtra(RECIPE);
+        getSupportActionBar().setTitle(recipe.getTitle());
     }
 
     @Override
