@@ -34,9 +34,6 @@ import butterknife.ButterKnife;
 public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.DetailsView {
     public static final String RECIPE = "recipe";
 
-    @BindView(R.id.recipeTitleDetail)
-    TextView mRecipeTitle;
-
     @BindView(R.id.recipeDescriptionDetail)
     TextView mRecipeDescription;
 
@@ -80,12 +77,11 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPrefs = getActivity().getSharedPreferences("USER_CREDENTIALS", Context.MODE_PRIVATE);
         mRecipe = (Recipe) getActivity().getIntent().getSerializableExtra(RECIPE);
-        mRecipeTitle.setText(mRecipe.getTitle());
         mRecipeDescription.setText(mRecipe.getDescription());
         initializeList();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mRecipeTitle.setTransitionName("recipeAnimation");
+            mRecipeDescription.setTransitionName("recipeAnimation");
         }
 
     }
