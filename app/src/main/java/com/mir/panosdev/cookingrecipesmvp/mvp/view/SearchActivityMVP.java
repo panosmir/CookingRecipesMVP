@@ -27,7 +27,7 @@ public interface SearchActivityMVP extends BaseView {
 
     interface Presenter{
         void attachView(SearchActivityMVP.SearchView view);
-        void detatchView();
+        void detachView();
     }
 
 }

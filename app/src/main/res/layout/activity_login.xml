@@ -23,7 +23,7 @@
 
         <EditText
             android:id="@+id/usernameEditText"
-            style="@style/TextColor"
+            style="@style/DetailTextColor"
             android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="56dp"
@@ -50,7 +50,7 @@
 
         <EditText
             android:id="@+id/passwordEditText"
-            style="@style/TextColor"
+            style="@style/DetailTextColor"
             android:layout_width="208dp"
             android:layout_height="48dp"
             android:layout_marginBottom="39dp"

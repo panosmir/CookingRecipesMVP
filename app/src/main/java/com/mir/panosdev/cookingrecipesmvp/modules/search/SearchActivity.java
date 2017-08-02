@@ -57,7 +57,7 @@ public class SearchActivity extends BaseActivity implements SearchActivityMVP.Se
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSearchPresenter.detatchView();
+        mSearchPresenter.detachView();
     }
 
     @Override

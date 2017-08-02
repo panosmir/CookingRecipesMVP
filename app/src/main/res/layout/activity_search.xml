@@ -21,7 +21,7 @@
 
         <EditText
             android:id="@+id/searchRecipeTextView"
-            style="@style/TextColor"
+            style="@style/DetailTextColor"
             android:layout_width="226dp"
             android:layout_height="51dp"
             android:hint="Search Recipe"/>
@@ -58,7 +58,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchRecipeList"
-        android:layout_width="336dp"
+        android:layout_width="354dp"
         android:layout_height="253dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"

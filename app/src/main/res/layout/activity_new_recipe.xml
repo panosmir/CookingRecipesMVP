@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp">
             <EditText
                 android:id="@+id/addRecipeTitleEditText"
-                style="@style/TextColor"
+                style="@style/DetailTextColor"
                 android:layout_width="299dp"
                 android:layout_height="50dp"
                 android:hint="Recipe title"/>
@@ -67,7 +67,7 @@
             android:layout_marginBottom="8dp">
             <EditText
                 android:id="@+id/addRecipeDescriptionEditText"
-                style="@style/TextColor"
+                style="@style/DetailTextColor"
                 android:layout_width="302dp"
                 android:layout_height="135dp"
                 android:layout_marginLeft="8dp"

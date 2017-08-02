@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class SearchPresenter implements SearchActivityMVP.Presenter {
 
     private SearchActivityMVP.SearchView mView;
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable = null;
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -53,6 +53,8 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                                 List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
                                 mView.onClearItems();
                                 mView.onRecipeLoaded(recipes);
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe found!!!");
                             }
                             else if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
                                 mView.onHideDialog();
@@ -68,8 +70,6 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-                            mView.onHideDialog();
-                            mView.onShowToast("Recipe found!!!");
                         }
                     });
             if (compositeDisposable != null)
@@ -83,7 +83,7 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
     }
 
     @Override
-    public void detatchView() {
+    public void detachView() {
         if (compositeDisposable != null)
             compositeDisposable.dispose();
         mView = null;

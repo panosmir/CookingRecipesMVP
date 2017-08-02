@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#95a5a6"
+    android:background="#5B738B"
     android:orientation="vertical">
 
     <TextView
@@ -14,11 +14,13 @@
         android:layout_marginBottom="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:textAlignment="center"
         android:padding="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textSize="14sp"
+        android:textSize="17sp"
         android:visibility="visible"
+        style="@style/MainTextColor"
         app:layout_constraintBottom_toTopOf="@+id/ingredientsRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

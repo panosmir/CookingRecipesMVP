@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/usernameTextView"
-        style="@style/TextColor"
+        style="@style/DetailTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/userRecipesTextView"
-        style="@style/TextColor"
+        style="@style/DetailTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
