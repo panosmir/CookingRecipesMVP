@@ -7,10 +7,10 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:layout_width="55dp"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:id="@+id/grEditText"
-        android:hint="g"
+        android:hint="Quantity"
         android:textAlignment="center"/>
 
     <TextView
@@ -25,17 +25,6 @@
         app:layout_constraintStart_toEndOf="@+id/grEditText"
         android:layout_marginStart="8dp" />
 
-    <CheckBox
-        android:id="@+id/ingredientCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/ingredientTextView"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintHorizontal_bias="0.944"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="4dp" />
 
 
 </android.support.constraint.ConstraintLayout>

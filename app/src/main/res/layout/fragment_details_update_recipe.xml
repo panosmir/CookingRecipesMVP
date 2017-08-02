@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:hint="Title"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -43,14 +43,12 @@
                 android:id="@+id/recipeDescriptionDetailEditText"
                 android:layout_width="348dp"
                 android:layout_height="200dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 android:hint="Description"
                 android:padding="10dp"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/updateIngredientRecyclerView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeTitleDetailEditText"
@@ -63,33 +61,39 @@
                 android:id="@+id/saveRecipeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="72dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginEnd="24dp"
                 android:text="Save"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cancelButton"
+                android:layout_marginStart="8dp"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cancelButton" />
+                android:layout_marginTop="28dp"
+                app:layout_constraintTop_toBottomOf="@+id/updateIngredientRecyclerView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" />
 
             <Button
                 android:id="@+id/cancelButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="72dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:text="Cancel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="28dp"
+                app:layout_constraintTop_toBottomOf="@+id/updateIngredientRecyclerView"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginBottom="8dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/updateIngredientRecyclerView"
-                android:layout_width="245dp"
+                android:layout_width="250dp"
                 android:layout_height="107dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/updateCategorySpinner" />
 
             <Button
                 android:id="@+id/ingredientSearchButton"
@@ -98,20 +102,20 @@
                 android:text="Search"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintStart_toEndOf="@+id/updateIngredientRecyclerView"
                 android:layout_marginStart="8dp"
-                app:layout_constraintHorizontal_bias="1.0"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/saveRecipeButton" />
+                app:layout_constraintStart_toEndOf="@+id/updateCategorySpinner"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/recipeDescriptionDetailEditText" />
 
             <Spinner
                 android:id="@+id/updateCategorySpinner"
-                android:layout_width="103dp"
+                android:layout_width="243dp"
                 android:layout_height="40dp"
-                android:layout_marginBottom="4dp"
-                app:layout_constraintBottom_toTopOf="@+id/ingredientSearchButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/recipeDescriptionDetailEditText" />
 
         </android.support.constraint.ConstraintLayout>
 
