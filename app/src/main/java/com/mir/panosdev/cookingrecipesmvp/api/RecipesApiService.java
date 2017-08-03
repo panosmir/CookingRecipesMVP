@@ -10,6 +10,7 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -29,13 +30,13 @@ public interface RecipesApiService {
     Observable<Response<RecipesResponse>> getUserRecipes(@Path("id") int id);
 
     @POST("recipes/all/userId/create")
-    Observable<Recipe> addRecipe(@Body Recipe recipe);
+    Completable addRecipe(@Body Recipe recipe);
 
     @POST("users/create")
     Observable<Response<User>> userRegistration(@Body User user);
 
     @POST("users/all/findUser")
-    Observable<Response<User>> userLogin(@Body User user);
+    Single<Response<User>> userLogin(@Body User user);
 
     @HTTP(method = "DELETE", path = "/recipes/delete", hasBody = true)
     Completable deleteRecipe(@Body Recipe recipe);

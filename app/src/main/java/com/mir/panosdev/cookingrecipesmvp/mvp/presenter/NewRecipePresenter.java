@@ -17,20 +17,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 import static io.reactivex.internal.operators.observable.ObservableBlockingSubscribe.subscribe;
-
-/**
- * Created by Panos on 4/3/2017.
- */
 
 public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
@@ -54,14 +52,10 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
     @Inject
     public void addNewRecipe() {
         if (mView != null) {
-            Observable<Recipe> recipeObservable = mRecipesApiService.addRecipe(mView.getRecipeDetails());
+            Completable recipeObservable = mRecipesApiService.addRecipe(mView.getRecipeDetails());
             Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Recipe>() {
-                        @Override
-                        public void onNext(Recipe recipe) {
-                        }
-
+                    .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onError(Throwable e) {
                         }
