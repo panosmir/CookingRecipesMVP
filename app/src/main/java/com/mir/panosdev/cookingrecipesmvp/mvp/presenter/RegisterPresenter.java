@@ -1,30 +1,18 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
 import android.util.Log;
-
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
-import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterActivityMVP;
-
 import java.net.HttpURLConnection;
-
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
-
-/**
- * Created by Panos on 4/7/2017.
- */
 
 public class RegisterPresenter implements RegisterActivityMVP.Presenter {
 

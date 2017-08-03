@@ -6,38 +6,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Panos on 14-Jun-17.
- */
-
-public class UpdateIngredientAdapter extends RecyclerView.Adapter<UpdateIngredientAdapter.Holder>{
+public class UpdatableIngredientAdapter extends RecyclerView.Adapter<UpdatableIngredientAdapter.Holder>{
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
 
-    public UpdateIngredientAdapter(LayoutInflater inflater){
+    public UpdatableIngredientAdapter(LayoutInflater inflater){
         mLayoutInflater = inflater;
     }
 
     @Override
-    public UpdateIngredientAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UpdatableIngredientAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.added_ingredients_list, parent, false);
         return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(UpdateIngredientAdapter.Holder holder, int position) {
+    public void onBindViewHolder(UpdatableIngredientAdapter.Holder holder, int position) {
         holder.bind(mIngredients.get(position));
     }
 

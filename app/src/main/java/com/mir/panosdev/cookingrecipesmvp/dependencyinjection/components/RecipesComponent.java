@@ -12,12 +12,8 @@ import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchFragment;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
-
 import dagger.Component;
 
-/**
- * Created by Panos on 3/18/2017.
- */
 @PerActivity
 @Component(modules = RecipesModule.class, dependencies = ApplicationComponent.class)
 public interface RecipesComponent {

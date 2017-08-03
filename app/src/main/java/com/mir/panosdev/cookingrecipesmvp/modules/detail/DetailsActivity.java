@@ -8,40 +8,29 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-/**
- * Created by Panos on 3/18/2017.
- */
 public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.DetailsViewActivity {
 
     public static final String RECIPE = "recipe";
 
     @Inject
-    SharedPreferences prefs;
+    protected SharedPreferences prefs;
 
     @Inject
     protected DetailsPresenter mPresenter;
 
-    private AddedIngredientsAdapter mIngredientAdapter;
     private Recipe recipe;
-    private boolean isReadyForDelete = false, isReadyForUpdate = false;
-    int userId;
+    private boolean isReadyForDelete = false;
 
     @Override
     protected void onStart() {
@@ -76,7 +65,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem deleteButton = menu.findItem(R.id.deleteRecipeButton);
         MenuItem updateButton = menu.findItem(R.id.updateRecipeButton);
-        userId = prefs.getInt("USER_ID", 0);
+        int userId = prefs.getInt("USER_ID", 0);
         if (recipe.getUser().getId() == userId){
             deleteButton.setVisible(true);
             updateButton.setVisible(true);
@@ -102,7 +91,6 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
                 finish();
                 return true;
             case R.id.updateRecipeButton:
-                isReadyForUpdate = true;
                 editUserDetails();
         }
         return super.onOptionsItemSelected(item);

@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Panos on 3/18/2017.
- */
 
 public class Recipe implements Serializable{
 //    private int userId;

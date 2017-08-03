@@ -3,12 +3,6 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.view;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseView;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
-import java.util.List;
-
-/**
- * Created by Panos on 3/27/2017.
- */
-
 public interface LoginActivityMVP {
 
     interface LoginView extends BaseView{

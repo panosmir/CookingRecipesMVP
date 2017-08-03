@@ -10,9 +10,6 @@ import javax.inject.Singleton;
 import dagger.Component;
 import retrofit2.Retrofit;
 
-/**
- * Created by Panos on 3/17/2017.
- */
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {

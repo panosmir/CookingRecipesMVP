@@ -76,11 +76,11 @@ public class SearchFragment extends BaseFragment implements SearchActivityMVP.Se
         searchList.setHasFixedSize(true);
         searchList.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
         mSearchAdapter = new SearchAdapter(getActivity().getLayoutInflater());
-        mSearchAdapter.setRecipeClickListener(mOnRecipeClickListener);
+        mSearchAdapter.setRecipeClickListener(mRecipeClickListener);
         searchList.setAdapter(mSearchAdapter);
     }
 
-    private OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
+    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
         @Override
         public void onClick(View v, Recipe recipe, int position) {
             Intent intent = new Intent(getActivity(), DetailsActivity.class);
@@ -100,7 +100,7 @@ public class SearchFragment extends BaseFragment implements SearchActivityMVP.Se
     @Override
     public void onShowDialog(String searchString) {
         if (mSearchAdapter != null) {
-//            showDialog(searchString);
+            showDialog(searchString);
         }
     }
 
@@ -136,6 +136,6 @@ public class SearchFragment extends BaseFragment implements SearchActivityMVP.Se
 
     @Override
     public void onHideDialog() {
-//        hideDialog();
+        hideDialog();
    }
 }

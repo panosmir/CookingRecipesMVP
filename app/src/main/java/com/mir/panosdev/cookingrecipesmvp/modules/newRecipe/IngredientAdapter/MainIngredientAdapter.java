@@ -8,23 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Holder> {
+public class MainIngredientAdapter extends RecyclerView.Adapter<MainIngredientAdapter.Holder> {
 
     private LayoutInflater mLayoutInflater;
     private List<Ingredient> mIngredients = new ArrayList<>();
 
-    public IngredientAdapter(LayoutInflater inflater) {
+    public MainIngredientAdapter(LayoutInflater inflater) {
         mLayoutInflater = inflater;
     }
 
@@ -35,7 +32,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
     }
 
     @Override
-    public void onBindViewHolder(IngredientAdapter.Holder holder, int position) {
+    public void onBindViewHolder(MainIngredientAdapter.Holder holder, int position) {
         holder.bind(mIngredients.get(position));
     }
 
@@ -54,23 +51,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Ho
         notifyDataSetChanged();
     }
 
-    public void add(Ingredient ingredient) {
-        mIngredients.add(ingredient);
-        notifyDataSetChanged();
-    }
-
-    public void remove(Ingredient ingredient) {
-        mIngredients.remove(ingredient);
-        notifyDataSetChanged();
-    }
-
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.grEditText)
         EditText mGrEdiText;
 
         @BindView(R.id.ingredientTextView)
-        protected TextView ingredientTitle;
+        TextView ingredientTitle;
 
         private Ingredient mIngredient;
         private Context mContext;

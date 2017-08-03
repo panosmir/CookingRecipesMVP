@@ -48,9 +48,9 @@ public interface RecipesApiService {
     Observable<Category> getCategoryById(@Path("id")int id);
 
     @GET("/categories/all")
-    Observable<Response<Categories>> getAllCategories();
+    Single<Response<Categories>> getAllCategories();
 
     @GET("ingredients/findByCategoryId/{id}")
-    Observable<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
+    Single<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
 
 }

@@ -3,13 +3,13 @@ package com.mir.panosdev.cookingrecipesmvp.modules.home;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -19,22 +19,17 @@ import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchFragment;
 import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
-//// TODO: 4/4/2017 Code cleanup, comments needed.
-
 public class MainActivity extends BaseActivity {
-
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
 
     @Inject
-    SharedPreferences sharedPreferences;
+    protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,14 +55,14 @@ public class MainActivity extends BaseActivity {
 
     private OnBottomNavigationClickListener mOnBottomNavigationListener = new OnBottomNavigationClickListener() {
         @Override
-        public boolean onNavigationItemSelected(MenuItem menu) {
+        public boolean onNavigationItemSelected(@NonNull MenuItem menu) {
             switch (menu.getItemId()){
                 case R.id.action_recipes:
                     FragmentManager manager = getSupportFragmentManager();
                     MainFragment mainFragment = new MainFragment();
                     manager.beginTransaction().replace(R.id.mainFragmentContainer, mainFragment).commit();                    return true;
                 case R.id.action_search:
-                    seachRecipe();
+                    searchRecipe();
                     return true;
                 case R.id.action_profile:
                     userProfile();
@@ -96,55 +91,11 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
-//    @Override
-//    public void onShowDialog(String message) {
-////        showDialog(message);
-//    }
-//
-//    @Override
-//    public void onHideDialog() {
-////        hideDialog();
-//    }
-//
-//    @Override
-//    public void onShowToast(String message) {
-////        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onRecipeLoaded(List<Recipe> recipes) {
-////        mRecipeAdapter.addRecipes(recipes);
-//    }
-//
-//    @Override
-//    public void onClearItems() {
-////        mRecipeAdapter.clearRecipes();
-//    }
-//
-//    @Override
-//    public void onNetworkUnavailableToast(String message) {
-////        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-//    }
-
-    private void seachRecipe() {
+    private void searchRecipe() {
         FragmentManager manager = getSupportFragmentManager();
         SearchFragment searchFragment = new SearchFragment();
         manager.beginTransaction().replace(R.id.mainFragmentContainer, searchFragment).commit();
     }
-
-//    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
-//        @Override
-//        public void onClick(View v, Recipe recipe, int position) {
-//            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-//            intent.putExtra(DetailsActivity.RECIPE, recipe);
-//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "recipeAnimation");
-//                startActivity(intent, options.toBundle());
-//            } else {
-//                startActivity(intent);
-//            }
-//        }
-//    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

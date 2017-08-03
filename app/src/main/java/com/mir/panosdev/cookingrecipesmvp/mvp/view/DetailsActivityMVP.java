@@ -7,27 +7,16 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import java.util.List;
 
-/**
- * Created by Panos on 4/17/2017.
- */
-
 public interface DetailsActivityMVP extends BaseView {
 
     interface DetailsView extends BaseView {
         Recipe getRecipeDetails();
-
         boolean getUpdateSignal();
-
         void onUpdateShowToast(String message);
-
         int getCategoryId();
-
         void onClearIngredients();
-
         void onIngredientsLoaded(List<Ingredient> ingredientList);
-
         void onClearItems();
-
         void onItemsLoaded(List<Category> categories);
     }
 
