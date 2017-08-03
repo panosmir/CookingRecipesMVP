@@ -9,8 +9,12 @@
     </style>
 
     <!--Text Style-->
-    <style name="TextColor">
-        <item name="android:textColor">#d4d4d4</item>
+    <style name="DetailTextColor">
+        <item name="android:textColor">#AFAFAF</item>
+    </style>
+
+    <style name="MainTextColor">
+        <item name="android:textColor">#FEFEFE</item>
     </style>
 
 </resources>

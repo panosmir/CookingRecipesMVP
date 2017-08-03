@@ -7,6 +7,7 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 public class SearchPresenter implements SearchActivityMVP.Presenter {
 
     private SearchActivityMVP.SearchView mView;
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable = null;
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -48,9 +49,17 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                     .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
                         @Override
                         public void onNext(Response<RecipesResponse> recipesResponseResponse) {
-                            List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
-                            mView.onClearItems();
-                            mView.onRecipeLoaded(recipes);
+                            if(recipesResponseResponse.isSuccessful()) {
+                                List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
+                                mView.onClearItems();
+                                mView.onRecipeLoaded(recipes);
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe found!!!");
+                            }
+                            else if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe not found.");
+                            }
                         }
 
                         @Override
@@ -61,8 +70,6 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-                            mView.onHideDialog();
-                            mView.onShowToast("Recipe found!!!");
                         }
                     });
             if (compositeDisposable != null)
@@ -76,7 +83,7 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
     }
 
     @Override
-    public void detatchView() {
+    public void detachView() {
         if (compositeDisposable != null)
             compositeDisposable.dispose();
         mView = null;

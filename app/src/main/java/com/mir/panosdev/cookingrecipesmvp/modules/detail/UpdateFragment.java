@@ -80,13 +80,19 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
     private List<Ingredient> updatedIngredients = new ArrayList<>();
     private Category mCategory = new Category();
     private CategoryAdapter mCategoryAdapter;
+    private List<Ingredient> tempList = new ArrayList<>();
 
     @Override
     public void onStart() {
         super.onStart();
         mDetailsPresenter.attachView(this);
         mDetailsPresenter.fetchCategories();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDetailsPresenter.detachView();
     }
 
     @Nullable
@@ -180,11 +186,28 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
         mIngredientRecyclerView.setAdapter(mUpdateIngredientAdapter);
     }
 
+    private List<Ingredient> moddedIngredients(){
+        tempList.clear();
+        tempList.addAll(mIngredients);
+        for (Ingredient i :
+                mIngredients) {
+            for (Ingredient ingredient :
+                    updateRecipe.getIngredients()) {
+                if(ingredient.getIngredient().equals(i.getIngredient())){
+                    tempList.remove(i);
+                }
+            }
+        }
+        mIngredientAdapter.clearIngredients();
+        mIngredientAdapter.addIngredients(tempList);
+        return tempList;
+    }
+
     @OnClick(R.id.ingredientSearchButton)
     public void searchIngredientButtonClick() {
         new MaterialDialog.Builder(this.getActivity())
                 .title(mCategory.getCategory())
-                .items(mIngredients)
+                .items(moddedIngredients())
                 .adapter(mIngredientAdapter, new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false))
                 .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
@@ -207,7 +230,7 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
 
     private OnIngredientClickListener mIngredientClickListener = new OnIngredientClickListener() {
         @Override
-        public void onClick(View v, Ingredient ingredient, int position) {
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
             mUpdateIngredientAdapter.removeIngredient(ingredient);
             updateRecipe.getIngredients().remove(ingredient);
         }
@@ -215,7 +238,7 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
 
     private OnIngredientClickListener mUpdateIngredientClickListener = new OnIngredientClickListener() {
         @Override
-        public void onClick(View v, Ingredient ingredient, int position) {
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
             if (updateRecipe.getIngredients().contains(ingredient)) {
                 updateRecipe.getIngredients().remove(ingredient);
                 mUpdateIngredientAdapter.removeIngredient(ingredient);
@@ -230,16 +253,6 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
             return mRecipe;
         else
             return updateRecipe;
-    }
-
-    @Override
-    public void onDeleteShowToast(String message) {
-        Toast.makeText(this.getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean getDeleteSignal() {
-        return isReadyForDelete;
     }
 
     @Override

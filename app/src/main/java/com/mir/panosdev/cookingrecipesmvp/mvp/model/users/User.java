@@ -2,6 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.users;
 
 import java.io.Serializable;
 
+import io.reactivex.annotations.Nullable;
+
 /**
  * Created by Panos on 3/30/2017.
  */
@@ -10,6 +12,7 @@ public class User implements Serializable{
 
     private int user_id;
     private String username;
+    @Nullable
     private String password;
 
     public User() {

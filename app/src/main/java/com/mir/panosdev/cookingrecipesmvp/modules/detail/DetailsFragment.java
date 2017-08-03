@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,11 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.DetailsView {
+public class DetailsFragment extends BaseFragment {
     public static final String RECIPE = "recipe";
-
-    @BindView(R.id.recipeTitleDetail)
-    TextView mRecipeTitle;
 
     @BindView(R.id.recipeDescriptionDetail)
     TextView mRecipeDescription;
@@ -46,9 +45,6 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
     @Inject
     SharedPreferences mPrefs;
 
-    @Inject
-    protected DetailsPresenter mPresenter;
-
     private Recipe mRecipe;
     private AddedIngredientsAdapter mIngredientsAdapter;
     private int userId;
@@ -57,13 +53,11 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
     @Override
     public void onStart() {
         super.onStart();
-        mPresenter.attachView(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
     }
 
     @Nullable
@@ -80,12 +74,11 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPrefs = getActivity().getSharedPreferences("USER_CREDENTIALS", Context.MODE_PRIVATE);
         mRecipe = (Recipe) getActivity().getIntent().getSerializableExtra(RECIPE);
-        mRecipeTitle.setText(mRecipe.getTitle());
         mRecipeDescription.setText(mRecipe.getDescription());
         initializeList();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mRecipeTitle.setTransitionName("recipeAnimation");
+            mRecipeDescription.setTransitionName("recipeAnimation");
         }
 
     }
@@ -106,52 +99,4 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
         mIngredientsAdapter.addedIngredients(mRecipe.getIngredients());
     }
 
-    @Override
-    public Recipe getRecipeDetails() {
-        return null;
-    }
-
-    @Override
-    public void onDeleteShowToast(String message) {
-    }
-
-    @Override
-    public boolean getDeleteSignal() {
-        return false;
-    }
-
-    @Override
-    public boolean getUpdateSignal() {
-        return false;
-    }
-
-    @Override
-    public void onUpdateShowToast(String message) {
-
-    }
-
-    @Override
-    public int getCategoryId() {
-        return 0;
-    }
-
-    @Override
-    public void onClearIngredients() {
-
-    }
-
-    @Override
-    public void onIngredientsLoaded(List<Ingredient> ingredientList) {
-
-    }
-
-    @Override
-    public void onClearItems() {
-
-    }
-
-    @Override
-    public void onItemsLoaded(List<Category> categories) {
-
-    }
 }

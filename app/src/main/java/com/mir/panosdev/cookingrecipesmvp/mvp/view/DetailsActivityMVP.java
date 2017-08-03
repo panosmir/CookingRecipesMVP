@@ -16,10 +16,6 @@ public interface DetailsActivityMVP extends BaseView {
     interface DetailsView extends BaseView {
         Recipe getRecipeDetails();
 
-        void onDeleteShowToast(String message);
-
-        boolean getDeleteSignal();
-
         boolean getUpdateSignal();
 
         void onUpdateShowToast(String message);
@@ -35,8 +31,15 @@ public interface DetailsActivityMVP extends BaseView {
         void onItemsLoaded(List<Category> categories);
     }
 
+    interface DetailsViewActivity extends BaseView{
+        Recipe getRecipeDetails();
+        boolean getDeleteSignal();
+        void onDeleteShowToast(String message);
+    }
+
     interface Presenter {
         void attachView(DetailsView view);
+        void attachActivity(DetailsViewActivity detailsViewActivity);
         void detachView();
     }
 }

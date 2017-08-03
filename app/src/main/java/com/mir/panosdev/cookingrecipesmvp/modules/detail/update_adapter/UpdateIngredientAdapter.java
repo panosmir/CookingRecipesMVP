@@ -66,6 +66,9 @@ public class UpdateIngredientAdapter extends RecyclerView.Adapter<UpdateIngredie
         @BindView(R.id.addedIngredientTextView)
         TextView mIngredientTextView;
 
+        @BindView(R.id.quantityTextView)
+        TextView mIngredientQuantity;
+
         private Context mContext;
         private Ingredient mIngredient;
 
@@ -79,12 +82,13 @@ public class UpdateIngredientAdapter extends RecyclerView.Adapter<UpdateIngredie
         public void bind(Ingredient ingredient) {
             mIngredient = ingredient;
             mIngredientTextView.setText(ingredient.getIngredient());
+            mIngredientQuantity.setText(ingredient.getQuantity());
         }
 
         @Override
         public void onClick(View v) {
             if(mIngredientClickListener!=null){
-                mIngredientClickListener.onClick(mIngredientTextView, mIngredient, getAdapterPosition());
+                mIngredientClickListener.onClick(mIngredientTextView, mIngredient, getAdapterPosition(), true);
             }
         }
     }

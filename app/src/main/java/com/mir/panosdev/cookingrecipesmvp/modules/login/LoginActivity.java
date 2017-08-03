@@ -47,7 +47,13 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     protected void onStart() {
         super.onStart();
         mLoginPresenter.attachView(this);
-        mLoginPresenter.userLogin();
+        sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+        if (sharedPreferences.contains("EXISTS")) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else
+            mLoginPresenter.userLogin();
     }
 
     @Override
@@ -88,7 +94,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
         if (sharedPreferences.contains("EXISTS")) {
             user.setId(sharedPreferences.getInt("USER_ID", 0));
             user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
-            user.setPassword(sharedPreferences.getString("USER_PASSWORD", null));
             Log.d("LOGIN_LOG", "Username -> " + user.getUsername());
             return user;
         } else {
