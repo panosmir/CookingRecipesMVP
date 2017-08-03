@@ -53,8 +53,4 @@ public interface RecipesApiService {
     @GET("ingredients/findByCategoryId/{id}")
     Observable<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
 
-    //// TODO: 18-May-17 Wait for the server to implement it
-//    @GET("recipes/userFavorites/{id}")
-//    Observable<Response<RecipesResponse>> getUserFavoriteRecipes(@Path("id") int id);
-
 }
