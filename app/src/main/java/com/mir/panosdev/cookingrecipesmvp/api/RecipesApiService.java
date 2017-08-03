@@ -33,7 +33,7 @@ public interface RecipesApiService {
     Completable addRecipe(@Body Recipe recipe);
 
     @POST("users/create")
-    Observable<Response<User>> userRegistration(@Body User user);
+    Single<Response<User>> userRegistration(@Body User user);
 
     @POST("users/all/findUser")
     Single<Response<User>> userLogin(@Body User user);

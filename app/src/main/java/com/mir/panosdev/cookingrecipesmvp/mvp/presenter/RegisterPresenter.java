@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
@@ -11,10 +13,12 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
@@ -37,12 +41,12 @@ public class RegisterPresenter implements RegisterActivityMVP.Presenter {
     @Inject
     public void userRegistration() {
         if (mView != null && mView.getUserDetails() != null) {
-            Observable<Response<User>> userObservable = mRecipesApiService.userRegistration(mView.getUserDetails());
+            Single<Response<User>> userObservable = mRecipesApiService.userRegistration(mView.getUserDetails());
             Disposable disposable = userObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Response<User>>() {
+                    .subscribeWith(new DisposableSingleObserver<Response<User>>() {
                         @Override
-                        public void onNext(Response<User> userResponse) {
+                        public void onSuccess(Response<User> userResponse) {
                             switch (userResponse.code()) {
                                 case HttpURLConnection.HTTP_CREATED:
                                     mView.returnUserDetails(userResponse.body());
@@ -53,14 +57,9 @@ public class RegisterPresenter implements RegisterActivityMVP.Presenter {
                                     break;
                             }
                         }
-
                         @Override
                         public void onError(Throwable e) {
-                        }
-
-                        @Override
-                        public void onComplete() {
-
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
                     });
             if (compositeDisposable != null)
