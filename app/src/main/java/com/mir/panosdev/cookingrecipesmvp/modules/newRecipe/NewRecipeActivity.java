@@ -256,7 +256,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         Recipe recipe = new Recipe();
         user.setId(mSharedPreferences.getInt("USER_ID", 0));
         user.setUsername(mSharedPreferences.getString("USER_USERNAME", ""));
-        user.setPassword(mSharedPreferences.getString("USER_PASSWORD", ""));
         recipe.setUser(user);
         if (!addRecipeTitle.getText().toString().isEmpty() || !addRecipeDescription.getText().toString().isEmpty()) {
             recipe.setTitle(addRecipeTitle.getText().toString());
