@@ -43,7 +43,6 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     private DetailsActivityMVP.DetailsView mView;
     private DetailsActivityMVP.DetailsViewActivity mDetailsViewActivity;
     private Completable recipeCompletable;
-//    private Observable<Response<Recipe>> recipeObservable;
 
     protected CompositeDisposable compositeDisposable;
 
