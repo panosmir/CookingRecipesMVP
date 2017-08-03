@@ -16,10 +16,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
@@ -40,7 +42,8 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
     private DetailsActivityMVP.DetailsView mView;
     private DetailsActivityMVP.DetailsViewActivity mDetailsViewActivity;
-    private Observable<Response<Recipe>> recipeObservable;
+    private Completable recipeCompletable;
+//    private Observable<Response<Recipe>> recipeObservable;
 
     protected CompositeDisposable compositeDisposable;
 
@@ -51,24 +54,19 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     @Inject
     public void deleteRecipe() {
         if (mDetailsViewActivity!=null && mDetailsViewActivity.getDeleteSignal()) {
-            recipeObservable = mRecipesApiService.deleteRecipe(mDetailsViewActivity.getRecipeDetails());
-            Disposable disposable = recipeObservable.observeOn(Schedulers.io())
+            recipeCompletable= mRecipesApiService.deleteRecipe(mDetailsViewActivity.getRecipeDetails());
+            Disposable disposable = recipeCompletable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Response<Recipe>>() {
+                    .subscribeWith(new DisposableCompletableObserver() {
 
                         @Override
-                        public void onNext(Response<Recipe> recipeResponse) {
-
+                        public void onComplete() {
+                            mDetailsViewActivity.onDeleteShowToast("Recipe deleted!");
                         }
 
                         @Override
                         public void onError(Throwable e) {
 
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            mDetailsViewActivity.onDeleteShowToast("Recipe deleted!");
                         }
                     });
             if (compositeDisposable != null)
@@ -79,14 +77,10 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     @Inject
     public void updateRecipe() {
         if (mView!=null && mView.getUpdateSignal()) {
-            recipeObservable = mRecipesApiService.updateRecipe(mView.getRecipeDetails());
-            Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
+            recipeCompletable = mRecipesApiService.updateRecipe(mView.getRecipeDetails());
+            Disposable disposable = recipeCompletable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Response<Recipe>>() {
-                        @Override
-                        public void onNext(Response<Recipe> recipeResponse) {
-                        }
-
+                    .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onError(Throwable e) {
                         }
