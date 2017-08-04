@@ -74,6 +74,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
                     .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override
@@ -127,6 +128,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
                         @Override
                         public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
                     });
             if(compositeDisposable!=null)

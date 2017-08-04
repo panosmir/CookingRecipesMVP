@@ -57,7 +57,7 @@ public class RegisterPresenter implements RegisterActivityMVP.Presenter {
 
     private void registerSuccessful() {
         mView.onShowDialog("We're trying to register you, please wait...");
-        mView.onRegisterSuccess("Register completed!!");
+        mView.onRegisterSuccess("Registration completed!!");
     }
 
     private void registerFailed() {

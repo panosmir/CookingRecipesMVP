@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
@@ -50,6 +52,7 @@ public class LoginPresenter implements LoginActivityMVP.Presenter {
                         public void onError(Throwable e) {
                             mView.onHideDialog();
                             mView.onErrorToast("Server is down...");
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
                     });
             if (compositeDisposable != null)

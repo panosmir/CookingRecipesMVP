@@ -49,6 +49,7 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
                     .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override

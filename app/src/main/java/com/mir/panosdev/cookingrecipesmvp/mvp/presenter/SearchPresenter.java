@@ -1,5 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
@@ -57,10 +59,12 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                         public void onError(Throwable e) {
                             mView.onHideDialog();
                             mView.onShowToast("Error loading recipes " + e.getMessage());
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override
                         public void onComplete() {
+                            mView.onShowToast("Search Completed.");
                         }
                     });
             if (compositeDisposable != null)
