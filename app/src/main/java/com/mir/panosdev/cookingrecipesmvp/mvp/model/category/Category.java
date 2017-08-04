@@ -1,4 +1,3 @@
-
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.category;
 
 import javax.annotation.Generated;

@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
@@ -20,23 +19,19 @@ import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
-import com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter.UpdateIngredientAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter.UpdatableIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.IngredientAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.MainIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.NewRecipePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -57,16 +52,15 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @Inject
     protected NewRecipePresenter mNewRecipePresenter;
 
-    User user = new User();
-    CategoryAdapter mCategoryAdapter;
-    List<Category> mCategories = new ArrayList<>();
-    List<Ingredient> mIngredients;
-    List<Ingredient> addedIngredients;
-    Category category = new Category();
+    private User user = new User();
+    private CategoryAdapter mCategoryAdapter;
+    private List<Category> mCategories = new ArrayList<>();
+    private List<Ingredient> mIngredients;
+    private List<Ingredient> addedIngredients;
+    private Category category = new Category();
     private int categoryId;
-    private IngredientAdapter mIngredientAdapter;
-    private UpdateIngredientAdapter mUpdateIngredientAdapter;
-    private AddedIngredientsAdapter mAddedIngredientsAdapter;
+    private MainIngredientAdapter mIngredientAdapter;
+    private UpdatableIngredientAdapter mUpdatableIngredientAdapter;
     private List<Ingredient> tempList;
 
     @Override
@@ -118,13 +112,12 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
 
-        mIngredientAdapter = new IngredientAdapter(getLayoutInflater());
-        mIngredientAdapter.setIngredientClickListener(mOnIngredientClickListener);
+        mIngredientAdapter = new MainIngredientAdapter(getLayoutInflater());
+        mIngredientAdapter.setIngredientClickListener(mMainIngredientClickListener);
 
-        mAddedIngredientsAdapter = new AddedIngredientsAdapter(getLayoutInflater());
-        mUpdateIngredientAdapter = new UpdateIngredientAdapter(getLayoutInflater());
-        mUpdateIngredientAdapter.setIngredientClickListener(mOnUpdateClickListener);
-        mRecyclerView.setAdapter(mUpdateIngredientAdapter);
+        mUpdatableIngredientAdapter = new UpdatableIngredientAdapter(getLayoutInflater());
+        mUpdatableIngredientAdapter.setIngredientClickListener(mAddedIngredientClickListener);
+        mRecyclerView.setAdapter(mUpdatableIngredientAdapter);
     }
 
     @Override
@@ -154,7 +147,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
 
     @OnClick(R.id.searchIngredientsButton)
     public void searchIngredientButtonClick() {
-
         new MaterialDialog.Builder(this)
                 .title(category.getCategory())
                 .items(moddedIngredients())
@@ -171,18 +163,18 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        mUpdateIngredientAdapter.clearIngredients();
-                        mUpdateIngredientAdapter.addIngredients(addedIngredients);
+                        mUpdatableIngredientAdapter.clearIngredients();
+                        mUpdatableIngredientAdapter.addIngredients(addedIngredients);
                     }
-                })
-                .show();
+                }).show();
     }
 
-    private OnIngredientClickListener mOnUpdateClickListener = new OnIngredientClickListener() {
+    private OnIngredientClickListener mAddedIngredientClickListener = new OnIngredientClickListener() {
         @Override
         public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
-            mUpdateIngredientAdapter.removeIngredient(ingredient);
+            mUpdatableIngredientAdapter.removeIngredient(ingredient);
             addedIngredients.remove(ingredient);
+            Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -235,7 +227,7 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         mIngredientAdapter.clearIngredients();
     }
 
-    private OnIngredientClickListener mOnIngredientClickListener = new OnIngredientClickListener() {
+    private OnIngredientClickListener mMainIngredientClickListener = new OnIngredientClickListener() {
         @Override
         public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
             if (!addedIngredients.contains(ingredient) && !isClicked) {
@@ -246,7 +238,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
                 addedIngredients.remove(ingredient);
                 Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
             }
-
         }
     };
 
@@ -256,7 +247,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         Recipe recipe = new Recipe();
         user.setId(mSharedPreferences.getInt("USER_ID", 0));
         user.setUsername(mSharedPreferences.getString("USER_USERNAME", ""));
-        user.setPassword(mSharedPreferences.getString("USER_PASSWORD", ""));
         recipe.setUser(user);
         if (!addRecipeTitle.getText().toString().isEmpty() || !addRecipeDescription.getText().toString().isEmpty()) {
             recipe.setTitle(addRecipeTitle.getText().toString());

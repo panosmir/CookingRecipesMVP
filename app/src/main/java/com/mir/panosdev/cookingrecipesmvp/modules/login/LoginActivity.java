@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -17,15 +16,9 @@ import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.LoginPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-
-/**
- * Created by Panos on 3/27/2017.
- */
 
 public class LoginActivity extends BaseActivity implements LoginActivityMVP.LoginView {
 
@@ -38,10 +31,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     @Inject
     protected LoginPresenter mLoginPresenter;
 
-    User user = new User();
+    private User user = new User();
 
     @Inject
-    SharedPreferences sharedPreferences;
+    protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onStart() {
@@ -133,7 +126,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("USER_ID", user.getId());
             editor.putString("USER_USERNAME", user.getUsername());
-            editor.putString("USER_PASSWORD", user.getPassword());
             editor.putBoolean("EXISTS", true);
             Log.d("USER_DETAILS", "User ---> " + user.getId());
             editor.apply();

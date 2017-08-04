@@ -15,10 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * Created by Panos on 4/19/2017.
- */
-
 public class Storage extends SQLiteOpenHelper {
 
     private static final String TAG = Storage.class.getSimpleName();

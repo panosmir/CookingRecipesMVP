@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
@@ -19,16 +20,9 @@ import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.userRecipesAdapter
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.UserProfilePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileMVP;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
-
-/**
- * Created by Panos on 4/5/2017.
- */
 
 public class UserProfileActivity extends BaseActivity implements UserProfileMVP.UserProfileView {
 
@@ -40,7 +34,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
 
     @Inject protected UserProfilePresenter mUserProfilePresenter;
 
-    @Inject SharedPreferences sharedPreferences;
+    @Inject protected SharedPreferences sharedPreferences;
 
     private UserProfileAdapter mProfileAdapter;
 
@@ -61,7 +55,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         showBackArrow();
-        initializeUsernameTextbox();
+        initializeUsernameTextBox();
         initializeList();
     }
 
@@ -77,7 +71,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
         mRecyclerView.setAdapter(mProfileAdapter);
     }
 
-    private void initializeUsernameTextbox() {
+    private void initializeUsernameTextBox() {
         sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         mUsername.setText(sharedPreferences.getString("USER_USERNAME", null));
     }
@@ -108,8 +102,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
     @Override
     public int getUserId() {
         sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        int id = sharedPreferences.getInt("USER_ID", 0);
-        return id;
+        return sharedPreferences.getInt("USER_ID", 0);
     }
 
     @Override
@@ -124,6 +117,11 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
         if(mProfileAdapter != null){
             mProfileAdapter.clearRecipes();
         }
+    }
+
+    @Override
+    public void onCompleteShowToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private OnRecipeClickListener mClickListener = new OnRecipeClickListener() {

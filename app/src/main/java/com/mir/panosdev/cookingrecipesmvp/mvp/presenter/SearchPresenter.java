@@ -1,29 +1,22 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
-import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
-
 import java.net.HttpURLConnection;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
-
-/**
- * Created by Panos on 3/21/2017.
- */
 
 public class SearchPresenter implements SearchActivityMVP.Presenter {
 
@@ -50,7 +43,7 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                         @Override
                         public void onNext(Response<RecipesResponse> recipesResponseResponse) {
                             if(recipesResponseResponse.isSuccessful()) {
-                                List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponseResponse.body().getRecipes());
+                                List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponseResponse.body().getRecipes());
                                 mView.onClearItems();
                                 mView.onRecipeLoaded(recipes);
                                 mView.onHideDialog();
@@ -66,10 +59,12 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                         public void onError(Throwable e) {
                             mView.onHideDialog();
                             mView.onShowToast("Error loading recipes " + e.getMessage());
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override
                         public void onComplete() {
+                            mView.onShowToast("Search Completed.");
                         }
                     });
             if (compositeDisposable != null)

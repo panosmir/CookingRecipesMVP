@@ -1,36 +1,25 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
 import android.util.Log;
-
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
-import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.CategoryMapper;
 import com.mir.panosdev.cookingrecipesmvp.mapper.IngredientMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.Completable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
-
-import static io.reactivex.internal.operators.observable.ObservableBlockingSubscribe.subscribe;
-
-/**
- * Created by Panos on 4/3/2017.
- */
 
 public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
@@ -54,16 +43,13 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
     @Inject
     public void addNewRecipe() {
         if (mView != null) {
-            Observable<Recipe> recipeObservable = mRecipesApiService.addRecipe(mView.getRecipeDetails());
+            Completable recipeObservable = mRecipesApiService.addRecipe(mView.getRecipeDetails());
             Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Recipe>() {
-                        @Override
-                        public void onNext(Recipe recipe) {
-                        }
-
+                    .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override
@@ -78,13 +64,13 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
     @Inject
     public void fetchCategories() {
-            Observable<Response<Categories>> categoryObservable = mRecipesApiService.getAllCategories();
+            Single<Response<Categories>> categoryObservable = mRecipesApiService.getAllCategories();
             Disposable disposable = categoryObservable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<Response<Categories>>() {
+                    .subscribeWith(new DisposableSingleObserver<Response<Categories>>() {
                         @Override
-                        public void onNext(Response<Categories> category) {
-                            List<Category> categories = mCategoryMapper.mapCategories(category.body().getCategories());
+                        public void onSuccess(Response<Categories> categoriesResponse) {
+                            List<Category> categories = mCategoryMapper.mapCategories(categoriesResponse.body().getCategories());
                             if (categories != null) {
                                 mView.onClearItems();
                                 mView.onItemsLoaded(categories);
@@ -95,11 +81,6 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
                         public void onError(Throwable e) {
                             Log.d("ERROR_LOG", "ERROR------->" + e.getMessage());
                         }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);
@@ -108,12 +89,12 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
     @Inject
     public void fetchIngredients() {
         if (mView!=null && mView.getCategoryId() != 0) {
-            Observable<Response<IngredientsResponse>> responseObservable = mRecipesApiService.getIngredientsById(mView.getCategoryId());
+            Single<Response<IngredientsResponse>> responseObservable = mRecipesApiService.getIngredientsById(mView.getCategoryId());
             Disposable disposable = responseObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribeWith(new DisposableObserver<Response<IngredientsResponse>>() {
+                    .subscribeWith(new DisposableSingleObserver<Response<IngredientsResponse>>() {
                         @Override
-                        public void onNext(Response<IngredientsResponse> ingredientsResponseResponse) {
+                        public void onSuccess(Response<IngredientsResponse> ingredientsResponseResponse) {
                             List<Ingredient> ingredientList = mIngredientMapper.mapIngredients(ingredientsResponseResponse.body().getIngredients());
                             mView.onClearIngredients();
                             mView.onIngredientsLoaded(ingredientList);
@@ -121,10 +102,6 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
                         @Override
                         public void onError(Throwable e) {
-                        }
-
-                        @Override
-                        public void onComplete() {
                         }
                     });
             if(compositeDisposable!=null)

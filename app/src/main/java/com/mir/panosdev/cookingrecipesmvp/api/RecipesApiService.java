@@ -8,7 +8,9 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -28,31 +30,27 @@ public interface RecipesApiService {
     Observable<Response<RecipesResponse>> getUserRecipes(@Path("id") int id);
 
     @POST("recipes/all/userId/create")
-    Observable<Recipe> addRecipe(@Body Recipe recipe);
+    Completable addRecipe(@Body Recipe recipe);
 
     @POST("users/create")
-    Observable<Response<User>> userRegistration(@Body User user);
+    Single<Response<User>> userRegistration(@Body User user);
 
     @POST("users/all/findUser")
-    Observable<Response<User>> userLogin(@Body User user);
+    Single<Response<User>> userLogin(@Body User user);
 
     @HTTP(method = "DELETE", path = "/recipes/delete", hasBody = true)
-    Observable<Response<Recipe>> deleteRecipe(@Body Recipe recipe);
+    Completable deleteRecipe(@Body Recipe recipe);
 
     @HTTP(method = "PUT", path = "/recipes/update", hasBody = true)
-    Observable<Response<Recipe>> updateRecipe(@Body Recipe recipe);
+    Completable updateRecipe(@Body Recipe recipe);
 
     @GET("/categories/findById/{id}")
     Observable<Category> getCategoryById(@Path("id")int id);
 
     @GET("/categories/all")
-    Observable<Response<Categories>> getAllCategories();
+    Single<Response<Categories>> getAllCategories();
 
     @GET("ingredients/findByCategoryId/{id}")
-    Observable<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
-
-    //// TODO: 18-May-17 Wait for the server to implement it
-//    @GET("recipes/userFavorites/{id}")
-//    Observable<Response<RecipesResponse>> getUserFavoriteRecipes(@Path("id") int id);
+    Single<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
 
 }

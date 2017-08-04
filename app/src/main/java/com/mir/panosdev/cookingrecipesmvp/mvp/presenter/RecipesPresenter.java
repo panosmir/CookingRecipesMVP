@@ -1,19 +1,16 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
-import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainActivityMVP;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,12 +18,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
-
-import static io.reactivex.internal.operators.observable.ObservableBlockingSubscribe.subscribe;
-
-/**
- * Created by Panos on 3/18/2017.
- */
 
 public class RecipesPresenter implements MainActivityMVP.Presenter {
 
@@ -39,7 +30,7 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
     protected Storage mStorage;
 
     private MainActivityMVP.MainView mainView;
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable = null;
 
     @Inject
     public RecipesPresenter() {
@@ -56,7 +47,7 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                 .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
                     @Override
                     public void onNext(@NonNull Response<RecipesResponse> recipesResponseResponse) {
-                        List<Recipe> recipes = mRecipeMapper.mapRecipes(mStorage, recipesResponseResponse.body().getRecipes());
+                        List<Recipe> recipes = mRecipeMapper.mapRecipesAndStorage(mStorage, recipesResponseResponse.body().getRecipes());
                         mainView.onClearItems();
                         mainView.onRecipeLoaded(recipes);
                     }
@@ -65,6 +56,7 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                     public void onError(@NonNull Throwable e) {
                         mainView.onHideDialog();
                         mainView.onShowToast("Error loading recipes " + e.getMessage());
+                        Log.e("ERROR_LOG", e.getMessage());
                     }
 
                     @Override

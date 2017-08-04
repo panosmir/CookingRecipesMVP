@@ -8,30 +8,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.AddedIngredientsAdapter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
-
-import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 public class DetailsFragment extends BaseFragment {
     public static final String RECIPE = "recipe";
@@ -43,22 +31,9 @@ public class DetailsFragment extends BaseFragment {
     RecyclerView mRecyclerView;
 
     @Inject
-    SharedPreferences mPrefs;
+    protected SharedPreferences mPrefs;
 
     private Recipe mRecipe;
-    private AddedIngredientsAdapter mIngredientsAdapter;
-    private int userId;
-    private boolean isReadyForDelete = false, isReadyForUpdate = false;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     @Nullable
     @Override
@@ -94,7 +69,7 @@ public class DetailsFragment extends BaseFragment {
     private void initializeList() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mIngredientsAdapter = new AddedIngredientsAdapter(getActivity().getLayoutInflater());
+        AddedIngredientsAdapter mIngredientsAdapter = new AddedIngredientsAdapter(getActivity().getLayoutInflater());
         mRecyclerView.setAdapter(mIngredientsAdapter);
         mIngredientsAdapter.addedIngredients(mRecipe.getIngredients());
     }

@@ -31,11 +31,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @CallSuper
     protected void onViewReady(Bundle savedInstanceState, Intent intent){
-        //To be implemented by child methods
         resolveDaggerDependency();
     }
 
     protected void resolveDaggerDependency() {
+        //To be implemented by child methods
     }
 
     protected void showDialog(String message){
@@ -46,7 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
-
     }
 
     protected void showBackArrow(){

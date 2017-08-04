@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -14,15 +13,9 @@ import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.RegisterPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterActivityMVP;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-
-/**
- * Created by Panos on 4/7/2017.
- */
 
 public class RegisterActivity extends BaseActivity implements RegisterActivityMVP.RegisterView {
 
@@ -35,7 +28,7 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
     @Inject
     protected RegisterPresenter mRegisterPresenter;
 
-    User user = new User();
+    private User user = new User();
 
     @Override
     protected void onStart() {
@@ -56,13 +49,11 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
 
     @Override
     public User getUserDetails() {
-
         if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
             user.setUsername(mUsername.getText().toString());
             user.setPassword(mPassword.getText().toString());
             return user;
         }
-
         return null;
     }
 
@@ -97,7 +88,6 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("USER_ID", user.getId());
             editor.putString("USER_USERNAME", user.getUsername());
-            editor.putString("USER_PASSWORD", user.getPassword());
             editor.putBoolean("EXISTS", true);
             Log.d("USER_DETAILS", "User ---> " + user.getId());
             editor.apply();

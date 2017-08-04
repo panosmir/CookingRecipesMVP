@@ -2,11 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.modules.home;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -34,10 +30,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by Panos on 02-Aug-17.
- */
 
 public class MainFragment extends BaseFragment implements MainActivityMVP.MainView {
 
@@ -130,12 +122,12 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
 
     @Override
     public void onShowDialog(String message) {
-//        showDialog(message);
+        showDialog(message);
     }
 
     @Override
     public void onHideDialog() {
-//        hideDialog();
+        hideDialog();
     }
 
     @Override

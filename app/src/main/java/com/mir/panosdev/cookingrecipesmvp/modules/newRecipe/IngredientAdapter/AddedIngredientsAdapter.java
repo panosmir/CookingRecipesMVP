@@ -6,19 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by Panos on 28-May-17.
- */
 
 public class AddedIngredientsAdapter extends RecyclerView.Adapter<AddedIngredientsAdapter.Holder>{
 
@@ -47,11 +40,6 @@ public class AddedIngredientsAdapter extends RecyclerView.Adapter<AddedIngredien
 
     public void addedIngredients(List<Ingredient> ingredients){
         mAddedIngredients.addAll(ingredients);
-        notifyDataSetChanged();
-    }
-
-    public void clearAddedIngredients(){
-        mAddedIngredients.clear();
         notifyDataSetChanged();
     }
 

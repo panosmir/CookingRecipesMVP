@@ -5,16 +5,13 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import java.util.List;
 
-/**
- * Created by Panos on 4/5/2017.
- */
-
 public interface UserProfileMVP {
 
     interface UserProfileView extends BaseView{
         int getUserId();
         void onRecipesLoaded(List<Recipe> recipes);
         void onClearItems();
+        void onCompleteShowToast(String message);
     }
 
     interface Presenter{

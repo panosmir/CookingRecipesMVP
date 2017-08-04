@@ -82,7 +82,7 @@ public class RecipesPresenterTest {
 //        when(response.getRecipes()).thenReturn(responseRecipes);
 //        mRecipesPresenter.onNext(Response.success(response));
 //
-//        verify(mRecipeMapper).mapRecipes(mStorage, responseRecipes);
+//        verify(mRecipeMapper).mapRecipesAndStorage(mStorage, responseRecipes);
 //        verify(mView).onClearItems();
 //        verify(mView).onRecipeLoaded(anyListOf(Recipe.class));
 //    }
