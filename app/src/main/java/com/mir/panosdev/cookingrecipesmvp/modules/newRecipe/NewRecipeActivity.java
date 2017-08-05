@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -48,6 +49,9 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.newRecipeFloatingButton)
+    FloatingActionButton newRecipeFloatingButton;
 
     @Inject
     protected NewRecipePresenter mNewRecipePresenter;
@@ -181,7 +185,13 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @OnClick(R.id.newRecipeFloatingButton)
     public void addRecipeButtonClick(View view) {
         if (view.getId() == R.id.newRecipeFloatingButton) {
-            mNewRecipePresenter.addNewRecipe();
+            if (!addRecipeTitle.getText().toString().isEmpty() && !addRecipeDescription.getText().toString().isEmpty() && !addedIngredients.isEmpty()) {
+                newRecipeFloatingButton.setEnabled(true);
+                mNewRecipePresenter.addNewRecipe();
+            }
+            else
+                newRecipeFloatingButton.setEnabled(false);
+
         }
     }
 

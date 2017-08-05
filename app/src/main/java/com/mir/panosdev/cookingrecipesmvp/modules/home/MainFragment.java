@@ -59,6 +59,12 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        loadRecipes();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mRecipesPresenter.detachView();
