@@ -88,6 +88,6 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
-        mainView = null;
+
     }
 }
