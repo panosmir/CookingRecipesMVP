@@ -37,11 +37,6 @@ public class MainActivity extends BaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         MainFragment mainFragment = new MainFragment();
         manager.beginTransaction().replace(R.id.mainFragmentContainer, mainFragment).commit();
-    }
-
-    @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationListener);
     }
 

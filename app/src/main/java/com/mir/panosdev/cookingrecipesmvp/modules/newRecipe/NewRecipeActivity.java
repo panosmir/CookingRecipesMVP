@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,20 +69,9 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     private List<Ingredient> tempList;
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mNewRecipePresenter.attachView(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mNewRecipePresenter.detachView();
-    }
-
-    @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
         mNewRecipePresenter.fetchCategories();
         setAdapters();
         initializeList();
@@ -89,6 +79,12 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         mIngredients = new ArrayList<>();
         addedIngredients = new ArrayList<>();
         tempList = new ArrayList<>();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNewRecipePresenter.detachView();
     }
 
     private void setAdapters() {
