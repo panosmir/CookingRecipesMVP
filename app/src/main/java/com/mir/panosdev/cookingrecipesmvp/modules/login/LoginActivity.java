@@ -46,12 +46,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     @BindView(R.id.loginButton)
     Button loginButton;
 
-    @BindView(R.id.textInputlayoutLoginUsername)
-    TextInputLayout textInputlayoutLoginUsername;
-
-    @BindView(R.id.textInputLayoutLoginPassword)
-    TextInputLayout textInputLayoutLoginPassword;
-
     @Inject
     protected LoginPresenter mLoginPresenter;
 
