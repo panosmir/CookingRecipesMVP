@@ -33,12 +33,6 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
     private boolean isReadyForDelete = false;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mPresenter.attachActivity(this);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
@@ -47,17 +41,13 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter.attachActivity(this);
         FragmentManager manager = getSupportFragmentManager();
         DetailsFragment detailsFragment = new DetailsFragment();
         manager.beginTransaction().replace(R.id.details_fragment_container, detailsFragment).commit();
-    }
-
-    @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
         showBackArrow();
         prefs = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        recipe = (Recipe) intent.getSerializableExtra(RECIPE);
+        recipe = (Recipe) getIntent().getSerializableExtra(RECIPE);
         getSupportActionBar().setTitle(recipe.getTitle());
     }
 

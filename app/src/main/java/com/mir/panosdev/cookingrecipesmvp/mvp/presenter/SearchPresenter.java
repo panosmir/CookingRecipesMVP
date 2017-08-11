@@ -42,16 +42,16 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                     .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
                         @Override
                         public void onNext(Response<RecipesResponse> recipesResponseResponse) {
-                            if(recipesResponseResponse.isSuccessful()) {
+                            if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe not found.");
+                            }
+                            else if(recipesResponseResponse.code()==HttpURLConnection.HTTP_OK) {
                                 List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponseResponse.body().getRecipes());
                                 mView.onClearItems();
                                 mView.onRecipeLoaded(recipes);
                                 mView.onHideDialog();
                                 mView.onShowToast("Recipe found!!!");
-                            }
-                            else if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
-                                mView.onHideDialog();
-                                mView.onShowToast("Recipe not found.");
                             }
                         }
 

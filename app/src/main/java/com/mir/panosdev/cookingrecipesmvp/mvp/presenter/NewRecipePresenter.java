@@ -1,6 +1,7 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
 import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.CategoryMapper;
 import com.mir.panosdev.cookingrecipesmvp.mapper.IngredientMapper;
@@ -9,8 +10,11 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,6 +68,7 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
     @Inject
     public void fetchCategories() {
+        if (mView != null) {
             Single<Response<Categories>> categoryObservable = mRecipesApiService.getAllCategories();
             Disposable disposable = categoryObservable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -84,11 +89,12 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);
+        }
     }
 
     @Inject
     public void fetchIngredients() {
-        if (mView!=null && mView.getCategoryId() != 0) {
+        if (mView != null && mView.getCategoryId() != 0) {
             Single<Response<IngredientsResponse>> responseObservable = mRecipesApiService.getIngredientsById(mView.getCategoryId());
             Disposable disposable = responseObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -104,7 +110,7 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
                         public void onError(Throwable e) {
                         }
                     });
-            if(compositeDisposable!=null)
+            if (compositeDisposable != null)
                 compositeDisposable.add(disposable);
         } else
             return;
@@ -117,7 +123,7 @@ public class NewRecipePresenter implements NewRecipeMVP.Presenter {
 
     @Override
     public void detachView() {
-        if (compositeDisposable!=null)
+        if (compositeDisposable != null)
             compositeDisposable.dispose();
         mView = null;
     }

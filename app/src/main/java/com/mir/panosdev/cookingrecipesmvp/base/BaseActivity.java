@@ -23,15 +23,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        resolveDaggerDependency();
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
         unbinder = ButterKnife.bind(this);
-        onViewReady(savedInstanceState, getIntent());
-    }
-
-    @CallSuper
-    protected void onViewReady(Bundle savedInstanceState, Intent intent){
-        resolveDaggerDependency();
     }
 
     protected void resolveDaggerDependency() {

@@ -53,15 +53,15 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
     };
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mRecipesPresenter.attachView(this);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         loadRecipes();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mRecipesPresenter.attachView(this);
     }
 
     @Override

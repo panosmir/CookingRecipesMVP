@@ -3,6 +3,7 @@ package com.mir.panosdev.cookingrecipesmvp.modules.userprofile;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -39,24 +40,19 @@ public class UserProfileActivity extends BaseActivity implements UserProfileMVP.
     private UserProfileAdapter mProfileAdapter;
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mUserProfilePresenter.attachView(this);
         loadUserRecipes();
+        showBackArrow();
+        initializeUsernameTextBox();
+        initializeList();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mUserProfilePresenter.detachView();
-    }
-
-    @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
-        showBackArrow();
-        initializeUsernameTextBox();
-        initializeList();
     }
 
     private void loadUserRecipes() {
