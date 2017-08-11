@@ -3,10 +3,15 @@ package com.mir.panosdev.cookingrecipesmvp.modules.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -16,9 +21,19 @@ import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.LoginPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+
+import static android.text.TextUtils.isEmpty;
 
 public class LoginActivity extends BaseActivity implements LoginActivityMVP.LoginView {
 
@@ -28,30 +43,74 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     @BindView(R.id.passwordEditText)
     TextView mPassword;
 
+    @BindView(R.id.loginButton)
+    Button loginButton;
+
+    @BindView(R.id.textInputlayoutLoginUsername)
+    TextInputLayout textInputlayoutLoginUsername;
+
+    @BindView(R.id.textInputLayoutLoginPassword)
+    TextInputLayout textInputLayoutLoginPassword;
+
     @Inject
     protected LoginPresenter mLoginPresenter;
 
     private User user = new User();
+    private Observable<Boolean> usernameObservable = null;
+    private Observable<Boolean> passwordObservable = null;
 
     @Inject
     protected SharedPreferences sharedPreferences;
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mLoginPresenter.attachView(this);
         sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         if (sharedPreferences.contains("EXISTS")) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        } else
-            mLoginPresenter.userLogin();
+        }
+        initUsernameCheck();
+        initPasswordCheck();
+        Observable.combineLatest(usernameObservable, passwordObservable, new BiFunction<Boolean, Boolean, Boolean>() {
+            @Override
+            public Boolean apply(Boolean usernameBoolean, Boolean passwordBoolean) throws Exception {
+                return usernameBoolean && passwordBoolean;
+            }
+        }).distinctUntilChanged()
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        loginButton.setEnabled(aBoolean);
+                    }
+                });
     }
 
-    @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
+    private void initPasswordCheck() {
+        if (mPassword != null) {
+            passwordObservable = RxTextView.textChanges(mPassword)
+                    .map(new Function<CharSequence, Boolean>() {
+                        @Override
+                        public Boolean apply(CharSequence charSequence) throws Exception {
+                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                        }
+                    }).distinctUntilChanged();
+        }
+    }
+
+    private void initUsernameCheck() {
+        if (mUsername.getText() != null) {
+            usernameObservable = RxTextView.textChanges(mUsername)
+                    .map(new Function<CharSequence, Boolean>() {
+                        @Override
+                        public Boolean apply(CharSequence charSequence) throws Exception {
+                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                        }
+                    }).distinctUntilChanged();
+
+        }
     }
 
     @OnClick({R.id.registerButton, R.id.loginButton})

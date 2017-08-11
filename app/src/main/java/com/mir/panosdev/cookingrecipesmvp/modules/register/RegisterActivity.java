@@ -5,8 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -18,6 +21,12 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterActivityMVP;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+
+import static android.text.TextUtils.isEmpty;
 
 public class RegisterActivity extends BaseActivity implements RegisterActivityMVP.RegisterView {
 
@@ -27,15 +36,59 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
     @BindView(R.id.passwordRegisterET)
     EditText mPassword;
 
+    @BindView(R.id.userRegistrationButton)
+    Button registerButton;
+
     @Inject
     protected RegisterPresenter mRegisterPresenter;
 
     private User user = new User();
+    private Observable<Boolean> usernameObservable = null;
+    private Observable<Boolean> passwordObservable = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRegisterPresenter.attachView(this);
+        initUsernameCheck();
+        initPasswordCheck();
+        Observable.combineLatest(usernameObservable, passwordObservable, new BiFunction<Boolean, Boolean, Boolean>() {
+            @Override
+            public Boolean apply(Boolean usernameBoolean, Boolean passwordBoolean) throws Exception {
+                return usernameBoolean && passwordBoolean;
+            }
+        }).distinctUntilChanged()
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        registerButton.setEnabled(aBoolean);
+                    }
+                });
+    }
+
+    private void initPasswordCheck() {
+        if (mPassword != null) {
+            passwordObservable = RxTextView.textChanges(mPassword)
+                    .map(new Function<CharSequence, Boolean>() {
+                        @Override
+                        public Boolean apply(CharSequence charSequence) throws Exception {
+                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                        }
+                    }).distinctUntilChanged();
+        }
+    }
+
+    private void initUsernameCheck() {
+        if (mUsername.getText() != null) {
+            usernameObservable = RxTextView.textChanges(mUsername)
+                    .map(new Function<CharSequence, Boolean>() {
+                        @Override
+                        public Boolean apply(CharSequence charSequence) throws Exception {
+                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                        }
+                    }).distinctUntilChanged();
+
+        }
     }
 
     @Override
