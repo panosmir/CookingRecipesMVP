@@ -38,36 +38,36 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
 
     @Inject
     public void getRecipes() {
-        if (mainView != null)
+        if (mainView != null) {
             mainView.onShowDialog("Loading recipes....");
-        mStorage.dropDatabase();
-        Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getRecipes();
-        Disposable disposable = recipesResponseObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
-                    @Override
-                    public void onNext(@NonNull Response<RecipesResponse> recipesResponseResponse) {
-                        List<Recipe> recipes = mRecipeMapper.mapRecipesAndStorage(mStorage, recipesResponseResponse.body().getRecipes());
-                        mainView.onClearItems();
-                        mainView.onRecipeLoaded(recipes);
-                    }
+            mStorage.dropDatabase();
+            Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getRecipes();
+            Disposable disposable = recipesResponseObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
+                        @Override
+                        public void onNext(@NonNull Response<RecipesResponse> recipesResponseResponse) {
+                            List<Recipe> recipes = mRecipeMapper.mapRecipesAndStorage(mStorage, recipesResponseResponse.body().getRecipes());
+                            mainView.onClearItems();
+                            mainView.onRecipeLoaded(recipes);
+                        }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        mainView.onHideDialog();
-                        mainView.onShowToast("Error loading recipes " + e.getMessage());
-                        Log.e("ERROR_LOG", e.getMessage());
-                    }
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            mainView.onHideDialog();
+                            mainView.onShowToast("Error loading recipes " + e.getMessage());
+                            Log.e("ERROR_LOG", e.getMessage());
+                        }
 
-                    @Override
-                    public void onComplete() {
-                        mainView.onHideDialog();
-                        mainView.onShowToast("Sync completed!");
-                    }
-                });
-        if (compositeDisposable != null)
-            compositeDisposable.add(disposable);
-
+                        @Override
+                        public void onComplete() {
+                            mainView.onHideDialog();
+                            mainView.onShowToast("Sync completed!");
+                        }
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
+        }
     }
 
 
@@ -88,6 +88,5 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
-
     }
 }

@@ -2,6 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.modules.register;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,8 +33,8 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
     private User user = new User();
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mRegisterPresenter.attachView(this);
     }
 
