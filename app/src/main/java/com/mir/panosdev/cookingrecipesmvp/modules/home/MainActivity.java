@@ -69,8 +69,11 @@ public class MainActivity extends BaseActivity {
 
 
     private void userProfile() {
-        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-        startActivity(intent);
+        FragmentManager manager = getSupportFragmentManager();
+        UserProfileActivity fragment = new UserProfileActivity();
+        manager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit();
+//        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+//        startActivity(intent);
     }
 
     @Override

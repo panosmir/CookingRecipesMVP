@@ -21,6 +21,7 @@ import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter.UpdatableIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
@@ -58,6 +59,7 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     protected NewRecipePresenter mNewRecipePresenter;
 
     private User user = new User();
+    private Recipe recipe = new Recipe();
     private CategoryAdapter mCategoryAdapter;
     private List<Category> mCategories = new ArrayList<>();
     private List<Ingredient> mIngredients;
@@ -199,7 +201,8 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @Override
     public void onCompletedToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(NewRecipeActivity.this, MainActivity.class);
+        Intent intent = new Intent(NewRecipeActivity.this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
         startActivity(intent);
         finish();
     }
@@ -250,7 +253,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @Override
     public Recipe getRecipeDetails() {
         SharedPreferences mSharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        Recipe recipe = new Recipe();
         user.setId(mSharedPreferences.getInt("USER_ID", 0));
         user.setUsername(mSharedPreferences.getString("USER_USERNAME", ""));
         recipe.setUser(user);

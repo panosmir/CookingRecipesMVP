@@ -83,28 +83,25 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     }
 
     private void initPasswordCheck() {
-        if (mPassword != null) {
-            passwordObservable = RxTextView.textChanges(mPassword)
-                    .map(new Function<CharSequence, Boolean>() {
-                        @Override
-                        public Boolean apply(CharSequence charSequence) throws Exception {
-                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                        }
-                    }).distinctUntilChanged();
-        }
+        passwordObservable = RxTextView.textChanges(mPassword)
+                .map(new Function<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean apply(CharSequence charSequence) throws Exception {
+                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                    }
+                })
+                .distinctUntilChanged();
     }
 
     private void initUsernameCheck() {
-        if (mUsername.getText() != null) {
-            usernameObservable = RxTextView.textChanges(mUsername)
-                    .map(new Function<CharSequence, Boolean>() {
-                        @Override
-                        public Boolean apply(CharSequence charSequence) throws Exception {
-                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                        }
-                    }).distinctUntilChanged();
-
-        }
+        usernameObservable = RxTextView.textChanges(mUsername)
+                .map(new Function<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean apply(CharSequence charSequence) throws Exception {
+                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                    }
+                })
+                .distinctUntilChanged();
     }
 
     @OnClick({R.id.registerButton, R.id.loginButton})

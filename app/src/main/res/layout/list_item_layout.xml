@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="#617487"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp"
+    android:background="@drawable/list_shape"
     android:orientation="horizontal">
 
     <TextView
@@ -60,15 +62,13 @@
         android:id="@+id/ic_play_arrow"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="12dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="6dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toRightOf="@+id/recipeTitle"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintVertical_bias="0.571"/>
 
 </android.support.constraint.ConstraintLayout>
