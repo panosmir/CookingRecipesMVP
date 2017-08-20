@@ -2,6 +2,8 @@ package com.mir.panosdev.cookingrecipesmvp.modules.home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -18,8 +21,10 @@ import com.mir.panosdev.cookingrecipesmvp.listeners.OnBottomNavigationClickListe
 import com.mir.panosdev.cookingrecipesmvp.modules.login.LoginActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.NewRecipeActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.search.SearchFragment;
-import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.UserProfileFragment;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -34,9 +39,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentManager manager = getSupportFragmentManager();
-        MainFragment mainFragment = new MainFragment();
-        manager.beginTransaction().replace(R.id.mainFragmentContainer, mainFragment).commit();
+        getRecipes();
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnBottomNavigationListener);
     }
 
@@ -51,11 +54,10 @@ public class MainActivity extends BaseActivity {
     private OnBottomNavigationClickListener mOnBottomNavigationListener = new OnBottomNavigationClickListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menu) {
-            switch (menu.getItemId()){
+            switch (menu.getItemId()) {
                 case R.id.action_recipes:
-                    FragmentManager manager = getSupportFragmentManager();
-                    MainFragment mainFragment = new MainFragment();
-                    manager.beginTransaction().replace(R.id.mainFragmentContainer, mainFragment).commit();                    return true;
+                    getRecipes();
+                    return true;
                 case R.id.action_search:
                     searchRecipe();
                     return true;
@@ -67,13 +69,23 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    private void getRecipes() {
+        FragmentManager manager = getSupportFragmentManager();
+        MainFragment mainFragment = new MainFragment();
+        manager.beginTransaction().replace(R.id.mainFragmentContainer, mainFragment).commit();
+    }
+
+
+    private void searchRecipe() {
+        FragmentManager manager = getSupportFragmentManager();
+        SearchFragment searchFragment = new SearchFragment();
+        manager.beginTransaction().replace(R.id.mainFragmentContainer, searchFragment).commit();
+    }
 
     private void userProfile() {
         FragmentManager manager = getSupportFragmentManager();
-        UserProfileActivity fragment = new UserProfileActivity();
+        UserProfileFragment fragment = new UserProfileFragment();
         manager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit();
-//        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-//        startActivity(intent);
     }
 
     @Override
@@ -87,12 +99,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected int getContentView() {
         return R.layout.activity_main;
-    }
-
-    private void searchRecipe() {
-        FragmentManager manager = getSupportFragmentManager();
-        SearchFragment searchFragment = new SearchFragment();
-        manager.beginTransaction().replace(R.id.mainFragmentContainer, searchFragment).commit();
     }
 
     @Override

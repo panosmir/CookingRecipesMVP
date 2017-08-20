@@ -23,6 +23,7 @@ public class RecipeMapper {
                     mRecipe.setTitle(recipe.getTitle());
                     mRecipe.setDescription(recipe.getDescription());
                     mRecipe.setIngredients(recipe.getIngredients());
+                    mRecipe.setFavorites(recipe.getFavorites());
                     storage.addRecipe(mRecipe);
                     recipeList.add(mRecipe);
                 }
@@ -41,6 +42,7 @@ public class RecipeMapper {
                 mRecipe.setTitle(recipe.getTitle());
                 mRecipe.setDescription(recipe.getDescription());
                 mRecipe.setIngredients(recipe.getIngredients());
+                mRecipe.setFavorites(recipe.getFavorites());
                 recipeList.add(mRecipe);
             }
         }

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.CategoryMapper;
 import com.mir.panosdev.cookingrecipesmvp.mapper.IngredientMapper;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsFragment;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
@@ -13,6 +14,7 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
 import java.util.List;
 import javax.inject.Inject;
 import io.reactivex.Completable;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -35,6 +37,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
 
     private DetailsActivityMVP.DetailsView mView;
     private DetailsActivityMVP.DetailsViewActivity mDetailsViewActivity;
+    private DetailsActivityMVP.DetailsViewFragment mDetailsViewFragment;
     private Completable recipeCompletable;
 
     protected CompositeDisposable compositeDisposable;
@@ -137,6 +140,49 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
             return;
     }
 
+    @Inject
+    public void addFavorite(){
+        if (mDetailsViewFragment != null) {
+            Completable completable = mRecipesApiService.addFavorite(mDetailsViewFragment.getRecipeId(), mDetailsViewFragment.getUsername());
+            Disposable disposable = completable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            mDetailsViewFragment.onCompletedToast("Bookmarked!");
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            mDetailsViewFragment.onErrorToast(throwable.getMessage());
+                        }
+                    });
+            if(compositeDisposable!=null)
+                compositeDisposable.add(disposable);
+        }
+    }
+
+    public void removeFavorite() {
+        if (mDetailsViewFragment != null) {
+            Completable completable = mRecipesApiService.removeFavorite(mDetailsViewFragment.getRecipeId(), mDetailsViewFragment.getUsername());
+            Disposable disposable = completable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            mDetailsViewFragment.onCompletedToast("UnFavorited!");
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            mDetailsViewFragment.onErrorToast(throwable.getMessage());
+                        }
+                    });
+            if(compositeDisposable!=null)
+                compositeDisposable.add(disposable);
+        }
+    }
+
     @Override
     public void attachView(DetailsActivityMVP.DetailsView view) {
         mView = view;
@@ -145,6 +191,11 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
     @Override
     public void attachActivity(DetailsActivityMVP.DetailsViewActivity detailsViewActivity) {
         mDetailsViewActivity = detailsViewActivity;
+    }
+
+    @Override
+    public void attachFragment(DetailsActivityMVP.DetailsViewFragment viewFragment) {
+        mDetailsViewFragment = viewFragment;
     }
 
     @Override

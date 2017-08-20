@@ -41,7 +41,6 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
     @BindView(R.id.recipe_list)
     RecyclerView recipesRecyclerView;
 
-
     @BindView(R.id.mainSwipeContainer)
     SwipeRefreshLayout mSwipeRefreshLayout;
 

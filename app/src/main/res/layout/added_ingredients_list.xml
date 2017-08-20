@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/quantityTextView"
-        style="@style/DetailTextColor"
+        style="@style/MainTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/addedIngredientTextView"
-        style="@style/DetailTextColor"
+        style="@style/MainTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

@@ -19,9 +19,10 @@ import retrofit2.Response;
 
 public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
-    private UserProfileMVP.UserProfileView mView;
-    protected CompositeDisposable compositeDisposable;
+    private UserProfileMVP.UserProfileView mView = null;
+    private UserProfileMVP.UserFragment mFragment = null;
 
+    protected CompositeDisposable compositeDisposable;
     @Inject
     protected RecipesApiService mApiService;
     @Inject
@@ -33,7 +34,7 @@ public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
     @Inject
     public void getUserRecipes() {
-        if (mView != null) {
+        if (mView != null ) {
             Observable<Response<RecipesResponse>> recipeObservable = mApiService.getUserRecipes(mView.getUserId());
             Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -54,7 +55,38 @@ public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-                            mView.onCompleteShowToast("Your recipes are here!");
+//                            mView.onCompleteShowToast("YOURS!");
+                        }
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
+        }
+    }
+
+    @Inject
+    public void getUserFavoritesRecipes() {
+        if (mView != null) {
+            Observable<Response<RecipesResponse>> recipeObservable = mApiService.getUserFavorites(mView.getUserId());
+            Disposable disposable = recipeObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
+                        @Override
+                        public void onNext(Response<RecipesResponse> recipesResponseResponse) {
+                            if (recipesResponseResponse.isSuccessful()) {
+                                List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponseResponse.body().getRecipes());
+                                mView.onClearItems();
+                                mView.onRecipesLoaded(recipes);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+//                            mView.onCompleteShowToast("FAVORITES!");
                         }
                     });
             if (compositeDisposable != null)
@@ -68,9 +100,13 @@ public class UserProfilePresenter implements UserProfileMVP.Presenter {
     }
 
     @Override
+    public void attachFragment(UserProfileMVP.UserFragment fragment) {
+        mFragment = fragment;
+    }
+
+    @Override
     public void detachView() {
         if (compositeDisposable != null)
             compositeDisposable.dispose();
-        mView = null;
     }
 }

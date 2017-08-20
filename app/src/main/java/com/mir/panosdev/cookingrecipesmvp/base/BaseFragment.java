@@ -17,9 +17,9 @@ public class BaseFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         resolveDaggerDependency();
+        super.onCreate(savedInstanceState);
     }
 
     protected void resolveDaggerDependency() {

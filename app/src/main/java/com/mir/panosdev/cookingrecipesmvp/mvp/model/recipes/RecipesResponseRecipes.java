@@ -1,5 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
+import com.google.gson.annotations.SerializedName;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
@@ -11,9 +12,10 @@ public class RecipesResponseRecipes implements Serializable{
     private String description;
     private int id;
     private String title;
-    private int userId;
+
     private User user;
     private List<Ingredient> ingredients = new ArrayList<>();
+    private List<User> favorites = new ArrayList<>();
 
     public String getDescription() {
         return this.description;
@@ -39,14 +41,6 @@ public class RecipesResponseRecipes implements Serializable{
         this.title = title;
     }
 
-    public int getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public User getUser() {
         return user;
     }
@@ -61,5 +55,13 @@ public class RecipesResponseRecipes implements Serializable{
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public List<User> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<User> favorites) {
+        this.favorites = favorites;
     }
 }

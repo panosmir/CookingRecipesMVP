@@ -14,8 +14,11 @@ public interface UserProfileMVP {
         void onCompleteShowToast(String message);
     }
 
+    interface UserFragment{}
+
     interface Presenter{
         void attachView(UserProfileMVP.UserProfileView view);
+        void attachFragment(UserProfileMVP.UserFragment fragment);
         void detachView();
     }
 }

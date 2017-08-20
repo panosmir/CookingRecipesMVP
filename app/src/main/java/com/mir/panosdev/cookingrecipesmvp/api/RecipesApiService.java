@@ -17,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RecipesApiService {
 
@@ -53,4 +54,12 @@ public interface RecipesApiService {
     @GET("ingredients/findByCategoryId/{id}")
     Single<Response<IngredientsResponse>> getIngredientsById(@Path("id") int id);
 
+    @GET("recipes/userFavorites/add/{id}/{username}")
+    Completable addFavorite(@Path("id") int id, @Path("username") String username);
+
+    @GET("recipes/removeFavorite")
+    Completable removeFavorite(@Query("id") int id, @Query("username") String username);
+
+    @GET("/users/userFavorites/{id}")
+    Observable<Response<RecipesResponse>> getUserFavorites(@Path("id") int id);
 }

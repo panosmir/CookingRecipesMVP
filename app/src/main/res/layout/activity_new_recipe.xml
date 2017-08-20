@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp">
             <EditText
                 android:id="@+id/addRecipeTitleEditText"
-                style="@style/DetailTextColor"
+                style="@style/MainTextColor"
                 android:layout_width="299dp"
                 android:layout_height="50dp"
                 android:hint="Recipe title"/>
@@ -67,7 +67,7 @@
             android:layout_marginBottom="8dp">
             <EditText
                 android:id="@+id/addRecipeDescriptionEditText"
-                style="@style/DetailTextColor"
+                style="@style/MainTextColor"
                 android:layout_width="302dp"
                 android:layout_height="135dp"
                 android:layout_marginLeft="8dp"
@@ -78,18 +78,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="168dp" />
         </android.support.design.widget.TextInputLayout>
-
-        <!--<Button-->
-            <!--android:id="@+id/addRecipeButton"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="57dp"-->
-            <!--android:layout_marginRight="40dp"-->
-            <!--android:text="@string/add_recipe_button"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/textInputDescription" />-->
 
         <Button
             android:id="@+id/searchIngredientsButton"
