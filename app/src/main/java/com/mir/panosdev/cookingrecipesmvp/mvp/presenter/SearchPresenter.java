@@ -51,7 +51,6 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
                                 mView.onClearItems();
                                 mView.onRecipeLoaded(recipes);
                                 mView.onHideDialog();
-                                mView.onShowToast("Recipe found!!!");
                             }
                         }
 
@@ -64,8 +63,8 @@ public class SearchPresenter implements SearchActivityMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-                            mView.onShowToast("Search Completed.");
                         }
+
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);

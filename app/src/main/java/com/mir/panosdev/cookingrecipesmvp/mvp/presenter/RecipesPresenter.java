@@ -62,8 +62,8 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                         @Override
                         public void onComplete() {
                             mainView.onHideDialog();
-                            mainView.onShowToast("Sync completed!");
                         }
+
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);

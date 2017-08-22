@@ -55,8 +55,8 @@ public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-//                            mView.onCompleteShowToast("YOURS!");
                         }
+
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);
@@ -86,8 +86,8 @@ public class UserProfilePresenter implements UserProfileMVP.Presenter {
 
                         @Override
                         public void onComplete() {
-//                            mView.onCompleteShowToast("FAVORITES!");
                         }
+
                     });
             if (compositeDisposable != null)
                 compositeDisposable.add(disposable);

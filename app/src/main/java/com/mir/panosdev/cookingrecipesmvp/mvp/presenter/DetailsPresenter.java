@@ -149,7 +149,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
                     .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onComplete() {
-                            mDetailsViewFragment.onCompletedToast("Bookmarked!");
+                            mDetailsViewFragment.onCompletedToast("Favorited!!!");
                         }
 
                         @Override
@@ -170,7 +170,7 @@ public class DetailsPresenter implements DetailsActivityMVP.Presenter {
                     .subscribeWith(new DisposableCompletableObserver() {
                         @Override
                         public void onComplete() {
-                            mDetailsViewFragment.onCompletedToast("UnFavorited!");
+                            mDetailsViewFragment.onCompletedToast("Removed from Favorites!");
                         }
 
                         @Override
