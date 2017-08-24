@@ -4,7 +4,7 @@
     <string name="search_icon">Search</string>
     <string name="profile_icon">My Profile</string>
     <string name="login_button">Login</string>
-    <string name="register_button">Register</string>
+    <string name="register_button">You don\'t have an account? Register NOW!</string>
     <string name="username_edit_text">Username</string>
     <string name="password_edit_text">Password</string>
     <string name="add_recipe_button">Add Recipe</string>

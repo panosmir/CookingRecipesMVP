@@ -77,9 +77,22 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
-                        loginButton.setEnabled(aBoolean);
+                        if(aBoolean)
+                            enableButton();
+                        else
+                            disableButton();
                     }
                 });
+    }
+
+    private void disableButton() {
+        loginButton.setBackground(getResources().getDrawable(R.color.grey));
+        loginButton.setEnabled(false);
+    }
+
+    private void enableButton() {
+        loginButton.setBackground(getResources().getDrawable(R.color.colorPrimary));
+        loginButton.setEnabled(true);
     }
 
     private void initPasswordCheck() {
