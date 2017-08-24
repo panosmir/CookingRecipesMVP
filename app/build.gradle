@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
@@ -64,4 +65,8 @@ dependencies {
             "org.powermock:powermock-module-junit4:$powermock_version",
             "org.powermock:powermock-api-mockito:$powermock_version"
     compile 'javax.annotation:javax.annotation-api:1.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
