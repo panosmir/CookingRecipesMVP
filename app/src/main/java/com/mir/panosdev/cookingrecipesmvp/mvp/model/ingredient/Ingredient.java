@@ -1,20 +1,22 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient;
 
+import com.google.gson.annotations.SerializedName;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 
-/**
- * Created by Panos on 18-May-17.
- */
+import java.io.Serializable;
 
-public class Ingredient {
+public class Ingredient implements Serializable{
 
     private int id;
     private String ingredient;
     private Category category;
+    @SerializedName(value = "quantity")
+    private String quantity;
 
-    public Ingredient(int id, String ingredient) {
+    public Ingredient(int id, String ingredient, String quantity) {
         this.id = id;
         this.ingredient = ingredient;
+        this.quantity = quantity;
     }
 
     public Ingredient() {
@@ -42,5 +44,13 @@ public class Ingredient {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

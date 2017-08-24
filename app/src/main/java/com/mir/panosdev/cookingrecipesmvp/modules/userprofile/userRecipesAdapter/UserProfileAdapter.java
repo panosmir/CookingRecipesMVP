@@ -6,20 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by Panos on 4/5/2017.
- */
 
 public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.Holder> {
 
@@ -59,10 +52,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.recipeTitle)
-        protected TextView recipeTitle;
+        TextView recipeTitle;
 
         @BindView(R.id.recipeDescription)
-        protected TextView recipeDescription;
+        TextView recipeDescription;
 
         private Recipe mRecipe;
         private Context mContext;

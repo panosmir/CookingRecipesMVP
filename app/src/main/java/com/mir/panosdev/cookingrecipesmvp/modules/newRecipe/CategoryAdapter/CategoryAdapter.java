@@ -1,5 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
@@ -8,20 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 
 public class CategoryAdapter extends BaseAdapter {
 
     private List<Category> mCategoryList;
+
     @Inject
-    Context mContext;
+    protected Context mContext;
+
     private LayoutInflater mLayoutInflater;
 
     public CategoryAdapter(List<Category> mCategoryList, Context mContext) {
@@ -54,6 +54,7 @@ public class CategoryAdapter extends BaseAdapter {
         return view;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;

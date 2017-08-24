@@ -2,7 +2,11 @@ package com.mir.panosdev.cookingrecipesmvp.modules.newRecipe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,31 +14,31 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerNewRecipeComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.NewRecipeModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
+import com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter.UpdatableIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
-import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.IngredientAdapter;
+import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.MainIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.NewRecipePresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeView;
-
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
+public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewRecipeView {
 
     @BindView(R.id.addRecipeTitleEditText)
     EditText addRecipeTitle;
@@ -48,25 +52,41 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.newRecipeFloatingButton)
+    FloatingActionButton newRecipeFloatingButton;
+
     @Inject
     protected NewRecipePresenter mNewRecipePresenter;
 
-    User user = new User();
-    CategoryAdapter mCategoryAdapter;
-    List<Category> mCategories = new ArrayList<>();
-    List<Ingredient> mIngredients = new ArrayList<>();
-    List<Ingredient> addedIngredients = new ArrayList<>();
-    Category category = new Category();
+    private User user = new User();
+    private Recipe recipe = new Recipe();
+    private CategoryAdapter mCategoryAdapter;
+    private List<Category> mCategories = new ArrayList<>();
+    private List<Ingredient> mIngredients;
+    private List<Ingredient> addedIngredients;
+    private Category category = new Category();
     private int categoryId;
-    private IngredientAdapter mIngredientAdapter;
+    private MainIngredientAdapter mIngredientAdapter;
+    private UpdatableIngredientAdapter mUpdatableIngredientAdapter;
+    private List<Ingredient> tempList;
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNewRecipePresenter.attachView(this);
         mNewRecipePresenter.fetchCategories();
         setAdapters();
         initializeList();
         spinnerItemSelectedListener();
+        mIngredients = new ArrayList<>();
+        addedIngredients = new ArrayList<>();
+        tempList = new ArrayList<>();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNewRecipePresenter.detachView();
     }
 
     private void setAdapters() {
@@ -85,7 +105,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -94,23 +113,83 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-        mIngredientAdapter = new IngredientAdapter(getLayoutInflater());
-        mRecyclerView.setAdapter(mIngredientAdapter);
-        mIngredientAdapter.setIngredientClickListener(mOnIngredientClickListener);
+
+        mIngredientAdapter = new MainIngredientAdapter(getLayoutInflater());
+        mIngredientAdapter.setIngredientClickListener(mMainIngredientClickListener);
+
+        mUpdatableIngredientAdapter = new UpdatableIngredientAdapter(getLayoutInflater());
+        mUpdatableIngredientAdapter.setIngredientClickListener(mAddedIngredientClickListener);
+        mRecyclerView.setAdapter(mUpdatableIngredientAdapter);
     }
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerNewRecipeComponent.builder().applicationComponent(
-                getApplicationComponent()
-        ).newRecipeModule(new NewRecipeModule(this))
+        DaggerRecipesComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 
-    @OnClick(R.id.addRecipeButton)
+    private List<Ingredient> moddedIngredients(){
+        tempList.clear();
+        tempList.addAll(mIngredients);
+        for (Ingredient i :
+                mIngredients) {
+            for (Ingredient ingredient :
+                    addedIngredients) {
+                if(ingredient.getIngredient().equals(i.getIngredient())){
+                    tempList.remove(i);
+                }
+            }
+        }
+        mIngredientAdapter.clearIngredients();
+        mIngredientAdapter.addIngredients(tempList);
+        return tempList;
+    }
+
+    @OnClick(R.id.searchIngredientsButton)
+    public void searchIngredientButtonClick() {
+        new MaterialDialog.Builder(this)
+                .title(category.getCategory())
+                .items(moddedIngredients())
+                .adapter(mIngredientAdapter, new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
+                .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
+                        return true;
+                    }
+                })
+                .widgetColor(Color.BLUE)
+                .positiveText("Choose")
+                .positiveColor(Color.BLUE)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                        mUpdatableIngredientAdapter.clearIngredients();
+                        mUpdatableIngredientAdapter.addIngredients(addedIngredients);
+                    }
+                }).show();
+    }
+
+    private OnIngredientClickListener mAddedIngredientClickListener = new OnIngredientClickListener() {
+        @Override
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
+            mUpdatableIngredientAdapter.removeIngredient(ingredient);
+            addedIngredients.remove(ingredient);
+            Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @OnClick(R.id.newRecipeFloatingButton)
     public void addRecipeButtonClick(View view) {
-        if (view.getId() == R.id.addRecipeButton) {
-            mNewRecipePresenter.addNewRecipe();
+        if (view.getId() == R.id.newRecipeFloatingButton) {
+            if (!addRecipeTitle.getText().toString().isEmpty() && !addRecipeDescription.getText().toString().isEmpty() && !addedIngredients.isEmpty()) {
+                newRecipeFloatingButton.setEnabled(true);
+                mNewRecipePresenter.addNewRecipe();
+            }
+            else
+                newRecipeFloatingButton.setEnabled(false);
+
         }
     }
 
@@ -122,7 +201,8 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
     @Override
     public void onCompletedToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(NewRecipeActivity.this, MainActivity.class);
+        Intent intent = new Intent(NewRecipeActivity.this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
         startActivity(intent);
         finish();
     }
@@ -148,8 +228,6 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
 
     @Override
     public void onIngredientsLoaded(List<Ingredient> ingredientList) {
-        mIngredientAdapter.addIngredients(ingredientList);
-        mIngredientAdapter.notifyDataSetChanged();
         mIngredients = ingredientList;
     }
 
@@ -158,21 +236,25 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeView {
         mIngredientAdapter.clearIngredients();
     }
 
-    private OnIngredientClickListener mOnIngredientClickListener = new OnIngredientClickListener() {
+    private OnIngredientClickListener mMainIngredientClickListener = new OnIngredientClickListener() {
         @Override
-        public void onClick(View v, Ingredient ingredient, int position) {
-            addedIngredients.add(ingredient);
-
+        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
+            if (!addedIngredients.contains(ingredient) && !isClicked) {
+                addedIngredients.add(ingredient);
+                Toast.makeText(NewRecipeActivity.this,ingredient.getIngredient() + " added!", Toast.LENGTH_SHORT).show();
+            }
+            else if(isClicked){
+                addedIngredients.remove(ingredient);
+                Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
     @Override
     public Recipe getRecipeDetails() {
         SharedPreferences mSharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        Recipe recipe = new Recipe();
         user.setId(mSharedPreferences.getInt("USER_ID", 0));
         user.setUsername(mSharedPreferences.getString("USER_USERNAME", ""));
-        user.setPassword(mSharedPreferences.getString("USER_PASSWORD", ""));
         recipe.setUser(user);
         if (!addRecipeTitle.getText().toString().isEmpty() || !addRecipeDescription.getText().toString().isEmpty()) {
             recipe.setTitle(addRecipeTitle.getText().toString());

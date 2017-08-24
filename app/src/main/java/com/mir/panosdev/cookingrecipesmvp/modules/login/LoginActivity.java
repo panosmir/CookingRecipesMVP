@@ -3,35 +3,39 @@ package com.mir.panosdev.cookingrecipesmvp.modules.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerLoginComponent;
-import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.LoginModule;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
+import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
 import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.register.RegisterActivity;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.LoginPresenter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginView;
-import com.mir.panosdev.cookingrecipesmvp.utilities.NetworkUtils;
-
-import java.io.IOException;
-import java.net.InetAddress;
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
-/**
- * Created by Panos on 3/27/2017.
- */
+import static android.text.TextUtils.isEmpty;
 
-public class LoginActivity extends BaseActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginActivityMVP.LoginView {
 
     @BindView(R.id.usernameEditText)
     TextView mUsername;
@@ -39,17 +43,78 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.passwordEditText)
     TextView mPassword;
 
+    @BindView(R.id.loginButton)
+    Button loginButton;
+
     @Inject
     protected LoginPresenter mLoginPresenter;
 
-    User user = new User();
+    private User user = new User();
+    private Observable<Boolean> usernameObservable = null;
+    private Observable<Boolean> passwordObservable = null;
 
     @Inject
-    SharedPreferences sharedPreferences;
+    protected SharedPreferences sharedPreferences;
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-        super.onViewReady(savedInstanceState, intent);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mLoginPresenter.attachView(this);
+        sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+        if (sharedPreferences.contains("EXISTS")) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        initUsernameCheck();
+        initPasswordCheck();
+        Observable.combineLatest(usernameObservable, passwordObservable, new BiFunction<Boolean, Boolean, Boolean>() {
+            @Override
+            public Boolean apply(Boolean usernameBoolean, Boolean passwordBoolean) throws Exception {
+                return usernameBoolean && passwordBoolean;
+            }
+        }).distinctUntilChanged()
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if(aBoolean)
+                            enableButton();
+                        else
+                            disableButton();
+                    }
+                });
+    }
+
+    private void disableButton() {
+        loginButton.setBackground(getResources().getDrawable(R.color.grey));
+        loginButton.setEnabled(false);
+    }
+
+    private void enableButton() {
+        loginButton.setBackground(getResources().getDrawable(R.color.colorPrimary));
+        loginButton.setEnabled(true);
+    }
+
+    private void initPasswordCheck() {
+        passwordObservable = RxTextView.textChanges(mPassword)
+                .map(new Function<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean apply(CharSequence charSequence) throws Exception {
+                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                    }
+                })
+                .distinctUntilChanged();
+    }
+
+    private void initUsernameCheck() {
+        usernameObservable = RxTextView.textChanges(mUsername)
+                .map(new Function<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean apply(CharSequence charSequence) throws Exception {
+                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
+                    }
+                })
+                .distinctUntilChanged();
     }
 
     @OnClick({R.id.registerButton, R.id.loginButton})
@@ -73,9 +138,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     protected void resolveDaggerDependency() {
-        DaggerLoginComponent.builder()
+        DaggerRecipesComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .loginModule(new LoginModule(this))
+                .recipesModule(new RecipesModule())
                 .build().inject(this);
     }
 
@@ -85,7 +150,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (sharedPreferences.contains("EXISTS")) {
             user.setId(sharedPreferences.getInt("USER_ID", 0));
             user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
-            user.setPassword(sharedPreferences.getString("USER_PASSWORD", null));
+            Log.d("LOGIN_LOG", "Username -> " + user.getUsername());
             return user;
         } else {
             if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
@@ -124,7 +189,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("USER_ID", user.getId());
             editor.putString("USER_USERNAME", user.getUsername());
-            editor.putString("USER_PASSWORD", user.getPassword());
             editor.putBoolean("EXISTS", true);
             Log.d("USER_DETAILS", "User ---> " + user.getId());
             editor.apply();

@@ -1,24 +1,23 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
-import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterView;
-
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.RegisterActivityMVP;
 import java.net.HttpURLConnection;
-
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-/**
- * Created by Panos on 4/7/2017.
- */
+public class RegisterPresenter implements RegisterActivityMVP.Presenter {
 
-public class RegisterPresenter extends BasePresenter<RegisterView> implements Observer<Response<User>> {
+    private RegisterActivityMVP.RegisterView mView;
+    protected CompositeDisposable compositeDisposable;
 
     @Inject
     protected RecipesApiService mRecipesApiService;
@@ -29,45 +28,52 @@ public class RegisterPresenter extends BasePresenter<RegisterView> implements Ob
 
     @Inject
     public void userRegistration() {
-        if (getView().getUserDetails() != null) {
-            Observable<Response<User>> userObservable = mRecipesApiService.userRegistration(getView().getUserDetails());
-            subscribe(userObservable, this);
-        }
-    }
-
-    @Override
-    public void onSubscribe(Disposable d) {
-
-    }
-
-    @Override
-    public void onNext(Response<User> userResponse) {
-        switch (userResponse.code()) {
-            case HttpURLConnection.HTTP_CREATED:
-                getView().returnUserDetails(userResponse.body());
-                registerSuccessful();
-                break;
-            case HttpURLConnection.HTTP_INTERNAL_ERROR:
-                registerFailed();
-                break;
+        if (mView != null && mView.getUserDetails() != null) {
+            Single<Response<User>> userObservable = mRecipesApiService.userRegistration(mView.getUserDetails());
+            Disposable disposable = userObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableSingleObserver<Response<User>>() {
+                        @Override
+                        public void onSuccess(Response<User> userResponse) {
+                            switch (userResponse.code()) {
+                                case HttpURLConnection.HTTP_CREATED:
+                                    mView.returnUserDetails(userResponse.body());
+                                    registerSuccessful();
+                                    break;
+                                case HttpURLConnection.HTTP_BAD_REQUEST:
+                                    registerFailed();
+                                    break;
+                            }
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e("ERROR_LOG", e.getMessage());
+                        }
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
         }
     }
 
     private void registerSuccessful() {
-        getView().onShowDialog("We're trying to register you, please wait...");
-        getView().onRegisterSuccess("Register completed!!");
+        mView.onShowDialog("We're trying to register you, please wait...");
+        mView.onRegisterSuccess("Registration completed!!");
     }
 
     private void registerFailed() {
-        getView().onHideDialog();
-        getView().onErrorToast("Username or password incorrect...");
+        mView.onHideDialog();
+        mView.onErrorToast("Username or password incorrect...");
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void attachView(RegisterActivityMVP.RegisterView view) {
+        mView = view;
     }
 
     @Override
-    public void onComplete() {
+    public void detachView() {
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
+        mView = null;
     }
 }

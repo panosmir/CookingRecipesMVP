@@ -14,9 +14,7 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.Applica
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by Panos on 3/17/2017.
- */
+
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -25,19 +23,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        resolveDaggerDependency();
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
         unbinder = ButterKnife.bind(this);
-        onViewReady(savedInstanceState, getIntent());
-    }
-
-    @CallSuper
-    protected void onViewReady(Bundle savedInstanceState, Intent intent){
-        //To be implemented by child methods
-        resolveDaggerDependency();
     }
 
     protected void resolveDaggerDependency() {
+        //To be implemented by child methods
     }
 
     protected void showDialog(String message){
@@ -48,7 +41,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
-
     }
 
     protected void showBackArrow(){

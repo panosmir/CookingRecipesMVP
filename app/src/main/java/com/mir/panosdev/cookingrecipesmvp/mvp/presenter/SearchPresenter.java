@@ -1,61 +1,85 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
+import android.util.Log;
+
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
-import com.mir.panosdev.cookingrecipesmvp.base.BasePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
-import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchView;
-
+import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
+import java.net.HttpURLConnection;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-/**
- * Created by Panos on 3/21/2017.
- */
+public class SearchPresenter implements SearchActivityMVP.Presenter {
 
-public class SearchPresenter extends BasePresenter<SearchView> implements Observer<Response<RecipesResponse>> {
-
-    @Inject protected RecipesApiService mRecipesApiService;
-
-    @Inject protected RecipeMapper mRecipeMapper;
-
-    @Inject public SearchPresenter(){}
+    private SearchActivityMVP.SearchView mView;
+    private CompositeDisposable compositeDisposable = null;
 
     @Inject
-    public void getARecipe(){
-        getView().onShowDialog("Searching for this recipe.....");
-        Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getARecipe(getView().searchTitle());
-        subscribe(recipesResponseObservable, this);
+    protected RecipesApiService mRecipesApiService;
+
+    @Inject
+    protected RecipeMapper mRecipeMapper;
+
+    @Inject
+    public SearchPresenter() {
+    }
+
+    @Inject
+    public void getARecipe() {
+        if (mView != null) {
+            Observable<Response<RecipesResponse>> recipesResponseObservable = mRecipesApiService.getARecipe(mView.searchTitle());
+            Disposable disposable = recipesResponseObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
+                        @Override
+                        public void onNext(Response<RecipesResponse> recipesResponseResponse) {
+                            if(recipesResponseResponse.code() == HttpURLConnection.HTTP_NOT_FOUND){
+                                mView.onHideDialog();
+                                mView.onShowToast("Recipe not found.");
+                            }
+                            else if(recipesResponseResponse.code()==HttpURLConnection.HTTP_OK) {
+                                List<Recipe> recipes = mRecipeMapper.mapRecipes(recipesResponseResponse.body().getRecipes());
+                                mView.onClearItems();
+                                mView.onRecipeLoaded(recipes);
+                                mView.onHideDialog();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.onHideDialog();
+                            mView.onShowToast("Error loading recipes " + e.getMessage());
+                            Log.e("ERROR_LOG", e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+
+                    });
+            if (compositeDisposable != null)
+                compositeDisposable.add(disposable);
+        }
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
-
+    public void attachView(SearchActivityMVP.SearchView view) {
+        mView = view;
     }
 
     @Override
-    public void onNext(Response<RecipesResponse> recipesResponse) {
-        List<Recipe> recipes = mRecipeMapper.mapResults(recipesResponse.body().getRecipes());
-        getView().onClearItems();
-        getView().onRecipeLoaded(recipes);
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        getView().onHideDialog();
-        getView().onShowToast("Error loading recipes " + e.getMessage());
-    }
-
-    @Override
-    public void onComplete() {
-        getView().onHideDialog();
-        getView().onShowToast("Recipe found!!!");
+    public void detachView() {
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
+        mView = null;
     }
 }

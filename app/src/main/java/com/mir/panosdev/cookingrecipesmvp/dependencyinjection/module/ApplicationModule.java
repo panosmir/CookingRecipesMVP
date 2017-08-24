@@ -1,28 +1,24 @@
 package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module;
 
 import android.content.Context;
-
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.prefs.SharedPrefsModule;
-
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by Panos on 3/17/2017.
- */
 @Module(includes = SharedPrefsModule.class)
 public class ApplicationModule {
+
     private String mBaseUrl;
     private Context mContext;
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 
     public ApplicationModule(Context context, String baseUrl) {
         mContext = context;
@@ -32,9 +28,11 @@ public class ApplicationModule {
     @Singleton
     @Provides
     OkHttpClient provideOkHttpClient() {
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(interceptor)
                 .build();
     }
 
@@ -55,7 +53,6 @@ public class ApplicationModule {
     Context provideContext() {
         return mContext;
     }
-
 
     @Singleton
     @Provides
