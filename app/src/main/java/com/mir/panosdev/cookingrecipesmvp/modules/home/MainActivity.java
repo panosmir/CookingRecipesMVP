@@ -51,22 +51,19 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private OnBottomNavigationClickListener mOnBottomNavigationListener = new OnBottomNavigationClickListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menu) {
-            switch (menu.getItemId()) {
-                case R.id.action_recipes:
-                    getRecipes();
-                    return true;
-                case R.id.action_search:
-                    searchRecipe();
-                    return true;
-                case R.id.action_profile:
-                    userProfile();
-                    return true;
-            }
-            return true;
+    private OnBottomNavigationClickListener mOnBottomNavigationListener = menu -> {
+        switch (menu.getItemId()) {
+            case R.id.action_recipes:
+                getRecipes();
+                return true;
+            case R.id.action_search:
+                searchRecipe();
+                return true;
+            case R.id.action_profile:
+                userProfile();
+                return true;
         }
+        return true;
     };
 
     private void getRecipes() {

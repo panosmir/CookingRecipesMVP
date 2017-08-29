@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -21,6 +22,10 @@ android {
         exclude 'META-INF/rxjava.properties'
     }
     compileOptions.incremental = false
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -64,4 +69,7 @@ dependencies {
             "org.powermock:powermock-module-junit4:$powermock_version",
             "org.powermock:powermock-api-mockito:$powermock_version"
     compile 'javax.annotation:javax.annotation-api:1.2'
+}
+repositories {
+    mavenCentral()
 }

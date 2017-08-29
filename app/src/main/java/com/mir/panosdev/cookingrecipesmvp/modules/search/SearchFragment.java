@@ -91,13 +91,10 @@ public class SearchFragment extends BaseFragment implements SearchActivityMVP.Se
         searchList.setAdapter(mSearchAdapter);
     }
 
-    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(getActivity(), DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            startActivity(intent);
-        }
+    private OnRecipeClickListener mRecipeClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        startActivity(intent);
     };
 
     @OnClick(R.id.searchButton)
