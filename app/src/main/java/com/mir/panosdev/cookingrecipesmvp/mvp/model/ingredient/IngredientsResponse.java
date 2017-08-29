@@ -1,13 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient;
 
 public class IngredientsResponse implements java.io.Serializable {
-    private IngredientsResponseIngredients[] ingredients;
+    private Ingredient[] ingredients;
 
-    public IngredientsResponseIngredients[] getIngredients() {
+    public Ingredient[] getIngredients() {
         return this.ingredients;
     }
 
-    public void setIngredients(IngredientsResponseIngredients[] ingredients) {
+    public void setIngredients(Ingredient[] ingredients) {
         this.ingredients = ingredients;
     }
 }

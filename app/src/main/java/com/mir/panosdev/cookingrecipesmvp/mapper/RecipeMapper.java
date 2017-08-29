@@ -1,7 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.mapper;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponseRecipes;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +11,11 @@ public class RecipeMapper {
     @Inject
     public RecipeMapper(){}
 
-    public List<Recipe> mapRecipesAndStorage(Storage storage, RecipesResponseRecipes[] response){
+    public List<Recipe> mapRecipesAndStorage(Storage storage, Recipe[] response){
         List<Recipe> recipeList = new ArrayList<>();
 
         if (response != null){
-                for (RecipesResponseRecipes recipe: response) {
+                for (Recipe recipe: response) {
                     Recipe mRecipe = new Recipe();
                     mRecipe.setUser(recipe.getUser());
                     mRecipe.setId(recipe.getId());
@@ -31,10 +30,10 @@ public class RecipeMapper {
         return recipeList;
     }
 
-    public List<Recipe> mapRecipes(RecipesResponseRecipes[] response){
+    public List<Recipe> mapRecipes(Recipe[] response){
         List<Recipe> recipeList = new ArrayList<>();
         if(response != null){
-            for (RecipesResponseRecipes recipe :
+            for (Recipe recipe :
                     response) {
                 Recipe mRecipe = new Recipe();
                 mRecipe.setUser(recipe.getUser());

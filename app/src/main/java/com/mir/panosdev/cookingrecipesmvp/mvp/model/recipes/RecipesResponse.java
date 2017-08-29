@@ -1,13 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
 public class RecipesResponse {
-    private RecipesResponseRecipes[] recipes;
+    private Recipe[] recipes;
 
-    public RecipesResponseRecipes[] getRecipes() {
+    public Recipe[] getRecipes() {
         return this.recipes;
     }
 
-    public void setRecipes(RecipesResponseRecipes[] recipes) {
+    public void setRecipes(Recipe[] recipes) {
         this.recipes = recipes;
     }
 }
