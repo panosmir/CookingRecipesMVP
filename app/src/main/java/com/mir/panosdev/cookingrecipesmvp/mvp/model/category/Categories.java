@@ -2,13 +2,13 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.model.category;
 
 public class Categories implements java.io.Serializable {
     private static final long serialVersionUID = 6849705858325444072L;
-    private CategoriesResponse[] categories;
+    private Category[] categories;
 
-    public CategoriesResponse[] getCategories() {
+    public Category[] getCategories() {
         return this.categories;
     }
 
-    public void setCategories(CategoriesResponse[] categories) {
+    public void setCategories(Category[] categories) {
         this.categories = categories;
     }
 }
