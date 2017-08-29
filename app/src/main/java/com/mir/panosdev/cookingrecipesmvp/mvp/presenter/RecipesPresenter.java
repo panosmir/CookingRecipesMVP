@@ -46,8 +46,8 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                     .subscribeOn(Schedulers.io())
                     .subscribeWith(new DisposableObserver<Response<RecipesResponse>>() {
                         @Override
-                        public void onNext(@NonNull Response<RecipesResponse> recipesResponseResponse) {
-                            List<Recipe> recipes = mRecipeMapper.mapRecipesAndStorage(mStorage, recipesResponseResponse.body().getRecipes());
+                        public void onNext(Response<RecipesResponse> recipeResponse) {
+                            List<Recipe> recipes = mRecipeMapper.mapRecipesAndStorage(mStorage, recipeResponse.body().getRecipes());
                             mainView.onClearItems();
                             mainView.onRecipeLoaded(recipes);
                         }

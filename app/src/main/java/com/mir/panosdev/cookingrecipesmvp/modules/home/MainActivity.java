@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity {
                 editor.apply();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
         }
         return false;
