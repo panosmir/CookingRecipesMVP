@@ -72,7 +72,6 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
             usernameObservable = RxTextView.textChanges(mUsername)
                     .map(charSequence -> !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
                     .distinctUntilChanged();
-
         }
     }
 

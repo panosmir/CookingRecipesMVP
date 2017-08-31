@@ -96,9 +96,9 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
 
     private void initUsernameCheck() {
         usernameObservable = RxTextView.textChanges(mUsername)
-                .map(charSequence -> {
-                    return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                })
+                .map(charSequence ->
+                    !isEmpty(charSequence.toString()) && charSequence.length() >= 5
+                )
                 .distinctUntilChanged();
     }
 
