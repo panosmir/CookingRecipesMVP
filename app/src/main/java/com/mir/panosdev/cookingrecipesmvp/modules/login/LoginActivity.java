@@ -68,20 +68,13 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
         }
         initUsernameCheck();
         initPasswordCheck();
-        Observable.combineLatest(usernameObservable, passwordObservable, new BiFunction<Boolean, Boolean, Boolean>() {
-            @Override
-            public Boolean apply(Boolean usernameBoolean, Boolean passwordBoolean) throws Exception {
-                return usernameBoolean && passwordBoolean;
-            }
-        }).distinctUntilChanged()
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if(aBoolean)
-                            enableButton();
-                        else
-                            disableButton();
-                    }
+        Observable.combineLatest(usernameObservable, passwordObservable, (usernameBoolean, passwordBoolean) -> usernameBoolean && passwordBoolean)
+                .distinctUntilChanged()
+                .subscribe(isValid -> {
+                    if(isValid)
+                        enableButton();
+                    else
+                        disableButton();
                 });
     }
 
@@ -97,23 +90,16 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
 
     private void initPasswordCheck() {
         passwordObservable = RxTextView.textChanges(mPassword)
-                .map(new Function<CharSequence, Boolean>() {
-                    @Override
-                    public Boolean apply(CharSequence charSequence) throws Exception {
-                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                    }
-                })
+                .map(charSequence ->
+                        !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
                 .distinctUntilChanged();
     }
 
     private void initUsernameCheck() {
         usernameObservable = RxTextView.textChanges(mUsername)
-                .map(new Function<CharSequence, Boolean>() {
-                    @Override
-                    public Boolean apply(CharSequence charSequence) throws Exception {
-                        return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                    }
-                })
+                .map(charSequence ->
+                    !isEmpty(charSequence.toString()) && charSequence.length() >= 5
+                )
                 .distinctUntilChanged();
     }
 

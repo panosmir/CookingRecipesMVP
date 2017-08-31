@@ -52,42 +52,28 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
         mRegisterPresenter.attachView(this);
         initUsernameCheck();
         initPasswordCheck();
-        Observable.combineLatest(usernameObservable, passwordObservable, new BiFunction<Boolean, Boolean, Boolean>() {
-            @Override
-            public Boolean apply(Boolean usernameBoolean, Boolean passwordBoolean) throws Exception {
-                return usernameBoolean && passwordBoolean;
-            }
-        }).distinctUntilChanged()
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        registerButton.setEnabled(aBoolean);
-                    }
-                });
+        Observable.combineLatest(usernameObservable, passwordObservable, (usernameBoolean, passwordBoolean) -> usernameBoolean && passwordBoolean)
+                .distinctUntilChanged()
+                .subscribe(isValid ->
+                        registerButton.setEnabled(isValid)
+                );
     }
 
     private void initPasswordCheck() {
         if (mPassword != null) {
             passwordObservable = RxTextView.textChanges(mPassword)
-                    .map(new Function<CharSequence, Boolean>() {
-                        @Override
-                        public Boolean apply(CharSequence charSequence) throws Exception {
-                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                        }
-                    }).distinctUntilChanged();
+                    .map(charSequence ->
+                            !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
+                    .distinctUntilChanged();
         }
     }
 
     private void initUsernameCheck() {
         if (mUsername.getText() != null) {
             usernameObservable = RxTextView.textChanges(mUsername)
-                    .map(new Function<CharSequence, Boolean>() {
-                        @Override
-                        public Boolean apply(CharSequence charSequence) throws Exception {
-                            return !isEmpty(charSequence.toString()) && charSequence.length() >= 5;
-                        }
-                    }).distinctUntilChanged();
-
+                    .map(charSequence ->
+                            !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
+                    .distinctUntilChanged();
         }
     }
 

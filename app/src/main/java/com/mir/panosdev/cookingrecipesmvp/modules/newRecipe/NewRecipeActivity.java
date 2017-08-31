@@ -153,32 +153,22 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
                 .title(category.getCategory())
                 .items(moddedIngredients())
                 .adapter(mIngredientAdapter, new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
-                .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
-                        return true;
-                    }
-                })
+                .itemsCallbackMultiChoice(null, (materialDialog, integers, charSequences) -> true)
                 .widgetColor(Color.BLUE)
                 .positiveText("Choose")
                 .positiveColor(Color.BLUE)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        mUpdatableIngredientAdapter.clearIngredients();
-                        mUpdatableIngredientAdapter.addIngredients(addedIngredients);
-                    }
+                .onPositive((materialDialog, dialogAction) -> {
+                    mUpdatableIngredientAdapter.clearIngredients();
+                    mUpdatableIngredientAdapter.addIngredients(addedIngredients);
                 }).show();
     }
 
-    private OnIngredientClickListener mAddedIngredientClickListener = new OnIngredientClickListener() {
-        @Override
-        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
-            mUpdatableIngredientAdapter.removeIngredient(ingredient);
-            addedIngredients.remove(ingredient);
-            Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
-        }
-    };
+
+    private OnIngredientClickListener mAddedIngredientClickListener = ((v, ingredient, position, isClicked) -> {
+        mUpdatableIngredientAdapter.removeIngredient(ingredient);
+        addedIngredients.remove(ingredient);
+        Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
+    });
 
     @OnClick(R.id.newRecipeFloatingButton)
     public void addRecipeButtonClick(View view) {
@@ -236,19 +226,17 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
         mIngredientAdapter.clearIngredients();
     }
 
-    private OnIngredientClickListener mMainIngredientClickListener = new OnIngredientClickListener() {
-        @Override
-        public void onClick(View v, Ingredient ingredient, int position, boolean isClicked) {
-            if (!addedIngredients.contains(ingredient) && !isClicked) {
-                addedIngredients.add(ingredient);
-                Toast.makeText(NewRecipeActivity.this,ingredient.getIngredient() + " added!", Toast.LENGTH_SHORT).show();
-            }
-            else if(isClicked){
-                addedIngredients.remove(ingredient);
-                Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
-            }
+
+    private OnIngredientClickListener mMainIngredientClickListener = ((v, ingredient, position, isClicked) -> {
+        if (!addedIngredients.contains(ingredient) && !isClicked) {
+            addedIngredients.add(ingredient);
+            Toast.makeText(NewRecipeActivity.this,ingredient.getIngredient() + " added!", Toast.LENGTH_SHORT).show();
         }
-    };
+        else if(isClicked){
+            addedIngredients.remove(ingredient);
+            Toast.makeText(NewRecipeActivity.this, ingredient.getIngredient() + " removed!", Toast.LENGTH_SHORT).show();
+        }
+    });
 
     @Override
     public Recipe getRecipeDetails() {
