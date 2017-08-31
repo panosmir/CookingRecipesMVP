@@ -95,18 +95,15 @@ public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.
 
     public void setFavoriteIcon() {
         Observable<Object> clicks = RxView.clicks(favoriteButton);
-        clicks.subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                if (!isFavorited) {
-                    favoriteButton.setImageResource(R.drawable.ic_favorite);
-                    presenter.addFavorite();
-                    isFavorited = true;
-                } else {
-                    favoriteButton.setImageResource(R.drawable.ic_remove_favorite);
-                    presenter.removeFavorite();
-                    isFavorited = false;
-                }
+        clicks.subscribe(o -> {
+            if (!isFavorited) {
+                favoriteButton.setImageResource(R.drawable.ic_favorite);
+                presenter.addFavorite();
+                isFavorited = true;
+            } else {
+                favoriteButton.setImageResource(R.drawable.ic_remove_favorite);
+                presenter.removeFavorite();
+                isFavorited = false;
             }
         });
 

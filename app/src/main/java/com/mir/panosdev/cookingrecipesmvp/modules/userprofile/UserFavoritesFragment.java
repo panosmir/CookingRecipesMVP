@@ -85,17 +85,14 @@ public class UserFavoritesFragment extends BaseFragment implements UserProfileMV
         mRecyclerView.setAdapter(mProfileAdapter);
     }
 
-    private OnRecipeClickListener mClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(getActivity(), DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), v, "recipeAnimation");
-                startActivity(intent, options.toBundle());
-            } else {
-                startActivity(intent);
-            }
+    private OnRecipeClickListener mClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), v, "recipeAnimation");
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
         }
     };
 

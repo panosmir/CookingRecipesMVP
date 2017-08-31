@@ -78,13 +78,10 @@ public class UserRecipesFragment extends BaseFragment implements UserProfileMVP.
         mRecyclerView.setAdapter(mProfileAdapter);
     }
 
-    private OnRecipeClickListener mClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(getActivity(), DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            startActivity(intent);
-        }
+    private OnRecipeClickListener mClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        startActivity(intent);
     };
 
     @Override

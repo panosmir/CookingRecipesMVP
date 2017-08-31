@@ -78,17 +78,14 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
         recipesRecyclerView.setAdapter(mRecipeAdapter);
     }
 
-    private OnRecipeClickListener mRecipeClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onClick(View v, Recipe recipe, int position) {
-            Intent intent = new Intent(getActivity(), DetailsActivity.class);
-            intent.putExtra(DetailsActivity.RECIPE, recipe);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), v, "recipeAnimation");
-                startActivity(intent, options.toBundle());
-            } else {
-                startActivity(intent);
-            }
+    private OnRecipeClickListener mRecipeClickListener = (v, recipe, position) -> {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.RECIPE, recipe);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), v, "recipeAnimation");
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
         }
     };
 

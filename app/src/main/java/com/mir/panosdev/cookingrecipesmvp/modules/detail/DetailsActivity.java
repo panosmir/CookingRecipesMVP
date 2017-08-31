@@ -66,7 +66,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
         }
         return super.onPrepareOptionsMenu(menu);
     }
-//
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
