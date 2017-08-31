@@ -70,8 +70,8 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
         initPasswordCheck();
         Observable.combineLatest(usernameObservable, passwordObservable, (usernameBoolean, passwordBoolean) -> usernameBoolean && passwordBoolean)
                 .distinctUntilChanged()
-                .subscribe(aBoolean -> {
-                    if(aBoolean)
+                .subscribe(isValid -> {
+                    if(isValid)
                         enableButton();
                     else
                         disableButton();
@@ -90,7 +90,8 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
 
     private void initPasswordCheck() {
         passwordObservable = RxTextView.textChanges(mPassword)
-                .map(charSequence -> !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
+                .map(charSequence ->
+                        !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
                 .distinctUntilChanged();
     }
 

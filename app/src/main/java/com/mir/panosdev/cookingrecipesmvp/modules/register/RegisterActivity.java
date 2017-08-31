@@ -54,15 +54,16 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
         initPasswordCheck();
         Observable.combineLatest(usernameObservable, passwordObservable, (usernameBoolean, passwordBoolean) -> usernameBoolean && passwordBoolean)
                 .distinctUntilChanged()
-                .subscribe(aBoolean ->
-                        registerButton.setEnabled(aBoolean)
+                .subscribe(isValid ->
+                        registerButton.setEnabled(isValid)
                 );
     }
 
     private void initPasswordCheck() {
         if (mPassword != null) {
             passwordObservable = RxTextView.textChanges(mPassword)
-                    .map(charSequence -> !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
+                    .map(charSequence ->
+                            !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
                     .distinctUntilChanged();
         }
     }
@@ -70,7 +71,8 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
     private void initUsernameCheck() {
         if (mUsername.getText() != null) {
             usernameObservable = RxTextView.textChanges(mUsername)
-                    .map(charSequence -> !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
+                    .map(charSequence ->
+                            !isEmpty(charSequence.toString()) && charSequence.length() >= 5)
                     .distinctUntilChanged();
         }
     }
