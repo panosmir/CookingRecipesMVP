@@ -91,7 +91,16 @@ public class RecipesPresenterTest {
     public void shouldGetError() throws Exception {
         Mockito.when(mApiService.getRecipes()).thenReturn(Observable.error(e));
         mRecipesPresenter.getRecipes();
+        Mockito.verify(mView).onHideDialog();
         Mockito.verify(mView).onShowToast("Error loading recipes " + e.getMessage());
+    }
+
+    @Test
+    public void shouldHideDialog() throws Exception {
+        testObserver.onComplete();
+        Mockito.when(mApiService.getRecipes()).thenReturn(Observable.empty());
+        mRecipesPresenter.getRecipes();
+        Mockito.verify(mView).onHideDialog();
     }
 
 }
