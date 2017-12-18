@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -62,13 +64,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     //Test
     testCompile 'junit:junit:4.12'
-    def mockito_version = 'latest.release'
-    def powermock_version = 'latest.release'
-    testCompile "org.mockito:mockito-all:$mockito_version"
-    testCompile "org.powermock:powermock-core:$powermock_version",
-            "org.powermock:powermock-module-junit4:$powermock_version",
-            "org.powermock:powermock-api-mockito:$powermock_version"
+    testCompile group: 'org.mockito', name: 'mockito-inline', version: '2.9.0'
+
     compile 'javax.annotation:javax.annotation-api:1.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 repositories {
     mavenCentral()

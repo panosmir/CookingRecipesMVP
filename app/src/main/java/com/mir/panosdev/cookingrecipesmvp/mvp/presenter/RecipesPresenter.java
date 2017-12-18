@@ -56,7 +56,6 @@ public class RecipesPresenter implements MainActivityMVP.Presenter {
                         public void onError(@NonNull Throwable e) {
                             mainView.onHideDialog();
                             mainView.onShowToast("Error loading recipes " + e.getMessage());
-                            Log.e("ERROR_LOG", e.getMessage());
                         }
 
                         @Override
