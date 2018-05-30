@@ -1,9 +1,10 @@
 package com.mir.panosdev.cookingrecipesmvp.mapper;
 
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.CategoriesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class CategoryMapper {

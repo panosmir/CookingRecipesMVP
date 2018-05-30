@@ -1,15 +1,16 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.presenter;
 
-import android.util.Log;
-
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.MainActivityMVP;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;

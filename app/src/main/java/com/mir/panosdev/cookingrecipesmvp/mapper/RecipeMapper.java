@@ -2,8 +2,10 @@ package com.mir.panosdev.cookingrecipesmvp.mapper;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Storage;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class RecipeMapper {

@@ -7,9 +7,12 @@ import com.mir.panosdev.cookingrecipesmvp.mapper.RecipeMapper;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.SearchActivityMVP;
+
 import java.net.HttpURLConnection;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

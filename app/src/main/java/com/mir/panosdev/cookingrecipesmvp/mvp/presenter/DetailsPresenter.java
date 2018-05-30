@@ -5,16 +5,17 @@ import android.util.Log;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mapper.CategoryMapper;
 import com.mir.panosdev.cookingrecipesmvp.mapper.IngredientMapper;
-import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsFragment;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import io.reactivex.Completable;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
@@ -32,9 +33,12 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.DetailsPresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.DetailsActivityMVP;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -206,12 +210,9 @@ public class UpdateFragment extends BaseFragment implements DetailsActivityMVP.D
                 .widgetColor(Color.BLUE)
                 .positiveText("Choose")
                 .positiveColor(Color.BLUE)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        mUpdateIngredientAdapter.clearIngredients();
-                        mUpdateIngredientAdapter.addIngredients(updateRecipe.getIngredients());
-                    }
+                .onPositive((materialDialog, dialogAction) -> {
+                    mUpdateIngredientAdapter.clearIngredients();
+                    mUpdateIngredientAdapter.addIngredients(updateRecipe.getIngredients());
                 })
                 .show();
     }

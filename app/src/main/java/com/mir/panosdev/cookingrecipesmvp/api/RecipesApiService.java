@@ -2,7 +2,6 @@ package com.mir.panosdev.cookingrecipesmvp.api;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Categories;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.IngredientsResponse;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.RecipesResponse;
@@ -44,9 +43,6 @@ public interface RecipesApiService {
 
     @HTTP(method = "PUT", path = "/recipes/update", hasBody = true)
     Completable updateRecipe(@Body Recipe recipe);
-
-    @GET("/categories/findById/{id}")
-    Observable<Category> getCategoryById(@Path("id")int id);
 
     @GET("/categories/all")
     Single<Response<Categories>> getAllCategories();

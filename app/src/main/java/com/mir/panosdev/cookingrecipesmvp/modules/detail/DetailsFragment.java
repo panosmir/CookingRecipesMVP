@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 public class DetailsFragment extends BaseFragment implements DetailsActivityMVP.DetailsViewFragment {
 
