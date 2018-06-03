@@ -5,8 +5,11 @@ import android.util.Log;
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.LoginActivityMVP;
+
 import java.net.HttpURLConnection;
+
 import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

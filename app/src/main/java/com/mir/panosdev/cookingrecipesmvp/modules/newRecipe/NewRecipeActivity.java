@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import com.afollestad.materialdialogs.DialogAction;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseActivity;
@@ -23,7 +22,6 @@ import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMod
 import com.mir.panosdev.cookingrecipesmvp.listeners.OnIngredientClickListener;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.detail.update_adapter.UpdatableIngredientAdapter;
-import com.mir.panosdev.cookingrecipesmvp.modules.home.MainActivity;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.CategoryAdapter.CategoryAdapter;
 import com.mir.panosdev.cookingrecipesmvp.modules.newRecipe.IngredientAdapter.MainIngredientAdapter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
@@ -32,9 +30,12 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.NewRecipePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.NewRecipeMVP;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 

@@ -1,8 +1,10 @@
 package com.mir.panosdev.cookingrecipesmvp.mapper;
 
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class IngredientMapper {

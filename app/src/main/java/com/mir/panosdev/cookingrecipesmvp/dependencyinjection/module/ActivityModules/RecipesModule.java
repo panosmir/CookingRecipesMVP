@@ -2,6 +2,7 @@ package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityMo
 
 import com.mir.panosdev.cookingrecipesmvp.api.RecipesApiService;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.scope.PerActivity;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;

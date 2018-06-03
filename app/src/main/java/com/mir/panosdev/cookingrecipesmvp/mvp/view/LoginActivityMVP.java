@@ -7,15 +7,10 @@ public interface LoginActivityMVP {
 
     interface LoginView extends BaseView{
         User getUserDetails();
-
         void onHideDialog();
-
         void onLoginCompleted(String message);
-
         void onErrorToast(String message);
-
         void returnUserDetails(User user);
-
         void onShowDialog(String s);
     }
 

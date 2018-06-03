@@ -1,15 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.view;
 
-import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseView;
-import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsFragment;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.category.Category;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import java.util.List;
 
-public interface DetailsActivityMVP extends BaseView {
+public interface DetailsActivityMVP {
 
     interface DetailsView extends BaseView {
         Recipe getRecipeDetails();
@@ -31,9 +29,7 @@ public interface DetailsActivityMVP extends BaseView {
     interface DetailsViewFragment extends BaseView{
         int getRecipeId();
         String getUsername();
-
         void onCompletedToast(String s);
-
         void onErrorToast(String message);
     }
 

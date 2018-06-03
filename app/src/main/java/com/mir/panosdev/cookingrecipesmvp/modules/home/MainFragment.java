@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
@@ -44,12 +45,7 @@ public class MainFragment extends BaseFragment implements MainActivityMVP.MainVi
     @BindView(R.id.mainSwipeContainer)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private OnSwipeUpListener mOnSwipeUpListener = new OnSwipeUpListener() {
-        @Override
-        public void onRefresh() {
-            loadRecipes();
-        }
-    };
+    private OnSwipeUpListener mOnSwipeUpListener = this::loadRecipes;
 
     @Override
     public void onResume() {

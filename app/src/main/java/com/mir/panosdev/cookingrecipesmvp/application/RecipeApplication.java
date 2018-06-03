@@ -1,7 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.application;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.ApplicationComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerApplicationComponent;

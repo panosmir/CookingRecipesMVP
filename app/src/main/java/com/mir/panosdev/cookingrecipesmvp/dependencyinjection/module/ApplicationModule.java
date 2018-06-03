@@ -1,9 +1,13 @@
 package com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module;
 
 import android.content.Context;
+
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.prefs.SharedPrefsModule;
+
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;

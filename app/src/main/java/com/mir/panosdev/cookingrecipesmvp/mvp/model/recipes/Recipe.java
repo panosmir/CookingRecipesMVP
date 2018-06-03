@@ -1,14 +1,11 @@
 package com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes;
 
-import com.google.gson.annotations.SerializedName;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.ingredient.Ingredient;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.users.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public class Recipe implements Serializable{

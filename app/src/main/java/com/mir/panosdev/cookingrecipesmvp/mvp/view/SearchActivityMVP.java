@@ -5,9 +5,9 @@ import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 
 import java.util.List;
 
-public interface SearchActivityMVP extends BaseView {
+public interface SearchActivityMVP {
 
-    interface SearchView extends BaseView{
+    interface SearchView extends BaseView {
         void onShowDialog(String searchString);
         String searchTitle();
         void onShowToast(String message);

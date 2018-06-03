@@ -1,7 +1,6 @@
 package com.mir.panosdev.cookingrecipesmvp.modules.userprofile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,28 +8,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mir.panosdev.cookingrecipesmvp.R;
 import com.mir.panosdev.cookingrecipesmvp.base.BaseFragment;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.components.DaggerRecipesComponent;
 import com.mir.panosdev.cookingrecipesmvp.dependencyinjection.module.ActivityModules.RecipesModule;
-import com.mir.panosdev.cookingrecipesmvp.listeners.OnRecipeClickListener;
-import com.mir.panosdev.cookingrecipesmvp.modules.detail.DetailsActivity;
-import com.mir.panosdev.cookingrecipesmvp.modules.userprofile.userRecipesAdapter.UserProfileAdapter;
-import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
 import com.mir.panosdev.cookingrecipesmvp.mvp.presenter.UserProfilePresenter;
 import com.mir.panosdev.cookingrecipesmvp.mvp.view.UserProfileMVP;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -75,7 +64,7 @@ public class UserProfileFragment extends BaseFragment implements UserProfileMVP.
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initializeUsernameTextBox();
-        viewPager.setAdapter(new CustomAdapter(getChildFragmentManager(), getActivity()));
+        viewPager.setAdapter(new CustomFragmentPagerAdapter(getChildFragmentManager(), getActivity()));
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -92,11 +81,11 @@ public class UserProfileFragment extends BaseFragment implements UserProfileMVP.
                 .build().inject(this);
     }
 
-    private class CustomAdapter extends FragmentPagerAdapter {
+    private class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private String[] fragments = {"User Recipes", "Favorites"};
 
-        public CustomAdapter(FragmentManager supportFragmentManager, Context context) {
+        public CustomFragmentPagerAdapter(FragmentManager supportFragmentManager, Context context) {
             super(supportFragmentManager);
             mContext = context;
         }

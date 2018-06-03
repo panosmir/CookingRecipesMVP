@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5B738B"
-    android:orientation="vertical">
+    android:background="#5B738B">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -21,7 +20,7 @@
 
             <EditText
                 android:id="@+id/recipeTitleDetailEditText"
-                android:layout_width="352dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -41,7 +40,7 @@
 
             <EditText
                 android:id="@+id/recipeDescriptionDetailEditText"
-                android:layout_width="348dp"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -86,8 +85,8 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/updateIngredientRecyclerView"
-                android:layout_width="250dp"
-                android:layout_height="107dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +110,7 @@
             <Spinner
                 android:id="@+id/updateCategorySpinner"
                 android:layout_width="243dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"

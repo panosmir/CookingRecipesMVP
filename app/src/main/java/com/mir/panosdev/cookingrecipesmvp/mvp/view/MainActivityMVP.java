@@ -2,9 +2,10 @@ package com.mir.panosdev.cookingrecipesmvp.mvp.view;
 
 import com.mir.panosdev.cookingrecipesmvp.base.BaseView;
 import com.mir.panosdev.cookingrecipesmvp.mvp.model.recipes.Recipe;
+
 import java.util.List;
 
-public interface MainActivityMVP extends BaseView {
+public interface MainActivityMVP {
 
     interface MainView extends BaseView{
         void onShowDialog(String message);
