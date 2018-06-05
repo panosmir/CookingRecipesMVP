@@ -45,7 +45,7 @@ public class Storage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(TITLE, recipe.getTitle());
         values.put(DESCRIPTION, recipe.getDescription());
-        values.put(USER_ID, recipe.getUser().getId());
+        values.put(USER_ID, recipe.getUser().getUser_id());
 
         try {
             db.insert(TABLE_NAME, null, values);

@@ -130,9 +130,9 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
     public User getUserDetails() {
         sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         if (sharedPreferences.contains("EXISTS")) {
-            user.setId(sharedPreferences.getInt("USER_ID", 0));
+            user.setUser_id(sharedPreferences.getInt("USER_ID", 0));
             user.setUsername(sharedPreferences.getString("USER_USERNAME", null));
-            Log.d("LOGIN_LOG", "Username -> " + user.getUsername());
+            Log.d("LOGIN_LOG", "Username -> " + user.getUsername() + " id -> " +user.getUser_id());
             return user;
         } else {
             if (!mUsername.getText().toString().isEmpty() || !mPassword.getText().toString().isEmpty()) {
@@ -169,10 +169,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityMVP.Logi
         if (user != null) {
             sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("USER_ID", user.getId());
+            editor.putInt("USER_ID", user.getUser_id());
             editor.putString("USER_USERNAME", user.getUsername());
             editor.putBoolean("EXISTS", true);
-            Log.d("USER_DETAILS", "User ---> " + user.getId());
+            Log.d("USER_DETAILS", "User ---> " + user.getUser_id());
             editor.apply();
         }
     }

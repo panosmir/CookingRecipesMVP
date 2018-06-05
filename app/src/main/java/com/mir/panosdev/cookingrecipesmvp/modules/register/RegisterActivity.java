@@ -126,10 +126,10 @@ public class RegisterActivity extends BaseActivity implements RegisterActivityMV
         if (user != null) {
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("USER_ID", user.getId());
+            editor.putInt("USER_ID", user.getUser_id());
             editor.putString("USER_USERNAME", user.getUsername());
             editor.putBoolean("EXISTS", true);
-            Log.d("USER_DETAILS", "User ---> " + user.getId());
+            Log.d("USER_DETAILS", "User ---> " + user.getUser_id());
             editor.apply();
         }
     }

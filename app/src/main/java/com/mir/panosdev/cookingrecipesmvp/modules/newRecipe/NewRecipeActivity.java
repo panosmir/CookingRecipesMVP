@@ -242,7 +242,7 @@ public class NewRecipeActivity extends BaseActivity implements NewRecipeMVP.NewR
     @Override
     public Recipe getRecipeDetails() {
         SharedPreferences mSharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
-        user.setId(mSharedPreferences.getInt("USER_ID", 0));
+        user.setUser_id(mSharedPreferences.getInt("USER_ID", 0));
         user.setUsername(mSharedPreferences.getString("USER_USERNAME", ""));
         recipe.setUser(user);
         if (!addRecipeTitle.getText().toString().isEmpty() || !addRecipeDescription.getText().toString().isEmpty()) {

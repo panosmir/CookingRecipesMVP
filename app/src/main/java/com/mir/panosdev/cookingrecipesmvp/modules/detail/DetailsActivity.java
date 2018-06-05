@@ -57,7 +57,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityMVP.
         MenuItem deleteButton = menu.findItem(R.id.deleteRecipeButton);
         MenuItem updateButton = menu.findItem(R.id.updateRecipeButton);
         int userId = prefs.getInt("USER_ID", 0);
-        if (recipe.getUser().getId() == userId){
+        if (recipe.getUser().getUser_id() == userId){
             deleteButton.setVisible(true);
             updateButton.setVisible(true);
         }

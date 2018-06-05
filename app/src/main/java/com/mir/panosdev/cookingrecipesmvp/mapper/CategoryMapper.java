@@ -15,14 +15,14 @@ public class CategoryMapper {
     public List<Category> mapCategories(Category[] response){
         List<Category> categories = new ArrayList<>();
         Category c = new Category();
-        c.setmCategory("Please select a category");
+        c.setCategory("Please select a category");
         categories.add(c);
         if(response != null){
             for (Category categoriesResponse:
                  response) {
                 Category mCategory = new Category();
-                mCategory.setmId(categoriesResponse.getId());
-                mCategory.setmCategory(categoriesResponse.getCategory());
+                mCategory.setId(categoriesResponse.getId());
+                mCategory.setCategory(categoriesResponse.getCategory());
                 categories.add(mCategory);
             }
         }
